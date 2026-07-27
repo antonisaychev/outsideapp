@@ -24,9 +24,9 @@ class _OnboardingStep3ScreenState extends ConsumerState<OnboardingStep3Screen> {
   Future<void> _submit() async {
     setState(() => _submitting = true);
     try {
-      await ref
-          .read(sessionControllerProvider.notifier)
-          .updateProfile({'city_id': _selectedCityId});
+      await ref.read(sessionControllerProvider.notifier).updateProfile({
+        'city_id': _selectedCityId,
+      });
       // роутер сам переведёт на главный экран — онбординг завершён
     } finally {
       if (mounted) setState(() => _submitting = false);

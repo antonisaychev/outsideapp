@@ -20,6 +20,7 @@
   "errorEmailInvalid": "Введите корректный email",
   "errorEmailTaken": "Этот email уже зарегистрирован.",
   "errorPasswordTooShort": "Пароль должен быть не короче 8 символов",
+  "errorPasswordLatin": "Только латинские буквы, цифры и символы",
   "errorPasswordMismatch": "Пароли не совпадают",
   "errorUsernameInvalid": "Только латинские буквы и _, от 3 до 30 символов",
   "alreadyHaveAccount": "Уже есть аккаунт? Войти",
@@ -90,6 +91,87 @@
 
   "avatarUploadFailed": "Не удалось загрузить фото — добавите его позже в профиле",
   "homeWelcomeTitle": "Добро пожаловать в Outside!",
+
+  "tabDating": "Знакомства",
+  "tabServices": "Сервисы",
+  "tabMessages": "Сообщения",
+  "tabFriends": "Друзья",
+  "tabProfile": "Профиль",
+  "comingSoonSection": "Этот раздел появится в следующей итерации",
+
+  "servicesTitle": "Сервисы",
+  "servicesTabRecommended": "Рекомендовано",
+  "servicesTabPending": "На проверке",
+  "categoryAll": "Все",
+  "placeSheetTitle": "Место",
+  "servicesEmptyPending": "Пока нет сервисов на проверке. Добавьте первым!",
+  "servicesEmptyRecommended": "Пока нет рекомендованных сервисов",
+  "addServiceAction": "Добавить сервис",
+
+  "authGateTitle": "Войдите, чтобы {action}",
+  "@authGateTitle": {
+    "placeholders": { "action": {"type": "String"} }
+  },
+  "authGateSubtitle": "Это займёт меньше минуты. После входа действие выполнится автоматически",
+  "authGateActionFavorite": "сохранить в избранное",
+  "authGateActionLike": "рекомендовать сервис",
+  "authGateActionAdd": "добавить сервис",
+
+  "recommendCount": "{count} рекомендуют",
+  "@recommendCount": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "recommendButton": "👍 Рекомендую",
+  "youRecommend": "✓ Вы рекомендуете",
+  "confirmButton": "Подтвердить ({count}/{threshold})",
+  "@confirmButton": {
+    "placeholders": { "count": {"type": "int"}, "threshold": {"type": "int"} }
+  },
+  "confirmedByLocals": "Подтверждают жители города сервиса",
+  "yourServiceBadge": "Ваш сервис",
+  "siteButton": "Сайт",
+  "mapButton": "На карте",
+  "addedBy": "Добавил(а): {name}",
+  "@addedBy": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+
+  "reportSheetTitle": "Пожаловаться",
+  "reportReasonSpam": "Спам",
+  "reportReasonFraud": "Мошенничество",
+  "reportReasonAbuse": "Оскорбления",
+  "reportReasonOther": "Другое",
+  "reportCommentHint": "Комментарий (необязательно)",
+  "reportCommentRequired": "Для «Другое» опишите проблему",
+  "reportSubmit": "Отправить жалобу",
+  "reportSent": "Жалоба отправлена, мы разберёмся",
+
+  "addServiceTitle": "Новая рекомендация",
+  "addServiceSubtitle": "Рекомендуйте организации и сервисы, а не отдельных людей",
+  "photosCaption": "От 1 до 5 фото. Первое — обложка; удерживайте, чтобы изменить",
+  "coverBadge": "Обложка",
+  "makeCover": "Сделать обложкой",
+  "deletePhoto": "Удалить",
+  "serviceNameHint": "Название сервиса",
+  "serviceDescriptionHint": "Описание",
+  "serviceWebsiteHint": "Ссылка на сервис (необязательно)",
+  "serviceMapHint": "Ссылка на геопозицию (необязательно)",
+  "categoryChip": "Категория",
+  "placeChipPrefix": "Место: {city}",
+  "@placeChipPrefix": {
+    "placeholders": { "city": {"type": "String"} }
+  },
+  "submitForReview": "Отправить на проверку",
+  "sentForReview": "Отправлено на проверку",
+  "categorySheetTitle": "Категория",
+  "duplicateSheetTitle": "Возможно, уже добавлен",
+  "addAnyway": "Всё равно добавить",
+
+  "favoritesTitle": "Избранное",
+  "favoritesEmptyHint": "Сохраняйте сервисы сердечком на карточке",
+  "toServices": "К сервисам",
+  "addedToFavorites": "Добавлено в избранное",
+  "removedFromFavorites": "Убрано из избранного",
   "genericError": "Что-то пошло не так. Попробуйте ещё раз",
   "noConnection": "Нет соединения",
   "cancel": "Отмена",

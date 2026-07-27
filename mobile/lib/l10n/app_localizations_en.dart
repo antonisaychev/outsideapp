@@ -65,6 +65,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorPasswordTooShort => 'Password must be at least 8 characters';
 
   @override
+  String get errorPasswordLatin => 'Latin letters, digits and symbols only';
+
+  @override
   String get errorPasswordMismatch => 'Passwords don\'t match';
 
   @override
@@ -218,6 +221,199 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeWelcomeTitle => 'Welcome to Outside!';
+
+  @override
+  String get tabDating => 'Dating';
+
+  @override
+  String get tabServices => 'Services';
+
+  @override
+  String get tabMessages => 'Messages';
+
+  @override
+  String get tabFriends => 'Friends';
+
+  @override
+  String get tabProfile => 'Profile';
+
+  @override
+  String get comingSoonSection =>
+      'This section is coming in the next iteration';
+
+  @override
+  String get servicesTitle => 'Services';
+
+  @override
+  String get servicesTabRecommended => 'Recommended';
+
+  @override
+  String get servicesTabPending => 'In review';
+
+  @override
+  String get categoryAll => 'All';
+
+  @override
+  String get placeSheetTitle => 'Place';
+
+  @override
+  String get servicesEmptyPending =>
+      'No services in review yet. Be the first to add one!';
+
+  @override
+  String get servicesEmptyRecommended => 'No recommended services yet';
+
+  @override
+  String get addServiceAction => 'Add a service';
+
+  @override
+  String authGateTitle(String action) {
+    return 'Log in to $action';
+  }
+
+  @override
+  String get authGateSubtitle =>
+      'It takes less than a minute. After logging in the action will complete automatically';
+
+  @override
+  String get authGateActionFavorite => 'save to favorites';
+
+  @override
+  String get authGateActionLike => 'recommend a service';
+
+  @override
+  String get authGateActionAdd => 'add a service';
+
+  @override
+  String recommendCount(int count) {
+    return '$count recommend';
+  }
+
+  @override
+  String get recommendButton => '👍 Recommend';
+
+  @override
+  String get youRecommend => '✓ You recommend';
+
+  @override
+  String confirmButton(int count, int threshold) {
+    return 'Confirm ($count/$threshold)';
+  }
+
+  @override
+  String get confirmedByLocals => 'Confirmed by locals of the service\'s city';
+
+  @override
+  String get yourServiceBadge => 'Your service';
+
+  @override
+  String get siteButton => 'Website';
+
+  @override
+  String get mapButton => 'On the map';
+
+  @override
+  String addedBy(String name) {
+    return 'Added by $name';
+  }
+
+  @override
+  String get reportSheetTitle => 'Report';
+
+  @override
+  String get reportReasonSpam => 'Spam';
+
+  @override
+  String get reportReasonFraud => 'Fraud';
+
+  @override
+  String get reportReasonAbuse => 'Abuse';
+
+  @override
+  String get reportReasonOther => 'Other';
+
+  @override
+  String get reportCommentHint => 'Comment (optional)';
+
+  @override
+  String get reportCommentRequired =>
+      'For \"Other\" please describe the problem';
+
+  @override
+  String get reportSubmit => 'Submit report';
+
+  @override
+  String get reportSent => 'Report sent, we\'ll look into it';
+
+  @override
+  String get addServiceTitle => 'New recommendation';
+
+  @override
+  String get addServiceSubtitle =>
+      'Recommend organizations and services, not individuals';
+
+  @override
+  String get photosCaption =>
+      '1 to 5 photos. First one is the cover; long-press to change';
+
+  @override
+  String get coverBadge => 'Cover';
+
+  @override
+  String get makeCover => 'Make cover';
+
+  @override
+  String get deletePhoto => 'Delete';
+
+  @override
+  String get serviceNameHint => 'Service name';
+
+  @override
+  String get serviceDescriptionHint => 'Description';
+
+  @override
+  String get serviceWebsiteHint => 'Website link (optional)';
+
+  @override
+  String get serviceMapHint => 'Map link (optional)';
+
+  @override
+  String get categoryChip => 'Category';
+
+  @override
+  String placeChipPrefix(String city) {
+    return 'Place: $city';
+  }
+
+  @override
+  String get submitForReview => 'Submit for review';
+
+  @override
+  String get sentForReview => 'Submitted for review';
+
+  @override
+  String get categorySheetTitle => 'Category';
+
+  @override
+  String get duplicateSheetTitle => 'Possibly already added';
+
+  @override
+  String get addAnyway => 'Add anyway';
+
+  @override
+  String get favoritesTitle => 'Favorites';
+
+  @override
+  String get favoritesEmptyHint => 'Save services with the heart on a card';
+
+  @override
+  String get toServices => 'To services';
+
+  @override
+  String get addedToFavorites => 'Added to favorites';
+
+  @override
+  String get removedFromFavorites => 'Removed from favorites';
 
   @override
   String get genericError => 'Something went wrong. Please try again';

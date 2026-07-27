@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/utils/validators.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/session_controller.dart';
@@ -57,7 +58,7 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final formValid =
-        _passwordController.text.length >= 8 &&
+        isValidNewPassword(_passwordController.text) &&
         _confirmController.text == _passwordController.text;
     return Scaffold(
       appBar: AppBar(),
@@ -76,14 +77,19 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen> {
                 controller: _passwordController,
                 obscureText: true,
                 obscuringCharacter: '●',
+                inputFormatters: [asciiPasswordInputFilter],
                 onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(hintText: l10n.newPasswordHint),
+                decoration: InputDecoration(
+                  hintText: l10n.newPasswordHint,
+                  helperText: l10n.errorPasswordLatin,
+                ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _confirmController,
                 obscureText: true,
                 obscuringCharacter: '●',
+                inputFormatters: [asciiPasswordInputFilter],
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: l10n.passwordConfirmHint,

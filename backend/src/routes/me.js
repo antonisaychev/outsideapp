@@ -109,6 +109,8 @@ router.patch('/password', async (req, res) => {
   const current = String(req.body.current_password || '');
   const next = String(req.body.new_password || '');
   if (next.length < 8) return res.status(400).json({ errors: { new_password: 'PASSWORD_TOO_SHORT' } });
+  // Только печатаемый ASCII — без кириллицы (см. PASSWORD_RE в auth.js)
+  if (!/^[\x21-\x7E]{8,}$/.test(next)) return res.status(400).json({ errors: { new_password: 'PASSWORD_INVALID_CHARS' } });
   const r = await db.query('SELECT password_hash FROM users WHERE id=$1', [req.userId]);
   const ok = await bcrypt.compare(current, r.rows[0].password_hash);
   if (!ok) return res.status(400).json({ errors: { current_password: 'WRONG_PASSWORD' } });

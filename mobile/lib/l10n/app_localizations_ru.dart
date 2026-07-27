@@ -65,6 +65,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errorPasswordTooShort => 'Пароль должен быть не короче 8 символов';
 
   @override
+  String get errorPasswordLatin => 'Только латинские буквы, цифры и символы';
+
+  @override
   String get errorPasswordMismatch => 'Пароли не совпадают';
 
   @override
@@ -219,6 +222,197 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeWelcomeTitle => 'Добро пожаловать в Outside!';
+
+  @override
+  String get tabDating => 'Знакомства';
+
+  @override
+  String get tabServices => 'Сервисы';
+
+  @override
+  String get tabMessages => 'Сообщения';
+
+  @override
+  String get tabFriends => 'Друзья';
+
+  @override
+  String get tabProfile => 'Профиль';
+
+  @override
+  String get comingSoonSection => 'Этот раздел появится в следующей итерации';
+
+  @override
+  String get servicesTitle => 'Сервисы';
+
+  @override
+  String get servicesTabRecommended => 'Рекомендовано';
+
+  @override
+  String get servicesTabPending => 'На проверке';
+
+  @override
+  String get categoryAll => 'Все';
+
+  @override
+  String get placeSheetTitle => 'Место';
+
+  @override
+  String get servicesEmptyPending =>
+      'Пока нет сервисов на проверке. Добавьте первым!';
+
+  @override
+  String get servicesEmptyRecommended => 'Пока нет рекомендованных сервисов';
+
+  @override
+  String get addServiceAction => 'Добавить сервис';
+
+  @override
+  String authGateTitle(String action) {
+    return 'Войдите, чтобы $action';
+  }
+
+  @override
+  String get authGateSubtitle =>
+      'Это займёт меньше минуты. После входа действие выполнится автоматически';
+
+  @override
+  String get authGateActionFavorite => 'сохранить в избранное';
+
+  @override
+  String get authGateActionLike => 'рекомендовать сервис';
+
+  @override
+  String get authGateActionAdd => 'добавить сервис';
+
+  @override
+  String recommendCount(int count) {
+    return '$count рекомендуют';
+  }
+
+  @override
+  String get recommendButton => '👍 Рекомендую';
+
+  @override
+  String get youRecommend => '✓ Вы рекомендуете';
+
+  @override
+  String confirmButton(int count, int threshold) {
+    return 'Подтвердить ($count/$threshold)';
+  }
+
+  @override
+  String get confirmedByLocals => 'Подтверждают жители города сервиса';
+
+  @override
+  String get yourServiceBadge => 'Ваш сервис';
+
+  @override
+  String get siteButton => 'Сайт';
+
+  @override
+  String get mapButton => 'На карте';
+
+  @override
+  String addedBy(String name) {
+    return 'Добавил(а): $name';
+  }
+
+  @override
+  String get reportSheetTitle => 'Пожаловаться';
+
+  @override
+  String get reportReasonSpam => 'Спам';
+
+  @override
+  String get reportReasonFraud => 'Мошенничество';
+
+  @override
+  String get reportReasonAbuse => 'Оскорбления';
+
+  @override
+  String get reportReasonOther => 'Другое';
+
+  @override
+  String get reportCommentHint => 'Комментарий (необязательно)';
+
+  @override
+  String get reportCommentRequired => 'Для «Другое» опишите проблему';
+
+  @override
+  String get reportSubmit => 'Отправить жалобу';
+
+  @override
+  String get reportSent => 'Жалоба отправлена, мы разберёмся';
+
+  @override
+  String get addServiceTitle => 'Новая рекомендация';
+
+  @override
+  String get addServiceSubtitle =>
+      'Рекомендуйте организации и сервисы, а не отдельных людей';
+
+  @override
+  String get photosCaption =>
+      'От 1 до 5 фото. Первое — обложка; удерживайте, чтобы изменить';
+
+  @override
+  String get coverBadge => 'Обложка';
+
+  @override
+  String get makeCover => 'Сделать обложкой';
+
+  @override
+  String get deletePhoto => 'Удалить';
+
+  @override
+  String get serviceNameHint => 'Название сервиса';
+
+  @override
+  String get serviceDescriptionHint => 'Описание';
+
+  @override
+  String get serviceWebsiteHint => 'Ссылка на сервис (необязательно)';
+
+  @override
+  String get serviceMapHint => 'Ссылка на геопозицию (необязательно)';
+
+  @override
+  String get categoryChip => 'Категория';
+
+  @override
+  String placeChipPrefix(String city) {
+    return 'Место: $city';
+  }
+
+  @override
+  String get submitForReview => 'Отправить на проверку';
+
+  @override
+  String get sentForReview => 'Отправлено на проверку';
+
+  @override
+  String get categorySheetTitle => 'Категория';
+
+  @override
+  String get duplicateSheetTitle => 'Возможно, уже добавлен';
+
+  @override
+  String get addAnyway => 'Всё равно добавить';
+
+  @override
+  String get favoritesTitle => 'Избранное';
+
+  @override
+  String get favoritesEmptyHint => 'Сохраняйте сервисы сердечком на карточке';
+
+  @override
+  String get toServices => 'К сервисам';
+
+  @override
+  String get addedToFavorites => 'Добавлено в избранное';
+
+  @override
+  String get removedFromFavorites => 'Убрано из избранного';
 
   @override
   String get genericError => 'Что-то пошло не так. Попробуйте ещё раз';

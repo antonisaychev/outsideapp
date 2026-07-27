@@ -20,6 +20,7 @@
   "errorEmailInvalid": "Enter a valid email",
   "errorEmailTaken": "This email is already registered.",
   "errorPasswordTooShort": "Password must be at least 8 characters",
+  "errorPasswordLatin": "Latin letters, digits and symbols only",
   "errorPasswordMismatch": "Passwords don't match",
   "errorUsernameInvalid": "Only latin letters and _, 3 to 30 characters",
   "alreadyHaveAccount": "Already have an account? Log in",
@@ -90,6 +91,87 @@
 
   "avatarUploadFailed": "Couldn't upload the photo — you can add it later in your profile",
   "homeWelcomeTitle": "Welcome to Outside!",
+
+  "tabDating": "Dating",
+  "tabServices": "Services",
+  "tabMessages": "Messages",
+  "tabFriends": "Friends",
+  "tabProfile": "Profile",
+  "comingSoonSection": "This section is coming in the next iteration",
+
+  "servicesTitle": "Services",
+  "servicesTabRecommended": "Recommended",
+  "servicesTabPending": "In review",
+  "categoryAll": "All",
+  "placeSheetTitle": "Place",
+  "servicesEmptyPending": "No services in review yet. Be the first to add one!",
+  "servicesEmptyRecommended": "No recommended services yet",
+  "addServiceAction": "Add a service",
+
+  "authGateTitle": "Log in to {action}",
+  "@authGateTitle": {
+    "placeholders": { "action": {"type": "String"} }
+  },
+  "authGateSubtitle": "It takes less than a minute. After logging in the action will complete automatically",
+  "authGateActionFavorite": "save to favorites",
+  "authGateActionLike": "recommend a service",
+  "authGateActionAdd": "add a service",
+
+  "recommendCount": "{count} recommend",
+  "@recommendCount": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "recommendButton": "👍 Recommend",
+  "youRecommend": "✓ You recommend",
+  "confirmButton": "Confirm ({count}/{threshold})",
+  "@confirmButton": {
+    "placeholders": { "count": {"type": "int"}, "threshold": {"type": "int"} }
+  },
+  "confirmedByLocals": "Confirmed by locals of the service's city",
+  "yourServiceBadge": "Your service",
+  "siteButton": "Website",
+  "mapButton": "On the map",
+  "addedBy": "Added by {name}",
+  "@addedBy": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+
+  "reportSheetTitle": "Report",
+  "reportReasonSpam": "Spam",
+  "reportReasonFraud": "Fraud",
+  "reportReasonAbuse": "Abuse",
+  "reportReasonOther": "Other",
+  "reportCommentHint": "Comment (optional)",
+  "reportCommentRequired": "For \"Other\" please describe the problem",
+  "reportSubmit": "Submit report",
+  "reportSent": "Report sent, we'll look into it",
+
+  "addServiceTitle": "New recommendation",
+  "addServiceSubtitle": "Recommend organizations and services, not individuals",
+  "photosCaption": "1 to 5 photos. First one is the cover; long-press to change",
+  "coverBadge": "Cover",
+  "makeCover": "Make cover",
+  "deletePhoto": "Delete",
+  "serviceNameHint": "Service name",
+  "serviceDescriptionHint": "Description",
+  "serviceWebsiteHint": "Website link (optional)",
+  "serviceMapHint": "Map link (optional)",
+  "categoryChip": "Category",
+  "placeChipPrefix": "Place: {city}",
+  "@placeChipPrefix": {
+    "placeholders": { "city": {"type": "String"} }
+  },
+  "submitForReview": "Submit for review",
+  "sentForReview": "Submitted for review",
+  "categorySheetTitle": "Category",
+  "duplicateSheetTitle": "Possibly already added",
+  "addAnyway": "Add anyway",
+
+  "favoritesTitle": "Favorites",
+  "favoritesEmptyHint": "Save services with the heart on a card",
+  "toServices": "To services",
+  "addedToFavorites": "Added to favorites",
+  "removedFromFavorites": "Removed from favorites",
   "genericError": "Something went wrong. Please try again",
   "noConnection": "No connection",
   "cancel": "Cancel",

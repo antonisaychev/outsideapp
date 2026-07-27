@@ -61,15 +61,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Раздел «Сервисы» для гостей появится в следующей итерации',
-                      ),
-                    ),
-                  );
-                },
+                onPressed: () => context.go('/home'),
                 child: Text(l10n.continueAsGuest),
               ),
               const SizedBox(height: 24),

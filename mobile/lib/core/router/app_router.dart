@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/providers/session_controller.dart';
 import '../../features/auth/screens/blocked_screen.dart';
 import '../../features/auth/screens/forgot_password_screen.dart';
-import '../../features/auth/screens/home_placeholder_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/new_password_screen.dart';
 import '../../features/auth/screens/onboarding_step1_screen.dart';
@@ -15,6 +14,10 @@ import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/verify_code_screen.dart';
 import '../../features/auth/screens/welcome_screen.dart';
+import '../../features/services/screens/add_service_screen.dart';
+import '../../features/services/screens/favorites_screen.dart';
+import '../../features/services/screens/service_card_screen.dart';
+import '../../features/shell/tab_shell.dart';
 
 const _publicPaths = {
   '/welcome',
@@ -25,6 +28,11 @@ const _publicPaths = {
   '/verify-reset',
   '/reset-password',
 };
+
+/// Гостю (без токена) доступны просмотр главного экрана и карточек сервисов
+/// (мастер-ТЗ §1: гостевой режим — просмотр всего, действия через auth-gate).
+bool _guestAllowed(String loc) =>
+    loc == '/home' || (loc.startsWith('/services/') && loc != '/services/add');
 
 String _onboardingStepPath(SessionState session) {
   final profile = session.profile!;
@@ -51,12 +59,14 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final session = ref.read(sessionControllerProvider);
       final loc = state.matchedLocation;
+      debugPrint('[router] redirect check: loc=$loc status=${session.status}');
 
       switch (session.status) {
         case SessionStatus.initializing:
           return loc == '/splash' ? null : '/splash';
         case SessionStatus.unauthenticated:
-          return _publicPaths.contains(loc) ? null : '/welcome';
+          if (_publicPaths.contains(loc) || _guestAllowed(loc)) return null;
+          return '/welcome';
         case SessionStatus.blocked:
           return loc == '/blocked' ? null : '/blocked';
         case SessionStatus.onboarding:
@@ -125,9 +135,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/blocked',
         builder: (context, state) => const BlockedScreen(),
       ),
+      GoRoute(path: '/home', builder: (context, state) => const TabShell()),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomePlaceholderScreen(),
+        path: '/services/add',
+        builder: (context, state) => const AddServiceScreen(),
+      ),
+      GoRoute(
+        path: '/services/:id',
+        builder: (context, state) =>
+            ServiceCardScreen(serviceId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/favorites',
+        builder: (context, state) => const FavoritesScreen(),
       ),
     ],
   );

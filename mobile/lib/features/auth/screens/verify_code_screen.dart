@@ -122,7 +122,9 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
   Future<void> _resend() async {
     if (widget.purpose == VerifyPurpose.register) {
-      await ref.read(sessionControllerProvider.notifier).resendCode(widget.email);
+      await ref
+          .read(sessionControllerProvider.notifier)
+          .resendCode(widget.email);
     } else {
       await ref.read(authApiProvider).forgot(email: widget.email);
     }

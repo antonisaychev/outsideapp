@@ -35,12 +35,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _formError = null;
     });
     final email = _emailController.text.trim().toLowerCase();
+    debugPrint('[login] submit for $email');
     try {
       await ref
           .read(sessionControllerProvider.notifier)
           .login(email: email, password: _passwordController.text);
+      debugPrint('[login] success');
       // роутер сам переведёт дальше по смене статуса сессии (включая BLOCKED)
     } on ApiException catch (e) {
+      debugPrint('[login] ApiException: $e');
       String message;
       switch (e.error) {
         case 'EMAIL_NOT_VERIFIED':
@@ -122,8 +125,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: TextButton(
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
-                    foregroundColor:
-                        Theme.of(context).textTheme.bodyMedium?.color,
+                    foregroundColor: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color,
                   ),
                   onPressed: () => context.go('/register'),
                   child: Text(l10n.noAccountCreate),

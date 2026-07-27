@@ -9,6 +9,9 @@ const router = express.Router();
 
 const USERNAME_RE = /^[a-z_]{3,30}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Пароль — только печатаемый ASCII (латиница/цифры/символы), без кириллицы.
+// Применяется только при СОЗДАНИИ пароля, на вход не влияет
+const PASSWORD_RE = /^[\x21-\x7E]{8,}$/;
 
 function tokens(userId) {
   const access = jwt.sign({ sub: userId, type: 'access' }, process.env.JWT_SECRET, { expiresIn: '24h' });
@@ -34,6 +37,7 @@ router.post('/register', regLimit, async (req, res) => {
   const errors = {};
   if (!EMAIL_RE.test(email)) errors.email = 'INVALID_EMAIL';
   if (password.length < 8) errors.password = 'PASSWORD_TOO_SHORT';
+  else if (!PASSWORD_RE.test(password)) errors.password = 'PASSWORD_INVALID_CHARS';
   if (!USERNAME_RE.test(username)) errors.username = 'INVALID_USERNAME';
   if (Object.keys(errors).length) return res.status(400).json({ errors });
 
@@ -144,6 +148,7 @@ router.post('/reset', async (req, res) => {
     if (payload.type !== 'reset') throw new Error();
     const password = String(req.body.new_password || '');
     if (password.length < 8) return res.status(400).json({ error: 'PASSWORD_TOO_SHORT' });
+    if (!PASSWORD_RE.test(password)) return res.status(400).json({ error: 'PASSWORD_INVALID_CHARS' });
     const hash = await bcrypt.hash(password, 10);
     const r = await db.query('UPDATE users SET password_hash=$1, email_verified=true WHERE email=$2 RETURNING id', [hash, payload.email]);
     if (!r.rowCount) return res.status(400).json({ error: 'NOT_FOUND' });

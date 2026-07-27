@@ -82,7 +82,10 @@ ThemeData buildAppTheme() {
       filled: true,
       fillColor: AppColors.background,
       hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
-      helperStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+      helperStyle: const TextStyle(
+        color: AppColors.textSecondary,
+        fontSize: 12,
+      ),
       constraints: const BoxConstraints(minHeight: 56),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(

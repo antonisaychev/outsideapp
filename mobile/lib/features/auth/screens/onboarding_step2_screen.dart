@@ -45,9 +45,9 @@ class _OnboardingStep2ScreenState extends ConsumerState<OnboardingStep2Screen> {
   Future<void> _submit() async {
     setState(() => _submitting = true);
     try {
-      await ref
-          .read(sessionControllerProvider.notifier)
-          .updateProfile({'home_country': _selectedCode});
+      await ref.read(sessionControllerProvider.notifier).updateProfile({
+        'home_country': _selectedCode,
+      });
       // роутер сам переведёт на шаг 3
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -101,8 +101,7 @@ class _OnboardingStep2ScreenState extends ConsumerState<OnboardingStep2Screen> {
                         for (final c in gridCountries)
                           SelectableChip(
                             selected: _selectedCode == c.code,
-                            onTap: () =>
-                                setState(() => _selectedCode = c.code),
+                            onTap: () => setState(() => _selectedCode = c.code),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 14,
                               vertical: 0,

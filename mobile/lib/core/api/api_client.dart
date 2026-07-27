@@ -11,6 +11,10 @@ const String apiBaseUrl = String.fromEnvironment(
   defaultValue: 'https://api.outside.ink',
 );
 
+/// Файлы (фото) backend отдаёт относительными путями /uploads/...
+String absoluteFileUrl(String path) =>
+    path.startsWith('http') ? path : '$apiBaseUrl$path';
+
 /// Единая ошибка API: коды из backend в формате { error: 'CODE' } или
 /// { errors: {field: 'CODE'} } (см. CLAUDE.md, раздел «Конвенции кода»).
 class ApiException implements Exception {

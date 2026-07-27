@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/users_api.dart';
+import '../../../core/utils/validators.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/session_controller.dart';
@@ -50,7 +51,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   bool get _formValid =>
       _emailRe.hasMatch(_emailController.text) &&
-      _passwordController.text.length >= 8 &&
+      isValidNewPassword(_passwordController.text) &&
       _confirmController.text == _passwordController.text &&
       _usernameStatus == _UsernameStatus.available;
 
@@ -139,9 +140,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 controller: _passwordController,
                 obscureText: true,
                 obscuringCharacter: '●',
+                inputFormatters: [asciiPasswordInputFilter],
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: l10n.passwordHint,
+                  helperText: l10n.errorPasswordLatin,
                   errorText: _passwordError,
                 ),
               ),
@@ -150,6 +153,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 controller: _confirmController,
                 obscureText: true,
                 obscuringCharacter: '●',
+                inputFormatters: [asciiPasswordInputFilter],
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: l10n.passwordConfirmHint,
@@ -191,7 +195,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               Center(
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).textTheme.bodyMedium?.color,
+                    foregroundColor: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color,
                   ),
                   onPressed: () => context.go('/login'),
                   child: Text(l10n.alreadyHaveAccount),

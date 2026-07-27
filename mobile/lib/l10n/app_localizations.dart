@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Пароль должен быть не короче 8 символов'**
   String get errorPasswordTooShort;
 
+  /// No description provided for @errorPasswordLatin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только латинские буквы, цифры и символы'**
+  String get errorPasswordLatin;
+
   /// No description provided for @errorPasswordMismatch.
   ///
   /// In ru, this message translates to:
@@ -481,6 +487,360 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Добро пожаловать в Outside!'**
   String get homeWelcomeTitle;
+
+  /// No description provided for @tabDating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Знакомства'**
+  String get tabDating;
+
+  /// No description provided for @tabServices.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервисы'**
+  String get tabServices;
+
+  /// No description provided for @tabMessages.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщения'**
+  String get tabMessages;
+
+  /// No description provided for @tabFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'Друзья'**
+  String get tabFriends;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль'**
+  String get tabProfile;
+
+  /// No description provided for @comingSoonSection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Этот раздел появится в следующей итерации'**
+  String get comingSoonSection;
+
+  /// No description provided for @servicesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервисы'**
+  String get servicesTitle;
+
+  /// No description provided for @servicesTabRecommended.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендовано'**
+  String get servicesTabRecommended;
+
+  /// No description provided for @servicesTabPending.
+  ///
+  /// In ru, this message translates to:
+  /// **'На проверке'**
+  String get servicesTabPending;
+
+  /// No description provided for @categoryAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get categoryAll;
+
+  /// No description provided for @placeSheetTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Место'**
+  String get placeSheetTitle;
+
+  /// No description provided for @servicesEmptyPending.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет сервисов на проверке. Добавьте первым!'**
+  String get servicesEmptyPending;
+
+  /// No description provided for @servicesEmptyRecommended.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет рекомендованных сервисов'**
+  String get servicesEmptyRecommended;
+
+  /// No description provided for @addServiceAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить сервис'**
+  String get addServiceAction;
+
+  /// No description provided for @authGateTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите, чтобы {action}'**
+  String authGateTitle(String action);
+
+  /// No description provided for @authGateSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Это займёт меньше минуты. После входа действие выполнится автоматически'**
+  String get authGateSubtitle;
+
+  /// No description provided for @authGateActionFavorite.
+  ///
+  /// In ru, this message translates to:
+  /// **'сохранить в избранное'**
+  String get authGateActionFavorite;
+
+  /// No description provided for @authGateActionLike.
+  ///
+  /// In ru, this message translates to:
+  /// **'рекомендовать сервис'**
+  String get authGateActionLike;
+
+  /// No description provided for @authGateActionAdd.
+  ///
+  /// In ru, this message translates to:
+  /// **'добавить сервис'**
+  String get authGateActionAdd;
+
+  /// No description provided for @recommendCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} рекомендуют'**
+  String recommendCount(int count);
+
+  /// No description provided for @recommendButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'👍 Рекомендую'**
+  String get recommendButton;
+
+  /// No description provided for @youRecommend.
+  ///
+  /// In ru, this message translates to:
+  /// **'✓ Вы рекомендуете'**
+  String get youRecommend;
+
+  /// No description provided for @confirmButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердить ({count}/{threshold})'**
+  String confirmButton(int count, int threshold);
+
+  /// No description provided for @confirmedByLocals.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтверждают жители города сервиса'**
+  String get confirmedByLocals;
+
+  /// No description provided for @yourServiceBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваш сервис'**
+  String get yourServiceBadge;
+
+  /// No description provided for @siteButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сайт'**
+  String get siteButton;
+
+  /// No description provided for @mapButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'На карте'**
+  String get mapButton;
+
+  /// No description provided for @addedBy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавил(а): {name}'**
+  String addedBy(String name);
+
+  /// No description provided for @reportSheetTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожаловаться'**
+  String get reportSheetTitle;
+
+  /// No description provided for @reportReasonSpam.
+  ///
+  /// In ru, this message translates to:
+  /// **'Спам'**
+  String get reportReasonSpam;
+
+  /// No description provided for @reportReasonFraud.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мошенничество'**
+  String get reportReasonFraud;
+
+  /// No description provided for @reportReasonAbuse.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оскорбления'**
+  String get reportReasonAbuse;
+
+  /// No description provided for @reportReasonOther.
+  ///
+  /// In ru, this message translates to:
+  /// **'Другое'**
+  String get reportReasonOther;
+
+  /// No description provided for @reportCommentHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комментарий (необязательно)'**
+  String get reportCommentHint;
+
+  /// No description provided for @reportCommentRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для «Другое» опишите проблему'**
+  String get reportCommentRequired;
+
+  /// No description provided for @reportSubmit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить жалобу'**
+  String get reportSubmit;
+
+  /// No description provided for @reportSent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Жалоба отправлена, мы разберёмся'**
+  String get reportSent;
+
+  /// No description provided for @addServiceTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новая рекомендация'**
+  String get addServiceTitle;
+
+  /// No description provided for @addServiceSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендуйте организации и сервисы, а не отдельных людей'**
+  String get addServiceSubtitle;
+
+  /// No description provided for @photosCaption.
+  ///
+  /// In ru, this message translates to:
+  /// **'От 1 до 5 фото. Первое — обложка; удерживайте, чтобы изменить'**
+  String get photosCaption;
+
+  /// No description provided for @coverBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обложка'**
+  String get coverBadge;
+
+  /// No description provided for @makeCover.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сделать обложкой'**
+  String get makeCover;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get deletePhoto;
+
+  /// No description provided for @serviceNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название сервиса'**
+  String get serviceNameHint;
+
+  /// No description provided for @serviceDescriptionHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Описание'**
+  String get serviceDescriptionHint;
+
+  /// No description provided for @serviceWebsiteHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ссылка на сервис (необязательно)'**
+  String get serviceWebsiteHint;
+
+  /// No description provided for @serviceMapHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ссылка на геопозицию (необязательно)'**
+  String get serviceMapHint;
+
+  /// No description provided for @categoryChip.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get categoryChip;
+
+  /// No description provided for @placeChipPrefix.
+  ///
+  /// In ru, this message translates to:
+  /// **'Место: {city}'**
+  String placeChipPrefix(String city);
+
+  /// No description provided for @submitForReview.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить на проверку'**
+  String get submitForReview;
+
+  /// No description provided for @sentForReview.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправлено на проверку'**
+  String get sentForReview;
+
+  /// No description provided for @categorySheetTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get categorySheetTitle;
+
+  /// No description provided for @duplicateSheetTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Возможно, уже добавлен'**
+  String get duplicateSheetTitle;
+
+  /// No description provided for @addAnyway.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всё равно добавить'**
+  String get addAnyway;
+
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Избранное'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoritesEmptyHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохраняйте сервисы сердечком на карточке'**
+  String get favoritesEmptyHint;
+
+  /// No description provided for @toServices.
+  ///
+  /// In ru, this message translates to:
+  /// **'К сервисам'**
+  String get toServices;
+
+  /// No description provided for @addedToFavorites.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавлено в избранное'**
+  String get addedToFavorites;
+
+  /// No description provided for @removedFromFavorites.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрано из избранного'**
+  String get removedFromFavorites;
 
   /// No description provided for @genericError.
   ///
