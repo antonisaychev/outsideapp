@@ -635,7 +635,7 @@ abstract class AppLocalizations {
   /// No description provided for @yourServiceBadge.
   ///
   /// In ru, this message translates to:
-  /// **'Ваш сервис'**
+  /// **'Добавлен вами'**
   String get yourServiceBadge;
 
   /// No description provided for @siteButton.
@@ -707,7 +707,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportSent.
   ///
   /// In ru, this message translates to:
-  /// **'Жалоба отправлена, мы разберёмся'**
+  /// **'Жалоба отправлена. Мы все проверим и примем решение.'**
   String get reportSent;
 
   /// No description provided for @addServiceTitle.

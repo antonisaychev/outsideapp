@@ -128,7 +128,7 @@
     "placeholders": { "count": {"type": "int"}, "threshold": {"type": "int"} }
   },
   "confirmedByLocals": "Confirmed by locals of the service's city",
-  "yourServiceBadge": "Your service",
+  "yourServiceBadge": "Added by you",
   "siteButton": "Website",
   "mapButton": "On the map",
   "addedBy": "Added by {name}",
@@ -144,7 +144,7 @@
   "reportCommentHint": "Comment (optional)",
   "reportCommentRequired": "For \"Other\" please describe the problem",
   "reportSubmit": "Submit report",
-  "reportSent": "Report sent, we'll look into it",
+  "reportSent": "Report sent. We'll review it and take action.",
 
   "addServiceTitle": "New recommendation",
   "addServiceSubtitle": "Recommend organizations and services, not individuals",

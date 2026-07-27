@@ -304,7 +304,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmedByLocals => 'Confirmed by locals of the service\'s city';
 
   @override
-  String get yourServiceBadge => 'Your service';
+  String get yourServiceBadge => 'Added by you';
 
   @override
   String get siteButton => 'Website';
@@ -343,7 +343,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportSubmit => 'Submit report';
 
   @override
-  String get reportSent => 'Report sent, we\'ll look into it';
+  String get reportSent => 'Report sent. We\'ll review it and take action.';
 
   @override
   String get addServiceTitle => 'New recommendation';

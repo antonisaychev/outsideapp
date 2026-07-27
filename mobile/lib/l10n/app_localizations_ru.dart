@@ -304,7 +304,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmedByLocals => 'Подтверждают жители города сервиса';
 
   @override
-  String get yourServiceBadge => 'Ваш сервис';
+  String get yourServiceBadge => 'Добавлен вами';
 
   @override
   String get siteButton => 'Сайт';
@@ -342,7 +342,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reportSubmit => 'Отправить жалобу';
 
   @override
-  String get reportSent => 'Жалоба отправлена, мы разберёмся';
+  String get reportSent =>
+      'Жалоба отправлена. Мы все проверим и примем решение.';
 
   @override
   String get addServiceTitle => 'Новая рекомендация';

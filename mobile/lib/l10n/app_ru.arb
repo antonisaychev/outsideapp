@@ -128,7 +128,7 @@
     "placeholders": { "count": {"type": "int"}, "threshold": {"type": "int"} }
   },
   "confirmedByLocals": "Подтверждают жители города сервиса",
-  "yourServiceBadge": "Ваш сервис",
+  "yourServiceBadge": "Добавлен вами",
   "siteButton": "Сайт",
   "mapButton": "На карте",
   "addedBy": "Добавил(а): {name}",
@@ -144,7 +144,7 @@
   "reportCommentHint": "Комментарий (необязательно)",
   "reportCommentRequired": "Для «Другое» опишите проблему",
   "reportSubmit": "Отправить жалобу",
-  "reportSent": "Жалоба отправлена, мы разберёмся",
+  "reportSent": "Жалоба отправлена. Мы все проверим и примем решение.",
 
   "addServiceTitle": "Новая рекомендация",
   "addServiceSubtitle": "Рекомендуйте организации и сервисы, а не отдельных людей",
