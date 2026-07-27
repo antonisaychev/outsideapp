@@ -167,6 +167,13 @@
   "duplicateSheetTitle": "Possibly already added",
   "addAnyway": "Add anyway",
 
+  "messagesTitle": "Messages",
+  "messagesEmpty": "No conversations yet. Messaging is available between friends",
+  "toFriends": "To friends",
+  "messageHint": "Message",
+  "cannotMessageUser": "You can't message this user",
+  "guestMessagesTitle": "Log in to message your friends",
+
   "friendsTabMy": "My friends",
   "friendsTabIncoming": "Incoming",
   "friendsTabOutgoing": "Outgoing",

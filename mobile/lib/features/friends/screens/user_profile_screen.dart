@@ -12,6 +12,7 @@ import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
 import '../../auth/providers/session_controller.dart';
+import '../../chats/providers/chats_providers.dart';
 import '../providers/friends_providers.dart';
 
 /// Экраны 13/35 «Профиль чужой / Профиль друга» — кнопки по статусу отношений.
@@ -328,9 +329,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ElevatedButton(
-              onPressed: () => ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(l10n.comingSoonSection))),
+              onPressed: () => openChatWith(context, ref, widget.userId),
               child: Text(l10n.writeMessage),
             ),
             const SizedBox(height: 12),

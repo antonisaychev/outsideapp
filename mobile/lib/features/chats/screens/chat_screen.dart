@@ -1,0 +1,319 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/api/friends_api.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/user_avatar.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../auth/providers/session_controller.dart';
+import '../../friends/providers/friends_providers.dart';
+import '../providers/chats_providers.dart';
+
+/// Экран 09 «Чат»: optimistic-отправка, ✓/✓✓, подгрузка истории вверх.
+class ChatScreen extends ConsumerStatefulWidget {
+  const ChatScreen({
+    super.key,
+    required this.conversationId,
+    required this.peerId,
+  });
+
+  final String conversationId;
+  final String peerId;
+
+  @override
+  ConsumerState<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends ConsumerState<ChatScreen> {
+  final _textController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      // reverse: true — конец списка (старые сообщения) это maxScrollExtent
+      if (_scrollController.position.pixels >
+          _scrollController.position.maxScrollExtent - 200) {
+        ref
+            .read(chatControllerProvider(widget.conversationId).notifier)
+            .loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _send() {
+    final text = _textController.text.trim();
+    if (text.isEmpty) return;
+    _textController.clear();
+    setState(() {});
+    ref.read(chatControllerProvider(widget.conversationId).notifier).send(text);
+  }
+
+  String _formatTime(DateTime time) {
+    final local = time.toLocal();
+    return '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final chat = ref.watch(chatControllerProvider(widget.conversationId));
+    final myId = ref.watch(currentUserIdProvider);
+    final peerAsync = ref.watch(publicProfileProvider(widget.peerId));
+    final relationAsync = ref.watch(relationStatusProvider(widget.peerId));
+    final peer = peerAsync.valueOrNull;
+    // Плашка вместо ввода: собеседник не друг/заблокирован/удалён
+    final blocked =
+        chat.cannotMessage ||
+        (relationAsync.valueOrNull != null &&
+            relationAsync.valueOrNull != RelationStatus.accepted);
+
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: GestureDetector(
+          onTap: () => context.push('/users/${widget.peerId}'),
+          child: Row(
+            children: [
+              UserAvatar(
+                avatarUrl: peer?.avatarUrl,
+                name: peer?.displayName,
+                radius: 18,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  peer?.displayName ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: chat.loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      controller: _scrollController,
+                      reverse: true,
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      itemCount:
+                          chat.messages.length + (chat.loadingMore ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index >= chat.messages.length) {
+                          return const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        final m = chat.messages[index];
+                        final isMine = m.message.senderId == myId;
+                        return _MessageBubble(
+                          message: m,
+                          isMine: isMine,
+                          time: _formatTime(m.message.createdAt),
+                          onRetry: () => ref
+                              .read(
+                                chatControllerProvider(
+                                  widget.conversationId,
+                                ).notifier,
+                              )
+                              .retry(m.localId),
+                          retryLabel: l10n.retry,
+                        );
+                      },
+                    ),
+            ),
+            if (blocked)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                color: AppColors.surface,
+                child: Text(
+                  l10n.cannotMessageUser,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        maxLines: 5,
+                        minLines: 1,
+                        maxLength: 2000,
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                          hintText: l10n.messageHint,
+                          counterText: '',
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: _textController.text.trim().isEmpty
+                              ? AppColors.border
+                              : AppColors.coral,
+                          foregroundColor: Colors.white,
+                        ),
+                        icon: const Icon(Icons.arrow_upward),
+                        onPressed: _textController.text.trim().isEmpty
+                            ? null
+                            : _send,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MessageBubble extends StatelessWidget {
+  const _MessageBubble({
+    required this.message,
+    required this.isMine,
+    required this.time,
+    required this.onRetry,
+    required this.retryLabel,
+  });
+
+  final LocalMessage message;
+  final bool isMine;
+  final String time;
+  final VoidCallback onRetry;
+  final String retryLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final failed = message.status == LocalMessageStatus.failed;
+    return Align(
+      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+      child: GestureDetector(
+        onTap: failed ? onRetry : null,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.75,
+          ),
+          decoration: BoxDecoration(
+            color: isMine ? AppColors.coral : AppColors.surface,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(18),
+              topRight: const Radius.circular(18),
+              bottomLeft: Radius.circular(isMine ? 18 : 4),
+              bottomRight: Radius.circular(isMine ? 4 : 18),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                message.message.text,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: isMine ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (failed) ...[
+                    Icon(
+                      Icons.error_outline,
+                      size: 14,
+                      color: Colors.red.shade200,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      retryLabel,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isMine
+                            ? Colors.white70
+                            : AppColors.textSecondary,
+                      ),
+                    ),
+                  ] else ...[
+                    Text(
+                      time,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isMine
+                            ? Colors.white70
+                            : AppColors.textSecondary,
+                      ),
+                    ),
+                    if (isMine) ...[
+                      const SizedBox(width: 4),
+                      message.status == LocalMessageStatus.sending
+                          ? const SizedBox(
+                              width: 10,
+                              height: 10,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                color: Colors.white70,
+                              ),
+                            )
+                          : Text(
+                              message.message.readAt != null ? '✓✓' : '✓',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.white70,
+                              ),
+                            ),
+                    ],
+                  ],
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

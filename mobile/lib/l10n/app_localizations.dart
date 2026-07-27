@@ -812,6 +812,42 @@ abstract class AppLocalizations {
   /// **'Всё равно добавить'**
   String get addAnyway;
 
+  /// No description provided for @messagesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщения'**
+  String get messagesTitle;
+
+  /// No description provided for @messagesEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет диалогов. Сообщения доступны между друзьями'**
+  String get messagesEmpty;
+
+  /// No description provided for @toFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'К друзьям'**
+  String get toFriends;
+
+  /// No description provided for @messageHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщение'**
+  String get messageHint;
+
+  /// No description provided for @cannotMessageUser.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы не можете писать этому пользователю'**
+  String get cannotMessageUser;
+
+  /// No description provided for @guestMessagesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите, чтобы переписываться с друзьями'**
+  String get guestMessagesTitle;
+
   /// No description provided for @friendsTabMy.
   ///
   /// In ru, this message translates to:

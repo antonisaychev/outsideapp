@@ -8,6 +8,7 @@ import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../chats/providers/chats_providers.dart';
 import '../providers/friends_providers.dart';
 
 /// Экран 11 «Друзья»: табы Мои друзья / Входящие · N / Исходящие.
@@ -65,9 +66,7 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
               title: Text(l10n.writeMessage),
               onTap: () {
                 Navigator.of(sheetContext).pop();
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(l10n.comingSoonSection)));
+                openChatWith(context, ref, friend.id);
               },
             ),
             ListTile(
@@ -318,10 +317,7 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.chat_bubble_outline),
-                          onPressed: () =>
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(l10n.comingSoonSection)),
-                              ),
+                          onPressed: () => openChatWith(context, ref, f.id),
                         ),
                         IconButton(
                           icon: const Icon(Icons.more_horiz),

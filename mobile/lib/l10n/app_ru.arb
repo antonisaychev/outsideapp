@@ -167,6 +167,13 @@
   "duplicateSheetTitle": "Возможно, уже добавлен",
   "addAnyway": "Всё равно добавить",
 
+  "messagesTitle": "Сообщения",
+  "messagesEmpty": "Пока нет диалогов. Сообщения доступны между друзьями",
+  "toFriends": "К друзьям",
+  "messageHint": "Сообщение",
+  "cannotMessageUser": "Вы не можете писать этому пользователю",
+  "guestMessagesTitle": "Войдите, чтобы переписываться с друзьями",
+
   "friendsTabMy": "Мои друзья",
   "friendsTabIncoming": "Входящие",
   "friendsTabOutgoing": "Исходящие",

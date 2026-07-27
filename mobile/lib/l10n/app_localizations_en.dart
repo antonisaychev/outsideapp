@@ -401,6 +401,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAnyway => 'Add anyway';
 
   @override
+  String get messagesTitle => 'Messages';
+
+  @override
+  String get messagesEmpty =>
+      'No conversations yet. Messaging is available between friends';
+
+  @override
+  String get toFriends => 'To friends';
+
+  @override
+  String get messageHint => 'Message';
+
+  @override
+  String get cannotMessageUser => 'You can\'t message this user';
+
+  @override
+  String get guestMessagesTitle => 'Log in to message your friends';
+
+  @override
   String get friendsTabMy => 'My friends';
 
   @override

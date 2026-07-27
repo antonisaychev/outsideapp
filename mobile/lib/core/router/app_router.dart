@@ -14,6 +14,7 @@ import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/verify_code_screen.dart';
 import '../../features/auth/screens/welcome_screen.dart';
+import '../../features/chats/screens/chat_screen.dart';
 import '../../features/friends/screens/people_search_screen.dart';
 import '../../features/friends/screens/user_profile_screen.dart';
 import '../../features/profile/screens/blocked_users_screen.dart';
@@ -157,6 +158,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/favorites',
         builder: (context, state) => const FavoritesScreen(),
+      ),
+      GoRoute(
+        path: '/chats/:id',
+        builder: (context, state) => ChatScreen(
+          conversationId: state.pathParameters['id']!,
+          peerId: state.uri.queryParameters['peer'] ?? '',
+        ),
       ),
       GoRoute(
         path: '/people-search',

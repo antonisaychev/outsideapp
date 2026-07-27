@@ -401,6 +401,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addAnyway => 'Всё равно добавить';
 
   @override
+  String get messagesTitle => 'Сообщения';
+
+  @override
+  String get messagesEmpty =>
+      'Пока нет диалогов. Сообщения доступны между друзьями';
+
+  @override
+  String get toFriends => 'К друзьям';
+
+  @override
+  String get messageHint => 'Сообщение';
+
+  @override
+  String get cannotMessageUser => 'Вы не можете писать этому пользователю';
+
+  @override
+  String get guestMessagesTitle => 'Войдите, чтобы переписываться с друзьями';
+
+  @override
   String get friendsTabMy => 'Мои друзья';
 
   @override
