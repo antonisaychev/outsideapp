@@ -21,8 +21,10 @@ router.get('/', async (req, res) => {
   const r = await db.query(`
     SELECT c.id, c.last_message_at,
            u.id AS other_id, u.username, u.first_name, u.last_name, u.avatar_url, u.last_seen_at,
-           (SELECT text FROM messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC LIMIT 1) AS last_message_text,
-           (SELECT count(*)::int FROM messages m WHERE m.conversation_id=c.id AND m.sender_id<>$1 AND m.read_at IS NULL) AS unread_count
+           (SELECT CASE WHEN m.deleted_at IS NULL THEN m.text ELSE NULL END
+              FROM messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC LIMIT 1) AS last_message_text,
+           (SELECT m.deleted_at IS NOT NULL FROM messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC LIMIT 1) AS last_message_deleted,
+           (SELECT count(*)::int FROM messages m WHERE m.conversation_id=c.id AND m.sender_id<>$1 AND m.read_at IS NULL AND m.deleted_at IS NULL) AS unread_count
     FROM conversations c
     JOIN users u ON u.id = (CASE WHEN c.user_a=$1 THEN c.user_b ELSE c.user_a END)
     WHERE (c.user_a=$1 OR c.user_b=$1)
@@ -56,7 +58,9 @@ router.get('/:id/messages', async (req, res) => {
   if (req.query.before) { params.push(req.query.before); where += ` AND created_at < $${params.length}::timestamptz`; }
   params.push(limit);
   const r = await db.query(
-    `SELECT id, sender_id, text, created_at, read_at FROM messages WHERE ${where} ORDER BY created_at DESC LIMIT $${params.length}`,
+    `SELECT id, sender_id, CASE WHEN deleted_at IS NULL THEN text ELSE '' END AS text,
+            created_at, read_at, deleted_at
+     FROM messages WHERE ${where} ORDER BY created_at DESC LIMIT $${params.length}`,
     params);
   res.json(r.rows);
 });
@@ -83,6 +87,29 @@ router.post('/:id/messages', async (req, res) => {
   res.json(r.rows[0]);
 });
 
+// Удаление своего сообщения (мягкое): текст скрывается, в чате остаётся
+// заглушка «Сообщение удалено» — правка продукта поверх ТЗ v5
+router.delete('/:id/messages/:messageId', async (req, res) => {
+  if (!UUID_RE.test(req.params.id) || !UUID_RE.test(req.params.messageId)) {
+    return res.status(404).json({ error: 'NOT_FOUND' });
+  }
+  const conv = await assertParticipant(req.params.id, req.userId);
+  if (!conv) return res.status(404).json({ error: 'NOT_FOUND' });
+
+  const r = await db.query(
+    `UPDATE messages SET deleted_at=now()
+     WHERE id=$1 AND conversation_id=$2 AND sender_id=$3 AND deleted_at IS NULL
+     RETURNING id`,
+    [req.params.messageId, req.params.id, req.userId]);
+  if (!r.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
+
+  ws.send(otherUserId(conv, req.userId), 'message.deleted', {
+    conversation_id: req.params.id,
+    message_id: req.params.messageId,
+  });
+  res.json({ ok: true });
+});
+
 // Прочитано — отмечает чужие сообщения и уведомляет отправителя по WS
 router.post('/:id/read', async (req, res) => {
   if (!UUID_RE.test(req.params.id)) return res.status(404).json({ error: 'NOT_FOUND' });
@@ -90,7 +117,9 @@ router.post('/:id/read', async (req, res) => {
   if (!conv) return res.status(404).json({ error: 'NOT_FOUND' });
 
   const r = await db.query(
-    `UPDATE messages SET read_at=now() WHERE conversation_id=$1 AND sender_id<>$2 AND read_at IS NULL RETURNING id, sender_id`,
+    `UPDATE messages SET read_at=now()
+     WHERE conversation_id=$1 AND sender_id<>$2 AND read_at IS NULL AND deleted_at IS NULL
+     RETURNING id, sender_id`,
     [req.params.id, req.userId]);
   if (r.rowCount) {
     ws.send(r.rows[0].sender_id, 'message.read', { conversation_id: req.params.id, message_ids: r.rows.map(x => x.id) });

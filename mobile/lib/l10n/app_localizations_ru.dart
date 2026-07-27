@@ -401,6 +401,122 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addAnyway => 'Всё равно добавить';
 
   @override
+  String get notificationsTitle => 'Уведомления';
+
+  @override
+  String get notificationsEmpty => 'Пока нет уведомлений';
+
+  @override
+  String notifFriendRequest(String name) {
+    return '$name хочет добавить вас в друзья';
+  }
+
+  @override
+  String notifFriendAccepted(String name) {
+    return '$name принял(а) вашу заявку';
+  }
+
+  @override
+  String notifMatch(String name) {
+    return 'У вас мэтч с $name!';
+  }
+
+  @override
+  String get notifServiceRecommended => 'Ваш сервис попал в «Рекомендовано»';
+
+  @override
+  String get notifServiceHidden => 'Ваш сервис скрыт администратором';
+
+  @override
+  String get nowFriends => 'Вы теперь друзья';
+
+  @override
+  String get requestDeclined => 'Заявка отклонена';
+
+  @override
+  String get guestDatingTitle => 'Войдите, чтобы знакомиться';
+
+  @override
+  String get datingEnableTitle => 'Знакомьтесь с людьми рядом';
+
+  @override
+  String get datingEnableBody =>
+      'Включите участие — и мы покажем вас другим экспатам в вашем месте. Выключить можно в любой момент';
+
+  @override
+  String get datingEnableButton => 'Включить знакомства';
+
+  @override
+  String get datingProfileIncompleteTitle => 'Заполните профиль';
+
+  @override
+  String get datingProfileIncompleteBody =>
+      'Для знакомств нужны имя, фото, пол и дата рождения';
+
+  @override
+  String get deckEmpty => 'Вы посмотрели всех. Загляните позже';
+
+  @override
+  String get likeLimitReached => 'Лимит лайков на сегодня исчерпан';
+
+  @override
+  String get matchTitle => 'Это мэтч! 🎉';
+
+  @override
+  String matchSubtitle(String name) {
+    return 'Вы понравились друг другу с $name';
+  }
+
+  @override
+  String get matchWriteMessage => 'Написать сообщение';
+
+  @override
+  String get matchLater => 'Позже';
+
+  @override
+  String get datingSettingsTitle => 'Анкета';
+
+  @override
+  String get datingParticipate => 'Участвовать';
+
+  @override
+  String get datingParticipateHint =>
+      'Показывать вас в колоде и показывать вам других';
+
+  @override
+  String get lookingForLabel => 'Что ищете';
+
+  @override
+  String get lookingForAny => 'Не важно';
+
+  @override
+  String get lookingForFriends => 'Друзей';
+
+  @override
+  String get lookingForDating => 'Свидания';
+
+  @override
+  String get lookingForNetworking => 'Нетворкинг';
+
+  @override
+  String get showGenderLabel => 'Кого показывать';
+
+  @override
+  String get showGenderAny => 'Всех';
+
+  @override
+  String get myMatches => 'Мои мэтчи';
+
+  @override
+  String get matchesEmpty => 'Мэтчей пока нет — свайпайте!';
+
+  @override
+  String get messageDeleted => 'Сообщение удалено';
+
+  @override
+  String get deleteMessage => 'Удалить сообщение';
+
+  @override
   String get messagesTitle => 'Сообщения';
 
   @override

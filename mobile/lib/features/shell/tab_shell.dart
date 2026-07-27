@@ -5,13 +5,13 @@ import '../../core/theme/app_colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../chats/providers/chats_providers.dart';
 import '../chats/screens/chats_tab_screen.dart';
+import '../dating/screens/dating_tab_screen.dart';
 import '../friends/providers/friends_providers.dart';
 import '../friends/screens/friends_tab_screen.dart';
 import '../profile/screens/my_profile_tab.dart';
 import '../services/screens/services_list_screen.dart';
 
-/// Главный экран с 5 вкладками (мастер-ТЗ §13). Реальные: Сервисы,
-/// Сообщения, Друзья, Профиль; Знакомства — заглушка до своей итерации.
+/// Главный экран с 5 вкладками (мастер-ТЗ §13) — все разделы реальные.
 class TabShell extends ConsumerWidget {
   const TabShell({super.key});
 
@@ -24,7 +24,7 @@ class TabShell extends ConsumerWidget {
       body: IndexedStack(
         index: index,
         children: [
-          _ComingSoonTab(title: l10n.tabDating),
+          const DatingTabScreen(),
           const ServicesListScreen(),
           const ChatsTabScreen(),
           const FriendsTabScreen(),
@@ -78,32 +78,6 @@ class TabShell extends ConsumerWidget {
             label: l10n.tabProfile,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ComingSoonTab extends StatelessWidget {
-  const _ComingSoonTab({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return SafeArea(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.headlineMedium),
-            const SizedBox(height: 8),
-            Text(
-              l10n.comingSoonSection,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
       ),
     );
   }

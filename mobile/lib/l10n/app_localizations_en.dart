@@ -401,6 +401,122 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAnyway => 'Add anyway';
 
   @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmpty => 'No notifications yet';
+
+  @override
+  String notifFriendRequest(String name) {
+    return '$name wants to add you as a friend';
+  }
+
+  @override
+  String notifFriendAccepted(String name) {
+    return '$name accepted your request';
+  }
+
+  @override
+  String notifMatch(String name) {
+    return 'You matched with $name!';
+  }
+
+  @override
+  String get notifServiceRecommended => 'Your service is now Recommended';
+
+  @override
+  String get notifServiceHidden => 'Your service was hidden by an admin';
+
+  @override
+  String get nowFriends => 'You are now friends';
+
+  @override
+  String get requestDeclined => 'Request declined';
+
+  @override
+  String get guestDatingTitle => 'Log in to meet people';
+
+  @override
+  String get datingEnableTitle => 'Meet people nearby';
+
+  @override
+  String get datingEnableBody =>
+      'Turn on participation and we\'ll show you to other expats in your place. You can turn it off anytime';
+
+  @override
+  String get datingEnableButton => 'Enable dating';
+
+  @override
+  String get datingProfileIncompleteTitle => 'Complete your profile';
+
+  @override
+  String get datingProfileIncompleteBody =>
+      'Dating requires a name, photo, gender and date of birth';
+
+  @override
+  String get deckEmpty => 'You\'ve seen everyone. Check back later';
+
+  @override
+  String get likeLimitReached => 'You\'ve reached today\'s like limit';
+
+  @override
+  String get matchTitle => 'It\'s a match! 🎉';
+
+  @override
+  String matchSubtitle(String name) {
+    return 'You and $name liked each other';
+  }
+
+  @override
+  String get matchWriteMessage => 'Send a message';
+
+  @override
+  String get matchLater => 'Later';
+
+  @override
+  String get datingSettingsTitle => 'Dating profile';
+
+  @override
+  String get datingParticipate => 'Participate';
+
+  @override
+  String get datingParticipateHint =>
+      'Show you in the deck and show others to you';
+
+  @override
+  String get lookingForLabel => 'Looking for';
+
+  @override
+  String get lookingForAny => 'Anything';
+
+  @override
+  String get lookingForFriends => 'Friends';
+
+  @override
+  String get lookingForDating => 'Dating';
+
+  @override
+  String get lookingForNetworking => 'Networking';
+
+  @override
+  String get showGenderLabel => 'Show me';
+
+  @override
+  String get showGenderAny => 'Everyone';
+
+  @override
+  String get myMatches => 'My matches';
+
+  @override
+  String get matchesEmpty => 'No matches yet — start swiping!';
+
+  @override
+  String get messageDeleted => 'Message deleted';
+
+  @override
+  String get deleteMessage => 'Delete message';
+
+  @override
   String get messagesTitle => 'Messages';
 
   @override

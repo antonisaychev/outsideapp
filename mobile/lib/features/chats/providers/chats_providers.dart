@@ -45,7 +45,9 @@ final conversationsProvider = FutureProvider<List<Conversation>>((ref) {
   // Любое message.new/message.read обновляет список (порядок, превью, бейджи)
   ref.listen(wsEventsProvider, (_, next) {
     final event = next.valueOrNull?.event;
-    if (event == 'message.new' || event == 'message.read') {
+    if (event == 'message.new' ||
+        event == 'message.read' ||
+        event == 'message.deleted') {
       ref.invalidateSelf();
     }
   });
@@ -129,6 +131,11 @@ class ChatController extends StateNotifier<ChatState> {
         final data = e.data as Map<String, dynamic>;
         if (data['conversation_id'] == conversationId) {
           _markMineRead();
+        }
+      } else if (e.event == 'message.deleted') {
+        final data = e.data as Map<String, dynamic>;
+        if (data['conversation_id'] == conversationId) {
+          _applyDeleted(data['message_id'] as String);
         }
       }
     });
@@ -252,6 +259,29 @@ class ChatController extends StateNotifier<ChatState> {
     );
     // экран открыт — сразу помечаем прочитанным
     markRead();
+  }
+
+  /// Удаление своего сообщения: текст скрывается у обоих, остаётся заглушка
+  Future<void> deleteMessage(String messageId) async {
+    try {
+      await _api.deleteMessage(conversationId, messageId);
+      _applyDeleted(messageId);
+      _ref.invalidate(conversationsProvider);
+    } on ApiException {
+      // сообщение уже удалено или не наше — состояние не меняем
+    }
+  }
+
+  void _applyDeleted(String messageId) {
+    state = state.copyWith(
+      messages: [
+        for (final m in state.messages)
+          if (m.message.id == messageId)
+            m.copyWith(message: m.message.copyWith(deletedAt: DateTime.now()))
+          else
+            m,
+      ],
+    );
   }
 
   void _markMineRead() {

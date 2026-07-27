@@ -15,6 +15,7 @@ class Conversation {
     this.lastMessageText,
     this.lastMessageAt,
     this.unreadCount = 0,
+    this.lastMessageDeleted = false,
   });
 
   final String id;
@@ -26,6 +27,7 @@ class Conversation {
   final String? lastMessageText;
   final DateTime? lastMessageAt;
   final int unreadCount;
+  final bool lastMessageDeleted;
 
   String get peerName {
     final name = [
@@ -47,6 +49,7 @@ class Conversation {
         ? DateTime.tryParse(json['last_message_at'] as String)
         : null,
     unreadCount: (json['unread_count'] as int?) ?? 0,
+    lastMessageDeleted: (json['last_message_deleted'] as bool?) ?? false,
   );
 }
 
@@ -58,6 +61,7 @@ class ChatMessage {
     required this.text,
     required this.createdAt,
     this.readAt,
+    this.deletedAt,
   });
 
   final String id;
@@ -65,6 +69,9 @@ class ChatMessage {
   final String text;
   final DateTime createdAt;
   final DateTime? readAt;
+  final DateTime? deletedAt;
+
+  bool get isDeleted => deletedAt != null;
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) => ChatMessage(
     id: json['id'] as String,
@@ -74,14 +81,18 @@ class ChatMessage {
     readAt: json['read_at'] != null
         ? DateTime.tryParse(json['read_at'] as String)
         : null,
+    deletedAt: json['deleted_at'] != null
+        ? DateTime.tryParse(json['deleted_at'] as String)
+        : null,
   );
 
-  ChatMessage copyWith({DateTime? readAt}) => ChatMessage(
+  ChatMessage copyWith({DateTime? readAt, DateTime? deletedAt}) => ChatMessage(
     id: id,
     senderId: senderId,
     text: text,
     createdAt: createdAt,
     readAt: readAt ?? this.readAt,
+    deletedAt: deletedAt ?? this.deletedAt,
   );
 }
 
@@ -138,6 +149,14 @@ class ChatsApi {
         data: {'text': text},
       );
       return ChatMessage.fromJson(r.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  Future<void> deleteMessage(String conversationId, String messageId) async {
+    try {
+      await _dio.delete('/chats/$conversationId/messages/$messageId');
     } on DioException catch (e) {
       throw toApiException(e);
     }

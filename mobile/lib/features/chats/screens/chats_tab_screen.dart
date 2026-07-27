@@ -141,9 +141,14 @@ class ChatsTabScreen extends ConsumerWidget {
                               ),
                             ),
                             subtitle: Text(
-                              c.lastMessageText ?? '',
+                              c.lastMessageDeleted
+                                  ? l10n.messageDeleted
+                                  : (c.lastMessageText ?? ''),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              style: c.lastMessageDeleted
+                                  ? const TextStyle(fontStyle: FontStyle.italic)
+                                  : null,
                             ),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

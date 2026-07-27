@@ -15,7 +15,9 @@ import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/verify_code_screen.dart';
 import '../../features/auth/screens/welcome_screen.dart';
 import '../../features/chats/screens/chat_screen.dart';
+import '../../features/dating/screens/dating_settings_screen.dart';
 import '../../features/friends/screens/people_search_screen.dart';
+import '../../features/notifications/screens/notifications_screen.dart';
 import '../../features/friends/screens/user_profile_screen.dart';
 import '../../features/profile/screens/blocked_users_screen.dart';
 import '../../features/profile/screens/change_password_screen.dart';
@@ -165,6 +167,18 @@ final routerProvider = Provider<GoRouter>((ref) {
           conversationId: state.pathParameters['id']!,
           peerId: state.uri.queryParameters['peer'] ?? '',
         ),
+      ),
+      GoRoute(
+        path: '/dating/settings',
+        builder: (context, state) => const DatingSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/dating/matches',
+        builder: (context, state) => const MyMatchesScreen(),
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
         path: '/people-search',

@@ -167,6 +167,53 @@
   "duplicateSheetTitle": "Возможно, уже добавлен",
   "addAnyway": "Всё равно добавить",
 
+  "notificationsTitle": "Уведомления",
+  "notificationsEmpty": "Пока нет уведомлений",
+  "notifFriendRequest": "{name} хочет добавить вас в друзья",
+  "@notifFriendRequest": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "notifFriendAccepted": "{name} принял(а) вашу заявку",
+  "@notifFriendAccepted": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "notifMatch": "У вас мэтч с {name}!",
+  "@notifMatch": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "notifServiceRecommended": "Ваш сервис попал в «Рекомендовано»",
+  "notifServiceHidden": "Ваш сервис скрыт администратором",
+  "nowFriends": "Вы теперь друзья",
+  "requestDeclined": "Заявка отклонена",
+  "guestDatingTitle": "Войдите, чтобы знакомиться",
+  "datingEnableTitle": "Знакомьтесь с людьми рядом",
+  "datingEnableBody": "Включите участие — и мы покажем вас другим экспатам в вашем месте. Выключить можно в любой момент",
+  "datingEnableButton": "Включить знакомства",
+  "datingProfileIncompleteTitle": "Заполните профиль",
+  "datingProfileIncompleteBody": "Для знакомств нужны имя, фото, пол и дата рождения",
+  "deckEmpty": "Вы посмотрели всех. Загляните позже",
+  "likeLimitReached": "Лимит лайков на сегодня исчерпан",
+  "matchTitle": "Это мэтч! 🎉",
+  "matchSubtitle": "Вы понравились друг другу с {name}",
+  "@matchSubtitle": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "matchWriteMessage": "Написать сообщение",
+  "matchLater": "Позже",
+  "datingSettingsTitle": "Анкета",
+  "datingParticipate": "Участвовать",
+  "datingParticipateHint": "Показывать вас в колоде и показывать вам других",
+  "lookingForLabel": "Что ищете",
+  "lookingForAny": "Не важно",
+  "lookingForFriends": "Друзей",
+  "lookingForDating": "Свидания",
+  "lookingForNetworking": "Нетворкинг",
+  "showGenderLabel": "Кого показывать",
+  "showGenderAny": "Всех",
+  "myMatches": "Мои мэтчи",
+  "matchesEmpty": "Мэтчей пока нет — свайпайте!",
+  "messageDeleted": "Сообщение удалено",
+  "deleteMessage": "Удалить сообщение",
   "messagesTitle": "Сообщения",
   "messagesEmpty": "Пока нет диалогов. Сообщения доступны между друзьями",
   "toFriends": "К друзьям",

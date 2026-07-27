@@ -58,6 +58,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     ref.read(chatControllerProvider(widget.conversationId).notifier).send(text);
   }
 
+  Future<void> _messageActions(LocalMessage m) async {
+    final l10n = AppLocalizations.of(context)!;
+    if (m.message.isDeleted || m.status != LocalMessageStatus.sent) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: AppColors.error),
+              title: Text(
+                l10n.deleteMessage,
+                style: const TextStyle(color: AppColors.error),
+              ),
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                ref
+                    .read(
+                      chatControllerProvider(widget.conversationId).notifier,
+                    )
+                    .deleteMessage(m.message.id);
+              },
+            ),
+            ListTile(
+              title: Center(child: Text(l10n.cancel)),
+              onTap: () => Navigator.of(sheetContext).pop(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   String _formatTime(DateTime time) {
     final local = time.toLocal();
     return '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
@@ -145,7 +182,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 ).notifier,
                               )
                               .retry(m.localId),
+                          onLongPress: isMine ? () => _messageActions(m) : null,
                           retryLabel: l10n.retry,
+                          deletedLabel: l10n.messageDeleted,
                         );
                       },
                     ),
@@ -185,20 +224,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: IconButton(
-                        style: IconButton.styleFrom(
-                          backgroundColor: _textController.text.trim().isEmpty
+                    // Круглая кнопка: иконка строго по центру
+                    GestureDetector(
+                      onTap: _textController.text.trim().isEmpty ? null : _send,
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _textController.text.trim().isEmpty
                               ? AppColors.border
                               : AppColors.coral,
-                          foregroundColor: Colors.white,
                         ),
-                        icon: const Icon(Icons.arrow_upward),
-                        onPressed: _textController.text.trim().isEmpty
-                            ? null
-                            : _send,
+                        child: const Icon(
+                          Icons.arrow_upward_rounded,
+                          size: 22,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -217,22 +260,28 @@ class _MessageBubble extends StatelessWidget {
     required this.isMine,
     required this.time,
     required this.onRetry,
+    required this.onLongPress,
     required this.retryLabel,
+    required this.deletedLabel,
   });
 
   final LocalMessage message;
   final bool isMine;
   final String time;
   final VoidCallback onRetry;
+  final VoidCallback? onLongPress;
   final String retryLabel;
+  final String deletedLabel;
 
   @override
   Widget build(BuildContext context) {
     final failed = message.status == LocalMessageStatus.failed;
+    final deleted = message.message.isDeleted;
     return Align(
       alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
         onTap: failed ? onRetry : null,
+        onLongPress: deleted ? null : onLongPress,
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 3),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -240,7 +289,9 @@ class _MessageBubble extends StatelessWidget {
             maxWidth: MediaQuery.of(context).size.width * 0.75,
           ),
           decoration: BoxDecoration(
-            color: isMine ? AppColors.coral : AppColors.surface,
+            color: deleted
+                ? AppColors.surface
+                : (isMine ? AppColors.coral : AppColors.surface),
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(18),
               topRight: const Radius.circular(18),
@@ -252,10 +303,13 @@ class _MessageBubble extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                message.message.text,
+                deleted ? deletedLabel : message.message.text,
                 style: TextStyle(
                   fontSize: 15,
-                  color: isMine ? Colors.white : AppColors.textPrimary,
+                  fontStyle: deleted ? FontStyle.italic : FontStyle.normal,
+                  color: deleted
+                      ? AppColors.textSecondary
+                      : (isMine ? Colors.white : AppColors.textPrimary),
                 ),
               ),
               const SizedBox(height: 2),

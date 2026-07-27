@@ -167,6 +167,53 @@
   "duplicateSheetTitle": "Possibly already added",
   "addAnyway": "Add anyway",
 
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "No notifications yet",
+  "notifFriendRequest": "{name} wants to add you as a friend",
+  "@notifFriendRequest": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "notifFriendAccepted": "{name} accepted your request",
+  "@notifFriendAccepted": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "notifMatch": "You matched with {name}!",
+  "@notifMatch": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "notifServiceRecommended": "Your service is now Recommended",
+  "notifServiceHidden": "Your service was hidden by an admin",
+  "nowFriends": "You are now friends",
+  "requestDeclined": "Request declined",
+  "guestDatingTitle": "Log in to meet people",
+  "datingEnableTitle": "Meet people nearby",
+  "datingEnableBody": "Turn on participation and we'll show you to other expats in your place. You can turn it off anytime",
+  "datingEnableButton": "Enable dating",
+  "datingProfileIncompleteTitle": "Complete your profile",
+  "datingProfileIncompleteBody": "Dating requires a name, photo, gender and date of birth",
+  "deckEmpty": "You've seen everyone. Check back later",
+  "likeLimitReached": "You've reached today's like limit",
+  "matchTitle": "It's a match! 🎉",
+  "matchSubtitle": "You and {name} liked each other",
+  "@matchSubtitle": {
+    "placeholders": { "name": {"type": "String"} }
+  },
+  "matchWriteMessage": "Send a message",
+  "matchLater": "Later",
+  "datingSettingsTitle": "Dating profile",
+  "datingParticipate": "Participate",
+  "datingParticipateHint": "Show you in the deck and show others to you",
+  "lookingForLabel": "Looking for",
+  "lookingForAny": "Anything",
+  "lookingForFriends": "Friends",
+  "lookingForDating": "Dating",
+  "lookingForNetworking": "Networking",
+  "showGenderLabel": "Show me",
+  "showGenderAny": "Everyone",
+  "myMatches": "My matches",
+  "matchesEmpty": "No matches yet — start swiping!",
+  "messageDeleted": "Message deleted",
+  "deleteMessage": "Delete message",
   "messagesTitle": "Messages",
   "messagesEmpty": "No conversations yet. Messaging is available between friends",
   "toFriends": "To friends",

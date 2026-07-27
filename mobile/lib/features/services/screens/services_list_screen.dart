@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/session_controller.dart';
+import '../../notifications/providers/notifications_providers.dart';
 import '../providers/services_providers.dart';
 import '../widgets/service_grid_card.dart';
 
@@ -98,6 +99,9 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
     final citiesAsync = ref.watch(citiesProvider);
     final session = ref.watch(sessionControllerProvider);
     final isGuest = session.status != SessionStatus.ready;
+    final unreadNotifications = isGuest
+        ? 0
+        : (ref.watch(unreadNotificationsProvider).valueOrNull ?? 0);
     final listAsync = ref.watch(
       servicesListProvider(
         ServicesListKey(tab: _tab, cityId: cityId, categoryId: categoryId),
@@ -165,10 +169,20 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.notifications_none),
-                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.comingSoonSection)),
+                    icon: Badge(
+                      // красная точка при непрочитанных (спека, экран 04)
+                      isLabelVisible: !isGuest && unreadNotifications > 0,
+                      backgroundColor: AppColors.coral,
+                      smallSize: 8,
+                      child: const Icon(Icons.notifications_none),
                     ),
+                    onPressed: () {
+                      if (isGuest) {
+                        showAuthGateSheet(context, l10n.authGateActionFavorite);
+                      } else {
+                        context.push('/notifications');
+                      }
+                    },
                   ),
                   TextButton(
                     onPressed: _openCityPicker,

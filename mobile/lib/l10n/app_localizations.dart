@@ -812,6 +812,216 @@ abstract class AppLocalizations {
   /// **'Всё равно добавить'**
   String get addAnyway;
 
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомления'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет уведомлений'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notifFriendRequest.
+  ///
+  /// In ru, this message translates to:
+  /// **'{name} хочет добавить вас в друзья'**
+  String notifFriendRequest(String name);
+
+  /// No description provided for @notifFriendAccepted.
+  ///
+  /// In ru, this message translates to:
+  /// **'{name} принял(а) вашу заявку'**
+  String notifFriendAccepted(String name);
+
+  /// No description provided for @notifMatch.
+  ///
+  /// In ru, this message translates to:
+  /// **'У вас мэтч с {name}!'**
+  String notifMatch(String name);
+
+  /// No description provided for @notifServiceRecommended.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваш сервис попал в «Рекомендовано»'**
+  String get notifServiceRecommended;
+
+  /// No description provided for @notifServiceHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваш сервис скрыт администратором'**
+  String get notifServiceHidden;
+
+  /// No description provided for @nowFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы теперь друзья'**
+  String get nowFriends;
+
+  /// No description provided for @requestDeclined.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заявка отклонена'**
+  String get requestDeclined;
+
+  /// No description provided for @guestDatingTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите, чтобы знакомиться'**
+  String get guestDatingTitle;
+
+  /// No description provided for @datingEnableTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Знакомьтесь с людьми рядом'**
+  String get datingEnableTitle;
+
+  /// No description provided for @datingEnableBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включите участие — и мы покажем вас другим экспатам в вашем месте. Выключить можно в любой момент'**
+  String get datingEnableBody;
+
+  /// No description provided for @datingEnableButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включить знакомства'**
+  String get datingEnableButton;
+
+  /// No description provided for @datingProfileIncompleteTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заполните профиль'**
+  String get datingProfileIncompleteTitle;
+
+  /// No description provided for @datingProfileIncompleteBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для знакомств нужны имя, фото, пол и дата рождения'**
+  String get datingProfileIncompleteBody;
+
+  /// No description provided for @deckEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы посмотрели всех. Загляните позже'**
+  String get deckEmpty;
+
+  /// No description provided for @likeLimitReached.
+  ///
+  /// In ru, this message translates to:
+  /// **'Лимит лайков на сегодня исчерпан'**
+  String get likeLimitReached;
+
+  /// No description provided for @matchTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Это мэтч! 🎉'**
+  String get matchTitle;
+
+  /// No description provided for @matchSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы понравились друг другу с {name}'**
+  String matchSubtitle(String name);
+
+  /// No description provided for @matchWriteMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Написать сообщение'**
+  String get matchWriteMessage;
+
+  /// No description provided for @matchLater.
+  ///
+  /// In ru, this message translates to:
+  /// **'Позже'**
+  String get matchLater;
+
+  /// No description provided for @datingSettingsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Анкета'**
+  String get datingSettingsTitle;
+
+  /// No description provided for @datingParticipate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Участвовать'**
+  String get datingParticipate;
+
+  /// No description provided for @datingParticipateHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показывать вас в колоде и показывать вам других'**
+  String get datingParticipateHint;
+
+  /// No description provided for @lookingForLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Что ищете'**
+  String get lookingForLabel;
+
+  /// No description provided for @lookingForAny.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не важно'**
+  String get lookingForAny;
+
+  /// No description provided for @lookingForFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'Друзей'**
+  String get lookingForFriends;
+
+  /// No description provided for @lookingForDating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свидания'**
+  String get lookingForDating;
+
+  /// No description provided for @lookingForNetworking.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нетворкинг'**
+  String get lookingForNetworking;
+
+  /// No description provided for @showGenderLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кого показывать'**
+  String get showGenderLabel;
+
+  /// No description provided for @showGenderAny.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всех'**
+  String get showGenderAny;
+
+  /// No description provided for @myMatches.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мои мэтчи'**
+  String get myMatches;
+
+  /// No description provided for @matchesEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мэтчей пока нет — свайпайте!'**
+  String get matchesEmpty;
+
+  /// No description provided for @messageDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщение удалено'**
+  String get messageDeleted;
+
+  /// No description provided for @deleteMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить сообщение'**
+  String get deleteMessage;
+
   /// No description provided for @messagesTitle.
   ///
   /// In ru, this message translates to:
