@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/models.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/api/users_api.dart';
 import '../../../l10n/app_localizations.dart';
@@ -23,14 +24,14 @@ class FavoritesScreen extends ConsumerWidget {
 
     String categoryName(int id) {
       for (final c in categories) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }
 
     String cityName(int id) {
       for (final c in cities) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
@@ -111,7 +112,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             for (final city in cities)
               ListTile(
                 leading: Text(city.flag, style: const TextStyle(fontSize: 24)),
-                title: Text(city.nameRu),
+                title: Text(localizedName(context, city.nameRu, city.nameEn)),
                 onTap: () => Navigator.of(context).pop(city.id),
               ),
             const SizedBox(height: 12),
@@ -246,7 +247,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     String cityName(int? id) {
       for (final c in cities) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }
@@ -254,7 +255,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     String countryLabel(String? code) {
       if (code == null) return '';
       for (final c in allCountries) {
-        if (c.code == code) return '${c.flag} ${c.nameRu}';
+        if (c.code == code) {
+          return '${c.flag} ${localizedName(context, c.nameRu, c.nameEn)}';
+        }
       }
       return code;
     }
@@ -440,7 +443,7 @@ class _CountrySheetState extends State<_CountrySheet> {
                   final c = filtered[index];
                   return ListTile(
                     leading: Text(c.flag, style: const TextStyle(fontSize: 24)),
-                    title: Text(c.nameRu),
+                    title: Text(localizedName(context, c.nameRu, c.nameEn)),
                     onTap: () => Navigator.of(context).pop(c.code),
                   );
                 },

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/models.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
@@ -52,8 +53,14 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
             for (final city in cities)
               ListTile(
                 leading: Text(city.flag, style: const TextStyle(fontSize: 24)),
-                title: Text(city.nameRu),
-                subtitle: Text(city.countryRu),
+                title: Text(localizedName(context, city.nameRu, city.nameEn)),
+                subtitle: Text(
+                  localizedName(
+                    context,
+                    localizedName(context, city.countryRu, city.countryEn),
+                    city.countryEn,
+                  ),
+                ),
                 onTap: () => Navigator.of(context).pop(city.id),
               ),
             const SizedBox(height: 12),
@@ -116,7 +123,7 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
     final cities = citiesAsync.valueOrNull ?? const <City>[];
     String cityName(int id) {
       for (final c in cities) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }
@@ -124,7 +131,7 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
     final categories = categoriesAsync.valueOrNull ?? const <ServiceCategory>[];
     String categoryName(int id) {
       for (final c in categories) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }
@@ -233,7 +240,7 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                   for (final c in categories) ...[
                     const SizedBox(width: 8),
                     _CategoryChip(
-                      label: c.nameRu,
+                      label: localizedName(context, c.nameRu, c.nameEn),
                       selected: categoryId == c.id,
                       onTap: () =>
                           ref.read(selectedCategoryProvider.notifier).state =

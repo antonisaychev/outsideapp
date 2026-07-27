@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/api/users_api.dart';
@@ -123,7 +124,7 @@ class _AddServiceScreenState extends ConsumerState<AddServiceScreen> {
               ),
               for (final c in categories)
                 ListTile(
-                  title: Text(c.nameRu),
+                  title: Text(localizedName(context, c.nameRu, c.nameEn)),
                   trailing: _categoryId == c.id
                       ? const Icon(Icons.check, color: AppColors.coral)
                       : null,
@@ -162,7 +163,7 @@ class _AddServiceScreenState extends ConsumerState<AddServiceScreen> {
             for (final city in cities)
               ListTile(
                 leading: Text(city.flag, style: const TextStyle(fontSize: 24)),
-                title: Text(city.nameRu),
+                title: Text(localizedName(context, city.nameRu, city.nameEn)),
                 onTap: () => Navigator.of(context).pop(city.id),
               ),
             const SizedBox(height: 12),
@@ -262,14 +263,18 @@ class _AddServiceScreenState extends ConsumerState<AddServiceScreen> {
 
     String categoryLabel() {
       for (final c in categories) {
-        if (c.id == _categoryId) return c.nameRu;
+        if (c.id == _categoryId) {
+          return localizedName(context, c.nameRu, c.nameEn);
+        }
       }
       return l10n.categoryChip;
     }
 
     String cityLabel() {
       for (final c in cities) {
-        if (c.id == effectiveCityId) return c.nameRu;
+        if (c.id == effectiveCityId) {
+          return localizedName(context, c.nameRu, c.nameEn);
+        }
       }
       return '';
     }

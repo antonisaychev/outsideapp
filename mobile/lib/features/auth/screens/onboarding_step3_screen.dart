@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/users_api.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/selectable_chip.dart';
@@ -92,7 +93,11 @@ class _OnboardingStep3ScreenState extends ConsumerState<OnboardingStep3Screen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        city.nameRu,
+                                        localizedName(
+                                          context,
+                                          city.nameRu,
+                                          city.nameEn,
+                                        ),
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
@@ -102,7 +107,11 @@ class _OnboardingStep3ScreenState extends ConsumerState<OnboardingStep3Screen> {
                                         ),
                                       ),
                                       Text(
-                                        city.countryRu,
+                                        localizedName(
+                                          context,
+                                          city.countryRu,
+                                          city.countryEn,
+                                        ),
                                         style: Theme.of(
                                           context,
                                         ).textTheme.bodyMedium,

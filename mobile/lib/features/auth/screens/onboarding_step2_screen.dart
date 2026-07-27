@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/selectable_chip.dart';
 import '../../../l10n/app_localizations.dart';
@@ -115,7 +116,7 @@ class _OnboardingStep2ScreenState extends ConsumerState<OnboardingStep2Screen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    c.nameRu,
+                                    localizedName(context, c.nameRu, c.nameEn),
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 14,
@@ -202,7 +203,7 @@ class _CountrySearchSheetState extends State<_CountrySearchSheet> {
                   final c = filtered[index];
                   return ListTile(
                     leading: Text(c.flag, style: const TextStyle(fontSize: 24)),
-                    title: Text(c.nameRu),
+                    title: Text(localizedName(context, c.nameRu, c.nameEn)),
                     onTap: () => Navigator.of(context).pop(c.code),
                   );
                 },

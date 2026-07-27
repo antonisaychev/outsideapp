@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/friends_api.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
@@ -101,7 +102,7 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
     final cities = ref.watch(citiesProvider).valueOrNull ?? const <City>[];
     String cityName(int? id) {
       for (final c in cities) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }

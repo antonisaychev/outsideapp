@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/api/users_api.dart';
@@ -92,14 +93,14 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
 
     String categoryName(int id) {
       for (final c in categories) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }
 
     String cityName(int id) {
       for (final c in cities) {
-        if (c.id == id) return c.nameRu;
+        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
     }
