@@ -228,6 +228,7 @@
   "wrongPassword": "Wrong password",
   "languageTitle": "Language",
   "blockedUsersTitle": "Blocked users",
+  "blockedScreenTitle": "Blocked",
   "adminTitle": "Administration",
   "termsTitle": "Terms of Service",
   "privacyTitle": "Privacy Policy",

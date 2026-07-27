@@ -44,7 +44,7 @@ class BlockedUsersScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final blockedAsync = ref.watch(blockedUsersProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.blockedUsersTitle)),
+      appBar: AppBar(title: Text(l10n.blockedScreenTitle)),
       body: SafeArea(
         child: blockedAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),

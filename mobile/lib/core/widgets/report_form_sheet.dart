@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../api/api_client.dart';
 import 'primary_button.dart';
 import 'selectable_chip.dart';
 
@@ -55,6 +56,13 @@ class _ReportFormBodyState extends State<_ReportFormBody> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.reportSent)));
+    } on ApiException {
+      // Ошибка сервера не должна проглатываться молча (QA_NOTES №26)
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+      }
     } finally {
       if (mounted) setState(() => _submitting = false);
     }

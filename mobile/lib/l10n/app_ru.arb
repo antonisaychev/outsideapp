@@ -228,6 +228,7 @@
   "wrongPassword": "Неверный пароль",
   "languageTitle": "Язык",
   "blockedUsersTitle": "Заблокированные пользователи",
+  "blockedScreenTitle": "Заблокированные",
   "adminTitle": "Администрирование",
   "termsTitle": "Условия использования",
   "privacyTitle": "Политика конфиденциальности",

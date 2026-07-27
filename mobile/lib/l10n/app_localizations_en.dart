@@ -554,6 +554,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get blockedUsersTitle => 'Blocked users';
 
   @override
+  String get blockedScreenTitle => 'Blocked';
+
+  @override
   String get adminTitle => 'Administration';
 
   @override

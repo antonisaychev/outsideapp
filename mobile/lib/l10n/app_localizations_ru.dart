@@ -554,6 +554,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get blockedUsersTitle => 'Заблокированные пользователи';
 
   @override
+  String get blockedScreenTitle => 'Заблокированные';
+
+  @override
   String get adminTitle => 'Администрирование';
 
   @override

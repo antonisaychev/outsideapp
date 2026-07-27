@@ -1100,6 +1100,12 @@ abstract class AppLocalizations {
   /// **'Заблокированные пользователи'**
   String get blockedUsersTitle;
 
+  /// No description provided for @blockedScreenTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокированные'**
+  String get blockedScreenTitle;
+
   /// No description provided for @adminTitle.
   ///
   /// In ru, this message translates to:

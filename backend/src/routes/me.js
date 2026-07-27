@@ -131,13 +131,20 @@ router.get('/favorites', async (req, res) => {
   res.json(r.rows);
 });
 
-// Удаление аккаунта: soft-delete + скрытие своих сервисов
+// Удаление аккаунта: soft-delete + скрытие своих сервисов.
+// Email и никнейм переименовываются в «надгробия» — освобождаются для
+// повторной регистрации (у никнейма constraint ^[a-z_]{3,30}$, поэтому
+// цифры uuid транслитерируются в буквы)
 router.delete('/', async (req, res) => {
   const password = String(req.body.password || '');
   const r = await db.query('SELECT password_hash FROM users WHERE id=$1', [req.userId]);
   const ok = await bcrypt.compare(password, r.rows[0].password_hash);
   if (!ok) return res.status(400).json({ error: 'WRONG_PASSWORD' });
-  await db.query('UPDATE users SET deleted_at=now() WHERE id=$1', [req.userId]);
+  const tombstoneNick = ('deleted_' + req.userId.replace(/-/g, '')
+    .replace(/[0-9]/g, d => 'ghijklmnop'[Number(d)])).slice(0, 30);
+  await db.query(
+    `UPDATE users SET deleted_at=now(), email='deleted+' || id || '@deleted.local', username=$2 WHERE id=$1`,
+    [req.userId, tombstoneNick]);
   await db.query(`UPDATE services SET status='hidden' WHERE author_id=$1 AND status<>'hidden'`, [req.userId]);
   res.json({ ok: true });
 });
