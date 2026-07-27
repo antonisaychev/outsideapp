@@ -187,7 +187,7 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
                   _TabLabel(
                     text: l10n.friendsTabMy,
                     active: _tab == 0,
-                    onTap: () => setState(() => _tab = 0),
+                    onTap: () => _switchTab(0),
                   ),
                   const SizedBox(width: 16),
                   _TabLabel(
@@ -195,13 +195,13 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
                         ? l10n.friendsTabIncoming
                         : '${l10n.friendsTabIncoming} · ${incoming.length}',
                     active: _tab == 1,
-                    onTap: () => setState(() => _tab = 1),
+                    onTap: () => _switchTab(1),
                   ),
                   const SizedBox(width: 16),
                   _TabLabel(
                     text: l10n.friendsTabOutgoing,
                     active: _tab == 2,
-                    onTap: () => setState(() => _tab = 2),
+                    onTap: () => _switchTab(2),
                   ),
                 ],
               ),
@@ -212,6 +212,20 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
         ),
       ),
     );
+  }
+
+  /// Переключение таба всегда перезапрашивает его список — иначе на другом
+  /// устройстве не видно свежих заявок (см. QA_NOTES №23)
+  void _switchTab(int tab) {
+    switch (tab) {
+      case 1:
+        ref.invalidate(incomingRequestsProvider);
+      case 2:
+        ref.invalidate(outgoingRequestsProvider);
+      default:
+        ref.invalidate(friendsListProvider);
+    }
+    setState(() => _tab = tab);
   }
 
   Widget _buildTabContent(AppLocalizations l10n) {
@@ -243,26 +257,32 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
           child: Text(l10n.retry),
         ),
       ),
-      data: (friends) => friends.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      data: (friends) => RefreshIndicator(
+        onRefresh: () async => invalidateFriendship(ref),
+        child: friends.isEmpty
+            ? ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: [
-                  Text(
-                    l10n.friendsEmpty,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () => context.push('/people-search'),
-                    child: Text(l10n.findPeople),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 120),
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.friendsEmpty,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: () => context.push('/people-search'),
+                          child: Text(l10n.findPeople),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: () async => invalidateFriendship(ref),
-              child: ListView.builder(
+              )
+            : ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: friends.length,
                 itemBuilder: (context, index) {
                   final f = friends[index];
@@ -296,7 +316,7 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
                   );
                 },
               ),
-            ),
+      ),
     );
   }
 
@@ -318,95 +338,97 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
           child: Text(l10n.retry),
         ),
       ),
-      data: (requests) => requests.isEmpty
-          ? Center(
-              child: Text(
-                l10n.incomingEmpty,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: requests.length,
-              itemBuilder: (context, index) {
-                final r = requests[index];
-                final city = cityName(r.cityId);
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.coralTint,
-                    borderRadius: BorderRadius.circular(AppRadius.medium),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () => context.push('/users/${r.id}'),
-                        child: Row(
+      data: (requests) => RefreshIndicator(
+        onRefresh: () async => ref.invalidate(incomingRequestsProvider),
+        child: requests.isEmpty
+            ? _EmptyScrollable(text: l10n.incomingEmpty)
+            : ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                itemCount: requests.length,
+                itemBuilder: (context, index) {
+                  final r = requests[index];
+                  final city = cityName(r.cityId);
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.coralTint,
+                      borderRadius: BorderRadius.circular(AppRadius.medium),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.push('/users/${r.id}'),
+                          child: Row(
+                            children: [
+                              UserAvatar(
+                                avatarUrl: r.avatarUrl,
+                                name: r.displayName,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      r.displayName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      city.isEmpty
+                                          ? l10n.wantsToBeFriends
+                                          : '$city · ${l10n.wantsToBeFriends}',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
                           children: [
-                            UserAvatar(
-                              avatarUrl: r.avatarUrl,
-                              name: r.displayName,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(0, 44),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
+                              ),
+                              onPressed: () => _accept(r.id),
+                              child: Text(l10n.acceptRequest),
                             ),
                             const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    r.displayName,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    city.isEmpty
-                                        ? l10n.wantsToBeFriends
-                                        : '$city · ${l10n.wantsToBeFriends}',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium,
-                                  ),
-                                ],
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(0, 44),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
+                                backgroundColor: Colors.white,
+                                side: const BorderSide(color: AppColors.border),
                               ),
+                              onPressed: () => _decline(r.id),
+                              child: Text(l10n.declineRequest),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(0, 44),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                              ),
-                            ),
-                            onPressed: () => _accept(r.id),
-                            child: Text(l10n.acceptRequest),
-                          ),
-                          const SizedBox(width: 12),
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: const Size(0, 44),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                              ),
-                              backgroundColor: Colors.white,
-                              side: const BorderSide(color: AppColors.border),
-                            ),
-                            onPressed: () => _decline(r.id),
-                            child: Text(l10n.declineRequest),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 
@@ -420,34 +442,55 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
           child: Text(l10n.retry),
         ),
       ),
-      data: (requests) => requests.isEmpty
-          ? Center(
-              child: Text(
-                l10n.outgoingEmpty,
-                style: Theme.of(context).textTheme.bodyMedium,
+      data: (requests) => RefreshIndicator(
+        onRefresh: () async => ref.invalidate(outgoingRequestsProvider),
+        child: requests.isEmpty
+            ? _EmptyScrollable(text: l10n.outgoingEmpty)
+            : ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: requests.length,
+                itemBuilder: (context, index) {
+                  final r = requests[index];
+                  return ListTile(
+                    onTap: () => context.push('/users/${r.id}'),
+                    leading: UserAvatar(
+                      avatarUrl: r.avatarUrl,
+                      name: r.displayName,
+                    ),
+                    title: Text(
+                      r.displayName,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    trailing: TextButton(
+                      onPressed: () => _cancel(r.id),
+                      child: Text(l10n.cancelRequest),
+                    ),
+                  );
+                },
               ),
-            )
-          : ListView.builder(
-              itemCount: requests.length,
-              itemBuilder: (context, index) {
-                final r = requests[index];
-                return ListTile(
-                  onTap: () => context.push('/users/${r.id}'),
-                  leading: UserAvatar(
-                    avatarUrl: r.avatarUrl,
-                    name: r.displayName,
-                  ),
-                  title: Text(
-                    r.displayName,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  trailing: TextButton(
-                    onPressed: () => _cancel(r.id),
-                    child: Text(l10n.cancelRequest),
-                  ),
-                );
-              },
-            ),
+      ),
+    );
+  }
+}
+
+/// Пустое состояние, которое можно «потянуть вниз» для обновления.
+class _EmptyScrollable extends StatelessWidget {
+  const _EmptyScrollable({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 120),
+          child: Center(
+            child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+          ),
+        ),
+      ],
     );
   }
 }
