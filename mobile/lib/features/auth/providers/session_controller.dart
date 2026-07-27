@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
@@ -50,9 +49,7 @@ class SessionController extends StateNotifier<SessionState> {
             : SessionStatus.onboarding,
         profile: profile,
       );
-      debugPrint('[session] profile loaded, status=${state.status}');
     } on ApiException catch (e) {
-      debugPrint('[session] loadProfile failed: $e');
       if (e.statusCode == 403 && e.error == 'BLOCKED') {
         state = SessionState(
           status: SessionStatus.blocked,

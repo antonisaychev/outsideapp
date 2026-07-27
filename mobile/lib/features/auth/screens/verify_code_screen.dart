@@ -84,7 +84,8 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
         await ref
             .read(sessionControllerProvider.notifier)
             .verifyCode(email: widget.email, code: code);
-        // дальше роутер сам уведёт на онбординг по смене статуса сессии
+        // Явный переход (см. login_screen): redirect перехватит онбординг/блок
+        if (mounted) context.go('/home');
       } else {
         final resetToken = await ref
             .read(authApiProvider)

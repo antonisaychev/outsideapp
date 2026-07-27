@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/utils/validators.dart';
@@ -42,7 +43,8 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen> {
             resetToken: widget.resetToken,
             newPassword: _passwordController.text,
           );
-      // роутер сам переведёт дальше по смене статуса сессии
+      // Явный переход (см. login_screen): redirect перехватит онбординг/блок
+      if (mounted) context.go('/home');
     } on ApiException catch (e) {
       setState(
         () => _error = e.error == 'RESET_TOKEN_INVALID'

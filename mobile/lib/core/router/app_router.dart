@@ -59,7 +59,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final session = ref.read(sessionControllerProvider);
       final loc = state.matchedLocation;
-      debugPrint('[router] redirect check: loc=$loc status=${session.status}');
 
       switch (session.status) {
         case SessionStatus.initializing:

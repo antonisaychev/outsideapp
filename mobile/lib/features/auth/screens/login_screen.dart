@@ -35,15 +35,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _formError = null;
     });
     final email = _emailController.text.trim().toLowerCase();
-    debugPrint('[login] submit for $email');
     try {
       await ref
           .read(sessionControllerProvider.notifier)
           .login(email: email, password: _passwordController.text);
-      debugPrint('[login] success');
-      // роутер сам переведёт дальше по смене статуса сессии (включая BLOCKED)
+      // Явный переход: если экран входа был открыт поверх /home (гость),
+      // redirect роутера сам ничего не сделает — база уже валидна.
+      // go('/home') схлопывает стек; онбординг/блок redirect перехватит сам.
+      if (mounted) context.go('/home');
     } on ApiException catch (e) {
-      debugPrint('[login] ApiException: $e');
       String message;
       switch (e.error) {
         case 'EMAIL_NOT_VERIFIED':
