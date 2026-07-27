@@ -1,0 +1,83 @@
+{
+  "@@locale": "en",
+
+  "appName": "Outside",
+  "welcomeTagline": "A social network for expats near you",
+  "createAccount": "Create account",
+  "login": "Log in",
+  "continueAsGuest": "Continue without an account",
+
+  "registerTitle": "Sign up",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "passwordConfirmLabel": "Confirm password",
+  "usernameLabel": "Username",
+  "usernameHint": "letters and _, 3+ characters",
+  "usernameChecking": "checking…",
+  "usernameAvailable": "available",
+  "usernameTaken": "taken",
+  "errorEmailInvalid": "Enter a valid email",
+  "errorEmailTaken": "This email is already registered.",
+  "errorPasswordTooShort": "Password must be at least 8 characters",
+  "errorPasswordMismatch": "Passwords don't match",
+  "errorUsernameInvalid": "Only latin letters and _, 3 to 30 characters",
+  "alreadyHaveAccount": "Already have an account? Log in",
+
+  "verifyEmailTitle": "Confirm your email",
+  "verifyEmailSubtitle": "We sent a code to {email}",
+  "@verifyEmailSubtitle": {
+    "placeholders": { "email": {"type": "String"} }
+  },
+  "errorCodeWrong": "Wrong code, attempts left: {count}",
+  "@errorCodeWrong": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "errorCodeExpired": "Code expired or invalid",
+  "errorCodeLocked": "Too many attempts. Request a new code",
+  "resendCode": "Resend code",
+  "resendCodeTimer": "Resend in {seconds}s",
+  "@resendCodeTimer": {
+    "placeholders": { "seconds": {"type": "int"} }
+  },
+  "confirm": "Confirm",
+
+  "onboardingStep1Title": "What's your name?",
+  "firstNameLabel": "First name",
+  "lastNameLabel": "Last name",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "next": "Next",
+  "onboardingStep2Title": "Where are you from?",
+  "onboardingStep2Subtitle": "Pick your compatriots or who you'd like to meet",
+  "searchCountry": "Search country",
+  "otherCountry": "Other country…",
+  "onboardingStep3Title": "Where are you now?",
+  "done": "Done",
+
+  "loginTitle": "Log in",
+  "forgotPassword": "Forgot password?",
+  "noAccountCreate": "No account? Create one",
+  "errorInvalidCredentials": "Incorrect email or password",
+  "errorTryLater": "Too many attempts. Try again in {seconds}s",
+  "@errorTryLater": {
+    "placeholders": { "seconds": {"type": "int"} }
+  },
+
+  "forgotPasswordTitle": "Forgot password",
+  "sendCode": "Send code",
+  "codeSentNotice": "If that email is registered, we sent a code",
+  "newPasswordTitle": "New password",
+  "saveAndLogin": "Save and log in",
+
+  "blockedTitle": "Your account is blocked",
+  "blockedReasonLabel": "Reason:",
+  "contactSupport": "Contact support",
+  "logout": "Log out",
+
+  "avatarUploadFailed": "Couldn't upload the photo — you can add it later in your profile",
+  "homeWelcomeTitle": "Welcome to Outside!",
+  "genericError": "Something went wrong. Please try again",
+  "noConnection": "No connection",
+  "cancel": "Cancel",
+  "retry": "Retry"
+}

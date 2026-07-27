@@ -1,0 +1,83 @@
+{
+  "@@locale": "ru",
+
+  "appName": "Outside",
+  "welcomeTagline": "Соцсеть для экспатов рядом с вами",
+  "createAccount": "Создать аккаунт",
+  "login": "Войти",
+  "continueAsGuest": "Продолжить без регистрации",
+
+  "registerTitle": "Регистрация",
+  "emailLabel": "Email",
+  "passwordLabel": "Пароль",
+  "passwordConfirmLabel": "Повторите пароль",
+  "usernameLabel": "Никнейм",
+  "usernameHint": "латиница и _, от 3 символов",
+  "usernameChecking": "проверяем…",
+  "usernameAvailable": "свободно",
+  "usernameTaken": "занято",
+  "errorEmailInvalid": "Введите корректный email",
+  "errorEmailTaken": "Этот email уже зарегистрирован.",
+  "errorPasswordTooShort": "Пароль должен быть не короче 8 символов",
+  "errorPasswordMismatch": "Пароли не совпадают",
+  "errorUsernameInvalid": "Только латинские буквы и _, от 3 до 30 символов",
+  "alreadyHaveAccount": "Уже есть аккаунт? Войти",
+
+  "verifyEmailTitle": "Подтвердите почту",
+  "verifyEmailSubtitle": "Мы отправили код на {email}",
+  "@verifyEmailSubtitle": {
+    "placeholders": { "email": {"type": "String"} }
+  },
+  "errorCodeWrong": "Неверный код, осталось попыток: {count}",
+  "@errorCodeWrong": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "errorCodeExpired": "Код истёк или недействителен",
+  "errorCodeLocked": "Слишком много попыток. Запросите новый код",
+  "resendCode": "Отправить код повторно",
+  "resendCodeTimer": "Повторная отправка через {seconds} с",
+  "@resendCodeTimer": {
+    "placeholders": { "seconds": {"type": "int"} }
+  },
+  "confirm": "Подтвердить",
+
+  "onboardingStep1Title": "Как вас зовут?",
+  "firstNameLabel": "Имя",
+  "lastNameLabel": "Фамилия",
+  "genderMale": "Мужской",
+  "genderFemale": "Женский",
+  "next": "Далее",
+  "onboardingStep2Title": "Откуда вы?",
+  "onboardingStep2Subtitle": "Выберите ваших соотечественников или с кем хотите пообщаться",
+  "searchCountry": "Поиск страны",
+  "otherCountry": "Другая страна…",
+  "onboardingStep3Title": "Где вы находитесь?",
+  "done": "Готово",
+
+  "loginTitle": "Вход",
+  "forgotPassword": "Забыли пароль?",
+  "noAccountCreate": "Нет аккаунта? Создать",
+  "errorInvalidCredentials": "Неверный email или пароль",
+  "errorTryLater": "Слишком много попыток. Попробуйте через {seconds} с",
+  "@errorTryLater": {
+    "placeholders": { "seconds": {"type": "int"} }
+  },
+
+  "forgotPasswordTitle": "Забыли пароль",
+  "sendCode": "Отправить код",
+  "codeSentNotice": "Если такой email зарегистрирован, мы отправили код",
+  "newPasswordTitle": "Новый пароль",
+  "saveAndLogin": "Сохранить и войти",
+
+  "blockedTitle": "Ваш аккаунт заблокирован",
+  "blockedReasonLabel": "Причина:",
+  "contactSupport": "Написать в поддержку",
+  "logout": "Выйти",
+
+  "avatarUploadFailed": "Не удалось загрузить фото — добавите его позже в профиле",
+  "homeWelcomeTitle": "Добро пожаловать в Outside!",
+  "genericError": "Что-то пошло не так. Попробуйте ещё раз",
+  "noConnection": "Нет соединения",
+  "cancel": "Отмена",
+  "retry": "Повторить"
+}

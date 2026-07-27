@@ -1,0 +1,122 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/api/api_client.dart';
+import '../../../core/widgets/primary_button.dart';
+import '../../../l10n/app_localizations.dart';
+import '../providers/session_controller.dart';
+
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _submitting = false;
+  String? _formError;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() {
+      _submitting = true;
+      _formError = null;
+    });
+    final email = _emailController.text.trim().toLowerCase();
+    try {
+      await ref
+          .read(sessionControllerProvider.notifier)
+          .login(email: email, password: _passwordController.text);
+      // роутер сам переведёт дальше по смене статуса сессии (включая случай BLOCKED)
+    } on ApiException catch (e) {
+      String message;
+      switch (e.error) {
+        case 'EMAIL_NOT_VERIFIED':
+          if (mounted) {
+            context.go('/verify?email=${Uri.encodeComponent(email)}');
+          }
+          return;
+        case 'TRY_LATER':
+          final seconds = (e.extra?['retry_in_sec'] as num?)?.toInt() ?? 60;
+          message = l10n.errorTryLater(seconds);
+          break;
+        default:
+          message = l10n.errorInvalidCredentials;
+      }
+      setState(() => _formError = message);
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final formValid =
+        _emailController.text.trim().isNotEmpty &&
+        _passwordController.text.isNotEmpty;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.loginTitle)),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (_) => setState(() {}),
+                decoration: InputDecoration(labelText: l10n.emailLabel),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                onChanged: (_) => setState(() {}),
+                decoration: InputDecoration(labelText: l10n.passwordLabel),
+              ),
+              if (_formError != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  _formError!,
+                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                ),
+              ],
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => context.go('/forgot'),
+                  child: Text(l10n.forgotPassword),
+                ),
+              ),
+              const SizedBox(height: 16),
+              PrimaryButton(
+                label: l10n.login,
+                loading: _submitting,
+                onPressed: formValid ? _submit : null,
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () => context.go('/register'),
+                child: Text(l10n.noAccountCreate),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,134 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../features/auth/providers/session_controller.dart';
+import '../../features/auth/screens/blocked_screen.dart';
+import '../../features/auth/screens/forgot_password_screen.dart';
+import '../../features/auth/screens/home_placeholder_screen.dart';
+import '../../features/auth/screens/login_screen.dart';
+import '../../features/auth/screens/new_password_screen.dart';
+import '../../features/auth/screens/onboarding_step1_screen.dart';
+import '../../features/auth/screens/onboarding_step2_screen.dart';
+import '../../features/auth/screens/onboarding_step3_screen.dart';
+import '../../features/auth/screens/register_screen.dart';
+import '../../features/auth/screens/splash_screen.dart';
+import '../../features/auth/screens/verify_code_screen.dart';
+import '../../features/auth/screens/welcome_screen.dart';
+
+const _publicPaths = {
+  '/welcome',
+  '/register',
+  '/verify',
+  '/login',
+  '/forgot',
+  '/verify-reset',
+  '/reset-password',
+};
+
+String _onboardingStepPath(SessionState session) {
+  final profile = session.profile!;
+  if (!profile.onboardingStep1Done) return '/onboarding/1';
+  if (!profile.onboardingStep2Done) return '/onboarding/2';
+  return '/onboarding/3';
+}
+
+/// Мостик между Riverpod-состоянием сессии и go_router: пробрасывает
+/// изменения sessionControllerProvider как ChangeNotifier, чтобы GoRouter
+/// пересчитывал redirect при смене статуса (гость/онбординг/блок/готов).
+class _SessionRefreshNotifier extends ChangeNotifier {
+  _SessionRefreshNotifier(Ref ref) {
+    ref.listen(sessionControllerProvider, (_, _) => notifyListeners());
+  }
+}
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final refreshNotifier = _SessionRefreshNotifier(ref);
+
+  return GoRouter(
+    initialLocation: '/splash',
+    refreshListenable: refreshNotifier,
+    redirect: (context, state) {
+      final session = ref.read(sessionControllerProvider);
+      final loc = state.matchedLocation;
+
+      switch (session.status) {
+        case SessionStatus.initializing:
+          return loc == '/splash' ? null : '/splash';
+        case SessionStatus.unauthenticated:
+          return _publicPaths.contains(loc) ? null : '/welcome';
+        case SessionStatus.blocked:
+          return loc == '/blocked' ? null : '/blocked';
+        case SessionStatus.onboarding:
+          final step = _onboardingStepPath(session);
+          return loc == step ? null : step;
+        case SessionStatus.ready:
+          final onAuthScreen =
+              loc == '/splash' ||
+              _publicPaths.contains(loc) ||
+              loc.startsWith('/onboarding') ||
+              loc == '/blocked';
+          return onAuthScreen ? '/home' : null;
+      }
+    },
+    routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/welcome',
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/verify',
+        builder: (context, state) => VerifyCodeScreen(
+          email: state.uri.queryParameters['email'] ?? '',
+          purpose: VerifyPurpose.register,
+        ),
+      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/forgot',
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/verify-reset',
+        builder: (context, state) => VerifyCodeScreen(
+          email: state.uri.queryParameters['email'] ?? '',
+          purpose: VerifyPurpose.reset,
+        ),
+      ),
+      GoRoute(
+        path: '/reset-password',
+        builder: (context, state) => NewPasswordScreen(
+          resetToken: state.uri.queryParameters['resetToken'] ?? '',
+        ),
+      ),
+      GoRoute(
+        path: '/onboarding/1',
+        builder: (context, state) => const OnboardingStep1Screen(),
+      ),
+      GoRoute(
+        path: '/onboarding/2',
+        builder: (context, state) => const OnboardingStep2Screen(),
+      ),
+      GoRoute(
+        path: '/onboarding/3',
+        builder: (context, state) => const OnboardingStep3Screen(),
+      ),
+      GoRoute(
+        path: '/blocked',
+        builder: (context, state) => const BlockedScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const HomePlaceholderScreen(),
+      ),
+    ],
+  );
+});
