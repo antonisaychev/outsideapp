@@ -21,20 +21,26 @@ class FriendsTabScreen extends ConsumerStatefulWidget {
 class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
   int _tab = 0;
 
-  Future<void> _accept(String userId) async {
-    await ref.read(friendsApiProvider).acceptRequest(userId);
-    invalidateFriendship(ref, userId);
-  }
+  Future<void> _accept(String userId) => runFriendAction(
+    ref,
+    context,
+    userId,
+    () => ref.read(friendsApiProvider).acceptRequest(userId),
+  );
 
-  Future<void> _decline(String userId) async {
-    await ref.read(friendsApiProvider).declineRequest(userId);
-    invalidateFriendship(ref, userId);
-  }
+  Future<void> _decline(String userId) => runFriendAction(
+    ref,
+    context,
+    userId,
+    () => ref.read(friendsApiProvider).declineRequest(userId),
+  );
 
-  Future<void> _cancel(String userId) async {
-    await ref.read(friendsApiProvider).cancelRequest(userId);
-    invalidateFriendship(ref, userId);
-  }
+  Future<void> _cancel(String userId) => runFriendAction(
+    ref,
+    context,
+    userId,
+    () => ref.read(friendsApiProvider).cancelRequest(userId),
+  );
 
   Future<void> _friendActionsSheet(UserListItem friend) async {
     final l10n = AppLocalizations.of(context)!;
@@ -122,8 +128,13 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
       ),
     );
     if (confirmed == true) {
-      await ref.read(friendsApiProvider).removeFriend(friend.id);
-      invalidateFriendship(ref, friend.id);
+      if (!mounted) return;
+      await runFriendAction(
+        ref,
+        context,
+        friend.id,
+        () => ref.read(friendsApiProvider).removeFriend(friend.id),
+      );
     }
   }
 
@@ -149,8 +160,13 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
       ),
     );
     if (confirmed == true) {
-      await ref.read(friendsApiProvider).blockUser(friend.id);
-      invalidateFriendship(ref, friend.id);
+      if (!mounted) return;
+      await runFriendAction(
+        ref,
+        context,
+        friend.id,
+        () => ref.read(friendsApiProvider).blockUser(friend.id),
+      );
     }
   }
 

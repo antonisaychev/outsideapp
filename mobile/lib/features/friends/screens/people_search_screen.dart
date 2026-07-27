@@ -54,9 +54,12 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
   }
 
   Future<void> _sendRequest(UserListItem user) async {
-    await ref.read(friendsApiProvider).sendRequest(user.id);
-    invalidateFriendship(ref, user.id);
-    ref.invalidate(_statusesProvider);
+    await runFriendAction(
+      ref,
+      context,
+      user.id,
+      () => ref.read(friendsApiProvider).sendRequest(user.id),
+    );
   }
 
   Future<void> _cancelRequest(UserListItem user) async {
@@ -81,9 +84,13 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
       ),
     );
     if (confirmed == true) {
-      await ref.read(friendsApiProvider).cancelRequest(user.id);
-      invalidateFriendship(ref, user.id);
-      ref.invalidate(_statusesProvider);
+      if (!mounted) return;
+      await runFriendAction(
+        ref,
+        context,
+        user.id,
+        () => ref.read(friendsApiProvider).cancelRequest(user.id),
+      );
     }
   }
 
@@ -174,7 +181,7 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
                     );
                   }
                   final statusesAsync = ref.watch(
-                    _statusesProvider(others.map((u) => u.id).join(',')),
+                    relationStatusesProvider(others.map((u) => u.id).join(',')),
                   );
                   final statuses = statusesAsync.valueOrNull ?? {};
                   return ListView.builder(
@@ -232,11 +239,12 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
             foregroundColor: AppColors.coral,
             side: const BorderSide(color: AppColors.coral),
           ),
-          onPressed: () async {
-            await ref.read(friendsApiProvider).acceptRequest(user.id);
-            invalidateFriendship(ref, user.id);
-            ref.invalidate(_statusesProvider);
-          },
+          onPressed: () => runFriendAction(
+            ref,
+            context,
+            user.id,
+            () => ref.read(friendsApiProvider).acceptRequest(user.id),
+          ),
           child: Text(l10n.acceptRequest),
         );
       case RelationStatus.blockedByMe:
@@ -257,14 +265,6 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
     }
   }
 }
-
-/// Пакетная загрузка статусов отношений для списка результатов.
-final _statusesProvider =
-    FutureProvider.family<Map<String, RelationStatus>, String>((ref, idsCsv) {
-      ref.watch(currentUserIdProvider); // сброс кэша при смене аккаунта
-      final ids = idsCsv.split(',').where((s) => s.isNotEmpty).toList();
-      return ref.read(friendsApiProvider).statuses(ids);
-    });
 
 class _FilterChip extends StatelessWidget {
   const _FilterChip({

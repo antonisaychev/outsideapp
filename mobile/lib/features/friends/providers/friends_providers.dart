@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/api/api_client.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/api/models.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/session_controller.dart';
 
 // Все списки user-scoped: watch(currentUserIdProvider) сбрасывает кэш
@@ -40,15 +43,48 @@ final relationStatusProvider = FutureProvider.family<RelationStatus, String>((
   return map[userId] ?? RelationStatus.none;
 });
 
+/// Пакетные статусы отношений (для поиска людей и других списков).
+/// Ключ — id через запятую. Живёт здесь, чтобы invalidateFriendship
+/// сбрасывал и его.
+final relationStatusesProvider =
+    FutureProvider.family<Map<String, RelationStatus>, String>((ref, idsCsv) {
+      ref.watch(currentUserIdProvider);
+      final ids = idsCsv.split(',').where((s) => s.isNotEmpty).toList();
+      return ref.read(friendsApiProvider).statuses(ids);
+    });
+
 /// Сброс всех кэшей дружбы после любого действия (заявка/принятие/блок...)
 void invalidateFriendship(WidgetRef ref, [String? userId]) {
   ref.invalidate(friendsListProvider);
   ref.invalidate(incomingRequestsProvider);
   ref.invalidate(outgoingRequestsProvider);
   ref.invalidate(blockedUsersProvider);
+  ref.invalidate(relationStatusesProvider); // все инстансы family
   if (userId != null) {
     ref.invalidate(relationStatusProvider(userId));
     ref.invalidate(publicProfileProvider(userId));
+  }
+}
+
+/// Обёртка для действий дружбы: ошибка сервера показывается тостом (а не
+/// глотается молча), кэши сбрасываются ВСЕГДА — даже если запрос упал
+/// (иначе интерфейс остаётся с устаревшими кнопками, см. QA_NOTES №24).
+Future<void> runFriendAction(
+  WidgetRef ref,
+  BuildContext context,
+  String? userId,
+  Future<void> Function() action,
+) async {
+  try {
+    await action();
+  } on ApiException {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
+      );
+    }
+  } finally {
+    invalidateFriendship(ref, userId);
   }
 }
 

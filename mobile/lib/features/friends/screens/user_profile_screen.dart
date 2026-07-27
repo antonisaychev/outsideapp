@@ -28,10 +28,6 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
   bool get _isGuest =>
       ref.read(sessionControllerProvider).status != SessionStatus.ready;
 
-  void _refresh() {
-    invalidateFriendship(ref, widget.userId);
-  }
-
   Future<void> _copyLink(String username) async {
     final l10n = AppLocalizations.of(context)!;
     await Clipboard.setData(
@@ -119,8 +115,13 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
       ),
     );
     if (confirmed == true) {
-      await ref.read(friendsApiProvider).blockUser(widget.userId);
-      _refresh();
+      if (!mounted) return;
+      await runFriendAction(
+        ref,
+        context,
+        widget.userId,
+        () => ref.read(friendsApiProvider).blockUser(widget.userId),
+      );
       if (mounted) context.pop();
     }
   }
@@ -184,8 +185,13 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
       ),
     );
     if (confirmed == true) {
-      await ref.read(friendsApiProvider).removeFriend(widget.userId);
-      _refresh();
+      if (!mounted) return;
+      await runFriendAction(
+        ref,
+        context,
+        widget.userId,
+        () => ref.read(friendsApiProvider).removeFriend(widget.userId),
+      );
     }
   }
 
@@ -336,10 +342,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
         );
       case RelationStatus.pendingOutgoing:
         return OutlinedButton(
-          onPressed: () async {
-            await ref.read(friendsApiProvider).cancelRequest(widget.userId);
-            _refresh();
-          },
+          onPressed: () => runFriendAction(
+            ref,
+            context,
+            widget.userId,
+            () => ref.read(friendsApiProvider).cancelRequest(widget.userId),
+          ),
           child: Text(l10n.requestSent),
         );
       case RelationStatus.pendingIncoming:
@@ -347,24 +355,27 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () async {
-                  await ref
-                      .read(friendsApiProvider)
-                      .acceptRequest(widget.userId);
-                  _refresh();
-                },
+                onPressed: () => runFriendAction(
+                  ref,
+                  context,
+                  widget.userId,
+                  () =>
+                      ref.read(friendsApiProvider).acceptRequest(widget.userId),
+                ),
                 child: Text(l10n.acceptRequest),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: OutlinedButton(
-                onPressed: () async {
-                  await ref
+                onPressed: () => runFriendAction(
+                  ref,
+                  context,
+                  widget.userId,
+                  () => ref
                       .read(friendsApiProvider)
-                      .declineRequest(widget.userId);
-                  _refresh();
-                },
+                      .declineRequest(widget.userId),
+                ),
                 child: Text(l10n.declineRequest),
               ),
             ),
@@ -372,10 +383,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
         );
       case RelationStatus.blockedByMe:
         return OutlinedButton(
-          onPressed: () async {
-            await ref.read(friendsApiProvider).unblockUser(widget.userId);
-            _refresh();
-          },
+          onPressed: () => runFriendAction(
+            ref,
+            context,
+            widget.userId,
+            () => ref.read(friendsApiProvider).unblockUser(widget.userId),
+          ),
           child: Text(l10n.unblockUser),
         );
       case RelationStatus.blockedByThem:
@@ -383,10 +396,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
       case RelationStatus.none:
       case RelationStatus.declined:
         return ElevatedButton(
-          onPressed: () async {
-            await ref.read(friendsApiProvider).sendRequest(widget.userId);
-            _refresh();
-          },
+          onPressed: () => runFriendAction(
+            ref,
+            context,
+            widget.userId,
+            () => ref.read(friendsApiProvider).sendRequest(widget.userId),
+          ),
           child: Text(l10n.addFriend),
         );
     }
