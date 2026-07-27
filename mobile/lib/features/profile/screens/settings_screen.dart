@@ -72,6 +72,9 @@ class SettingsScreen extends ConsumerWidget {
     );
     if (confirmed == true) {
       await ref.read(sessionControllerProvider.notifier).logout();
+      // Явный переход (та же особенность, что в login_screen): настройки
+      // открыты push'ем, redirect базы /home для гостя ничего не делает
+      if (context.mounted) context.go('/welcome');
     }
   }
 
@@ -136,6 +139,7 @@ class SettingsScreen extends ConsumerWidget {
           .read(usersApiProvider)
           .deleteAccount(password: passwordController.text);
       await ref.read(sessionControllerProvider.notifier).logout();
+      if (context.mounted) context.go('/welcome');
     } on ApiException {
       if (context.mounted) {
         ScaffoldMessenger.of(

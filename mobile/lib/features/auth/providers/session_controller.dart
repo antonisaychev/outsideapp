@@ -146,3 +146,10 @@ final sessionControllerProvider =
     StateNotifierProvider<SessionController, SessionState>(
       (ref) => SessionController(ref),
     );
+
+/// id текущего пользователя. Все user-scoped провайдеры (друзья, заявки,
+/// избранное и т.п.) должны watch'ить его — тогда при смене аккаунта их
+/// кэш сбрасывается автоматически.
+final currentUserIdProvider = Provider<String?>(
+  (ref) => ref.watch(sessionControllerProvider.select((s) => s.profile?.id)),
+);

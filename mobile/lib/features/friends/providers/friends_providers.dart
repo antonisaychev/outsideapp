@@ -2,22 +2,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/friends_api.dart';
 import '../../../core/api/models.dart';
+import '../../auth/providers/session_controller.dart';
 
-final friendsListProvider = FutureProvider<List<UserListItem>>(
-  (ref) => ref.read(friendsApiProvider).friends(),
-);
+// Все списки user-scoped: watch(currentUserIdProvider) сбрасывает кэш
+// при смене аккаунта (выход/вход другим пользователем).
 
-final incomingRequestsProvider = FutureProvider<List<UserListItem>>(
-  (ref) => ref.read(friendsApiProvider).requests(incoming: true),
-);
+final friendsListProvider = FutureProvider<List<UserListItem>>((ref) {
+  ref.watch(currentUserIdProvider);
+  return ref.read(friendsApiProvider).friends();
+});
 
-final outgoingRequestsProvider = FutureProvider<List<UserListItem>>(
-  (ref) => ref.read(friendsApiProvider).requests(incoming: false),
-);
+final incomingRequestsProvider = FutureProvider<List<UserListItem>>((ref) {
+  ref.watch(currentUserIdProvider);
+  return ref.read(friendsApiProvider).requests(incoming: true);
+});
 
-final blockedUsersProvider = FutureProvider<List<UserListItem>>(
-  (ref) => ref.read(friendsApiProvider).blocked(),
-);
+final outgoingRequestsProvider = FutureProvider<List<UserListItem>>((ref) {
+  ref.watch(currentUserIdProvider);
+  return ref.read(friendsApiProvider).requests(incoming: false);
+});
+
+final blockedUsersProvider = FutureProvider<List<UserListItem>>((ref) {
+  ref.watch(currentUserIdProvider);
+  return ref.read(friendsApiProvider).blocked();
+});
 
 final publicProfileProvider = FutureProvider.family<PublicProfile, String>(
   (ref, id) => ref.read(peopleApiProvider).getById(id),
@@ -27,6 +35,7 @@ final relationStatusProvider = FutureProvider.family<RelationStatus, String>((
   ref,
   userId,
 ) async {
+  ref.watch(currentUserIdProvider);
   final map = await ref.read(friendsApiProvider).statuses([userId]);
   return map[userId] ?? RelationStatus.none;
 });

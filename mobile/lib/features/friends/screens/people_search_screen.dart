@@ -261,6 +261,7 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
 /// Пакетная загрузка статусов отношений для списка результатов.
 final _statusesProvider =
     FutureProvider.family<Map<String, RelationStatus>, String>((ref, idsCsv) {
+      ref.watch(currentUserIdProvider); // сброс кэша при смене аккаунта
       final ids = idsCsv.split(',').where((s) => s.isNotEmpty).toList();
       return ref.read(friendsApiProvider).statuses(ids);
     });
