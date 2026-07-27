@@ -812,6 +812,402 @@ abstract class AppLocalizations {
   /// **'Всё равно добавить'**
   String get addAnyway;
 
+  /// No description provided for @friendsTabMy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мои друзья'**
+  String get friendsTabMy;
+
+  /// No description provided for @friendsTabIncoming.
+  ///
+  /// In ru, this message translates to:
+  /// **'Входящие'**
+  String get friendsTabIncoming;
+
+  /// No description provided for @friendsTabOutgoing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Исходящие'**
+  String get friendsTabOutgoing;
+
+  /// No description provided for @friendsEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет друзей'**
+  String get friendsEmpty;
+
+  /// No description provided for @findPeople.
+  ///
+  /// In ru, this message translates to:
+  /// **'Найти людей'**
+  String get findPeople;
+
+  /// No description provided for @incomingEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет входящих заявок'**
+  String get incomingEmpty;
+
+  /// No description provided for @outgoingEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет исходящих заявок'**
+  String get outgoingEmpty;
+
+  /// No description provided for @wantsToBeFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'хочет добавить вас в друзья'**
+  String get wantsToBeFriends;
+
+  /// No description provided for @acceptRequest.
+  ///
+  /// In ru, this message translates to:
+  /// **'Принять'**
+  String get acceptRequest;
+
+  /// No description provided for @declineRequest.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отклонить'**
+  String get declineRequest;
+
+  /// No description provided for @cancelRequest.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отменить'**
+  String get cancelRequest;
+
+  /// No description provided for @cancelRequestTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отменить заявку?'**
+  String get cancelRequestTitle;
+
+  /// No description provided for @requestSent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправлено ✓'**
+  String get requestSent;
+
+  /// No description provided for @addFriend.
+  ///
+  /// In ru, this message translates to:
+  /// **'+ Добавить'**
+  String get addFriend;
+
+  /// No description provided for @alreadyFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'✓ Друзья'**
+  String get alreadyFriends;
+
+  /// No description provided for @writeMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Написать'**
+  String get writeMessage;
+
+  /// No description provided for @removeFriend.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить из друзей'**
+  String get removeFriend;
+
+  /// No description provided for @removeFriendTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить {name} из друзей?'**
+  String removeFriendTitle(String name);
+
+  /// No description provided for @removeFriendWarning.
+  ///
+  /// In ru, this message translates to:
+  /// **'Переписка станет недоступна, повторное добавление — новой заявкой'**
+  String get removeFriendWarning;
+
+  /// No description provided for @removeFriendConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get removeFriendConfirm;
+
+  /// No description provided for @blockUser.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокировать'**
+  String get blockUser;
+
+  /// No description provided for @blockUserTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокировать {name}?'**
+  String blockUserTitle(String name);
+
+  /// No description provided for @unblockUser.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разблокировать'**
+  String get unblockUser;
+
+  /// No description provided for @unblockConfirmTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разблокировать {name}?'**
+  String unblockConfirmTitle(String name);
+
+  /// No description provided for @blockedListEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Список пуст'**
+  String get blockedListEmpty;
+
+  /// No description provided for @peopleSearchTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск людей'**
+  String get peopleSearchTitle;
+
+  /// No description provided for @peopleSearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Имя или фамилия'**
+  String get peopleSearchHint;
+
+  /// No description provided for @compatriots.
+  ///
+  /// In ru, this message translates to:
+  /// **'Земляки'**
+  String get compatriots;
+
+  /// No description provided for @allInCity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все на {city}'**
+  String allInCity(String city);
+
+  /// No description provided for @nobodyFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Никого не нашли'**
+  String get nobodyFound;
+
+  /// No description provided for @authGateActionAddFriend.
+  ///
+  /// In ru, this message translates to:
+  /// **'добавить в друзья'**
+  String get authGateActionAddFriend;
+
+  /// No description provided for @linkCopied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ссылка скопирована'**
+  String get linkCopied;
+
+  /// No description provided for @countFriends.
+  ///
+  /// In ru, this message translates to:
+  /// **'Друзья'**
+  String get countFriends;
+
+  /// No description provided for @countRecommendations.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендации'**
+  String get countRecommendations;
+
+  /// No description provided for @guestProfileTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите, чтобы завести профиль'**
+  String get guestProfileTitle;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsSectionProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль'**
+  String get settingsSectionProfile;
+
+  /// No description provided for @settingsSectionAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт'**
+  String get settingsSectionAccount;
+
+  /// No description provided for @settingsSectionDating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Знакомства'**
+  String get settingsSectionDating;
+
+  /// No description provided for @settingsSectionPrivacy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приватность'**
+  String get settingsSectionPrivacy;
+
+  /// No description provided for @settingsSectionAdmin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Админ'**
+  String get settingsSectionAdmin;
+
+  /// No description provided for @settingsSectionAbout.
+  ///
+  /// In ru, this message translates to:
+  /// **'О приложении'**
+  String get settingsSectionAbout;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать профиль'**
+  String get editProfile;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сменить пароль'**
+  String get changePassword;
+
+  /// No description provided for @currentPasswordHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текущий пароль'**
+  String get currentPasswordHint;
+
+  /// No description provided for @wrongPassword.
+  ///
+  /// In ru, this message translates to:
+  /// **'Неверный пароль'**
+  String get wrongPassword;
+
+  /// No description provided for @languageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Язык'**
+  String get languageTitle;
+
+  /// No description provided for @blockedUsersTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокированные пользователи'**
+  String get blockedUsersTitle;
+
+  /// No description provided for @adminTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Администрирование'**
+  String get adminTitle;
+
+  /// No description provided for @termsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Условия использования'**
+  String get termsTitle;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Политика конфиденциальности'**
+  String get privacyTitle;
+
+  /// No description provided for @logoutConfirmTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти из аккаунта?'**
+  String get logoutConfirmTitle;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить аккаунт'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль будет удалён, ваши карточки сервисов скроются. Действие необратимо.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @deleteAccountContinue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить'**
+  String get deleteAccountContinue;
+
+  /// No description provided for @deleteAccountPasswordTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите пароль для подтверждения'**
+  String get deleteAccountPasswordTitle;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить навсегда'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить фото'**
+  String get changePhoto;
+
+  /// No description provided for @bioHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'О себе'**
+  String get bioHint;
+
+  /// No description provided for @placeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Место'**
+  String get placeLabel;
+
+  /// No description provided for @countryLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Страна'**
+  String get countryLabel;
+
+  /// No description provided for @birthDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата рождения'**
+  String get birthDateLabel;
+
+  /// No description provided for @save.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get save;
+
+  /// No description provided for @saved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранено'**
+  String get saved;
+
+  /// No description provided for @unsavedChangesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти без сохранения?'**
+  String get unsavedChangesTitle;
+
+  /// No description provided for @leaveWithoutSaving.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти'**
+  String get leaveWithoutSaving;
+
   /// No description provided for @favoritesTitle.
   ///
   /// In ru, this message translates to:

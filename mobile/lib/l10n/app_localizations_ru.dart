@@ -401,6 +401,214 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addAnyway => 'Всё равно добавить';
 
   @override
+  String get friendsTabMy => 'Мои друзья';
+
+  @override
+  String get friendsTabIncoming => 'Входящие';
+
+  @override
+  String get friendsTabOutgoing => 'Исходящие';
+
+  @override
+  String get friendsEmpty => 'Пока нет друзей';
+
+  @override
+  String get findPeople => 'Найти людей';
+
+  @override
+  String get incomingEmpty => 'Нет входящих заявок';
+
+  @override
+  String get outgoingEmpty => 'Нет исходящих заявок';
+
+  @override
+  String get wantsToBeFriends => 'хочет добавить вас в друзья';
+
+  @override
+  String get acceptRequest => 'Принять';
+
+  @override
+  String get declineRequest => 'Отклонить';
+
+  @override
+  String get cancelRequest => 'Отменить';
+
+  @override
+  String get cancelRequestTitle => 'Отменить заявку?';
+
+  @override
+  String get requestSent => 'Отправлено ✓';
+
+  @override
+  String get addFriend => '+ Добавить';
+
+  @override
+  String get alreadyFriends => '✓ Друзья';
+
+  @override
+  String get writeMessage => 'Написать';
+
+  @override
+  String get removeFriend => 'Удалить из друзей';
+
+  @override
+  String removeFriendTitle(String name) {
+    return 'Удалить $name из друзей?';
+  }
+
+  @override
+  String get removeFriendWarning =>
+      'Переписка станет недоступна, повторное добавление — новой заявкой';
+
+  @override
+  String get removeFriendConfirm => 'Удалить';
+
+  @override
+  String get blockUser => 'Заблокировать';
+
+  @override
+  String blockUserTitle(String name) {
+    return 'Заблокировать $name?';
+  }
+
+  @override
+  String get unblockUser => 'Разблокировать';
+
+  @override
+  String unblockConfirmTitle(String name) {
+    return 'Разблокировать $name?';
+  }
+
+  @override
+  String get blockedListEmpty => 'Список пуст';
+
+  @override
+  String get peopleSearchTitle => 'Поиск людей';
+
+  @override
+  String get peopleSearchHint => 'Имя или фамилия';
+
+  @override
+  String get compatriots => 'Земляки';
+
+  @override
+  String allInCity(String city) {
+    return 'Все на $city';
+  }
+
+  @override
+  String get nobodyFound => 'Никого не нашли';
+
+  @override
+  String get authGateActionAddFriend => 'добавить в друзья';
+
+  @override
+  String get linkCopied => 'Ссылка скопирована';
+
+  @override
+  String get countFriends => 'Друзья';
+
+  @override
+  String get countRecommendations => 'Рекомендации';
+
+  @override
+  String get guestProfileTitle => 'Войдите, чтобы завести профиль';
+
+  @override
+  String get settingsTitle => 'Настройки';
+
+  @override
+  String get settingsSectionProfile => 'Профиль';
+
+  @override
+  String get settingsSectionAccount => 'Аккаунт';
+
+  @override
+  String get settingsSectionDating => 'Знакомства';
+
+  @override
+  String get settingsSectionPrivacy => 'Приватность';
+
+  @override
+  String get settingsSectionAdmin => 'Админ';
+
+  @override
+  String get settingsSectionAbout => 'О приложении';
+
+  @override
+  String get editProfile => 'Редактировать профиль';
+
+  @override
+  String get changePassword => 'Сменить пароль';
+
+  @override
+  String get currentPasswordHint => 'Текущий пароль';
+
+  @override
+  String get wrongPassword => 'Неверный пароль';
+
+  @override
+  String get languageTitle => 'Язык';
+
+  @override
+  String get blockedUsersTitle => 'Заблокированные пользователи';
+
+  @override
+  String get adminTitle => 'Администрирование';
+
+  @override
+  String get termsTitle => 'Условия использования';
+
+  @override
+  String get privacyTitle => 'Политика конфиденциальности';
+
+  @override
+  String get logoutConfirmTitle => 'Выйти из аккаунта?';
+
+  @override
+  String get deleteAccountTitle => 'Удалить аккаунт';
+
+  @override
+  String get deleteAccountWarning =>
+      'Профиль будет удалён, ваши карточки сервисов скроются. Действие необратимо.';
+
+  @override
+  String get deleteAccountContinue => 'Продолжить';
+
+  @override
+  String get deleteAccountPasswordTitle => 'Введите пароль для подтверждения';
+
+  @override
+  String get deleteAccountConfirm => 'Удалить навсегда';
+
+  @override
+  String get changePhoto => 'Изменить фото';
+
+  @override
+  String get bioHint => 'О себе';
+
+  @override
+  String get placeLabel => 'Место';
+
+  @override
+  String get countryLabel => 'Страна';
+
+  @override
+  String get birthDateLabel => 'Дата рождения';
+
+  @override
+  String get save => 'Сохранить';
+
+  @override
+  String get saved => 'Сохранено';
+
+  @override
+  String get unsavedChangesTitle => 'Выйти без сохранения?';
+
+  @override
+  String get leaveWithoutSaving => 'Выйти';
+
+  @override
   String get favoritesTitle => 'Избранное';
 
   @override

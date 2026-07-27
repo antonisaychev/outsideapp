@@ -14,6 +14,13 @@ import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/verify_code_screen.dart';
 import '../../features/auth/screens/welcome_screen.dart';
+import '../../features/friends/screens/people_search_screen.dart';
+import '../../features/friends/screens/user_profile_screen.dart';
+import '../../features/profile/screens/blocked_users_screen.dart';
+import '../../features/profile/screens/change_password_screen.dart';
+import '../../features/profile/screens/edit_profile_screen.dart';
+import '../../features/profile/screens/legal_screen.dart';
+import '../../features/profile/screens/settings_screen.dart';
 import '../../features/services/screens/add_service_screen.dart';
 import '../../features/services/screens/favorites_screen.dart';
 import '../../features/services/screens/service_card_screen.dart';
@@ -29,10 +36,13 @@ const _publicPaths = {
   '/reset-password',
 };
 
-/// Гостю (без токена) доступны просмотр главного экрана и карточек сервисов
-/// (мастер-ТЗ §1: гостевой режим — просмотр всего, действия через auth-gate).
+/// Гостю (без токена) доступны просмотр главного экрана, карточек сервисов
+/// и профилей (мастер-ТЗ §1: гостевой режим — просмотр всего, действия
+/// через auth-gate).
 bool _guestAllowed(String loc) =>
-    loc == '/home' || (loc.startsWith('/services/') && loc != '/services/add');
+    loc == '/home' ||
+    (loc.startsWith('/services/') && loc != '/services/add') ||
+    loc.startsWith('/users/');
 
 String _onboardingStepPath(SessionState session) {
   final profile = session.profile!;
@@ -147,6 +157,36 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/favorites',
         builder: (context, state) => const FavoritesScreen(),
+      ),
+      GoRoute(
+        path: '/people-search',
+        builder: (context, state) => const PeopleSearchScreen(),
+      ),
+      GoRoute(
+        path: '/users/:id',
+        builder: (context, state) =>
+            UserProfileScreen(userId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/settings/edit-profile',
+        builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: '/settings/password',
+        builder: (context, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/settings/blocked',
+        builder: (context, state) => const BlockedUsersScreen(),
+      ),
+      GoRoute(
+        path: '/settings/legal/:doc',
+        builder: (context, state) =>
+            LegalScreen(doc: state.pathParameters['doc']!),
       ),
     ],
   );

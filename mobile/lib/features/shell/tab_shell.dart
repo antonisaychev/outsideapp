@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/app_localizations.dart';
-import '../auth/providers/session_controller.dart';
+import '../friends/screens/friends_tab_screen.dart';
+import '../profile/screens/my_profile_tab.dart';
 import '../services/screens/services_list_screen.dart';
 
-/// Главный экран с 5 вкладками (мастер-ТЗ §13). В этой итерации реальный
-/// только раздел «Сервисы», остальные — заглушки «скоро».
+/// Главный экран с 5 вкладками (мастер-ТЗ §13). Реальные: Сервисы, Друзья,
+/// Профиль; Знакомства и Сообщения — заглушки до своих итераций.
 class TabShell extends ConsumerStatefulWidget {
   const TabShell({super.key});
 
@@ -29,8 +30,8 @@ class _TabShellState extends ConsumerState<TabShell> {
           _ComingSoonTab(title: l10n.tabDating),
           const ServicesListScreen(),
           _ComingSoonTab(title: l10n.tabMessages),
-          _ComingSoonTab(title: l10n.tabFriends),
-          _ComingSoonTab(title: l10n.tabProfile),
+          const FriendsTabScreen(),
+          const MyProfileTab(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -70,15 +71,14 @@ class _TabShellState extends ConsumerState<TabShell> {
   }
 }
 
-class _ComingSoonTab extends ConsumerWidget {
+class _ComingSoonTab extends StatelessWidget {
   const _ComingSoonTab({required this.title});
 
   final String title;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final session = ref.watch(sessionControllerProvider);
     return SafeArea(
       child: Center(
         child: Column(
@@ -90,15 +90,6 @@ class _ComingSoonTab extends ConsumerWidget {
               l10n.comingSoonSection,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            // Временный выход из аккаунта, пока нет экрана настроек
-            if (session.status == SessionStatus.ready) ...[
-              const SizedBox(height: 24),
-              TextButton(
-                onPressed: () =>
-                    ref.read(sessionControllerProvider.notifier).logout(),
-                child: Text(l10n.logout),
-              ),
-            ],
           ],
         ),
       ),

@@ -7,10 +7,15 @@ class MeProfile {
     this.firstName,
     this.lastName,
     this.avatarUrl,
+    this.bio,
     this.cityId,
     this.homeCountry,
     this.gender,
     this.birthDate,
+    this.lang,
+    this.role,
+    this.friendsCount = 0,
+    this.servicesCount = 0,
   });
 
   final String id;
@@ -19,10 +24,17 @@ class MeProfile {
   final String? firstName;
   final String? lastName;
   final String? avatarUrl;
+  final String? bio;
   final int? cityId;
   final String? homeCountry;
   final String? gender;
   final String? birthDate;
+  final String? lang;
+  final String? role;
+  final int friendsCount;
+  final int servicesCount;
+
+  bool get isAdmin => role == 'admin';
 
   factory MeProfile.fromJson(Map<String, dynamic> json) => MeProfile(
     id: json['id'] as String,
@@ -31,10 +43,15 @@ class MeProfile {
     firstName: json['first_name'] as String?,
     lastName: json['last_name'] as String?,
     avatarUrl: json['avatar_url'] as String?,
+    bio: json['bio'] as String?,
     cityId: json['city_id'] as int?,
     homeCountry: json['home_country'] as String?,
     gender: json['gender'] as String?,
     birthDate: json['birth_date'] as String?,
+    lang: json['lang'] as String?,
+    role: json['role'] as String?,
+    friendsCount: (json['friends_count'] as int?) ?? 0,
+    servicesCount: (json['services_count'] as int?) ?? 0,
   );
 
   // Онбординг (docs/TZ_Outside_v5_3_changes.md, п.2) — 3 обязательных шага.
@@ -46,6 +63,88 @@ class MeProfile {
   bool get onboardingStep3Done => cityId != null;
   bool get onboardingComplete =>
       onboardingStep1Done && onboardingStep2Done && onboardingStep3Done;
+}
+
+/// Публичный профиль другого пользователя (GET /users/:id).
+class PublicProfile {
+  PublicProfile({
+    required this.id,
+    required this.username,
+    this.firstName,
+    this.lastName,
+    this.avatarUrl,
+    this.bio,
+    this.cityId,
+    this.homeCountry,
+    this.friendsCount = 0,
+    this.servicesCount = 0,
+  });
+
+  final String id;
+  final String username;
+  final String? firstName;
+  final String? lastName;
+  final String? avatarUrl;
+  final String? bio;
+  final int? cityId;
+  final String? homeCountry;
+  final int friendsCount;
+  final int servicesCount;
+
+  String get displayName =>
+      [firstName, lastName].where((s) => s != null && s.isNotEmpty).join(' ');
+
+  factory PublicProfile.fromJson(Map<String, dynamic> json) => PublicProfile(
+    id: json['id'] as String,
+    username: json['username'] as String,
+    firstName: json['first_name'] as String?,
+    lastName: json['last_name'] as String?,
+    avatarUrl: json['avatar_url'] as String?,
+    bio: json['bio'] as String?,
+    cityId: json['city_id'] as int?,
+    homeCountry: json['home_country'] as String?,
+    friendsCount: (json['friends_count'] as int?) ?? 0,
+    servicesCount: (json['services_count'] as int?) ?? 0,
+  );
+}
+
+/// Строка пользователя в списках (поиск, друзья, заявки, заблокированные).
+class UserListItem {
+  UserListItem({
+    required this.id,
+    required this.username,
+    this.firstName,
+    this.lastName,
+    this.avatarUrl,
+    this.homeCountry,
+    this.cityId,
+  });
+
+  final String id;
+  final String username;
+  final String? firstName;
+  final String? lastName;
+  final String? avatarUrl;
+  final String? homeCountry;
+  final int? cityId;
+
+  String get displayName {
+    final name = [
+      firstName,
+      lastName,
+    ].where((s) => s != null && s.isNotEmpty).join(' ');
+    return name.isEmpty ? '@$username' : name;
+  }
+
+  factory UserListItem.fromJson(Map<String, dynamic> json) => UserListItem(
+    id: json['id'] as String,
+    username: json['username'] as String,
+    firstName: json['first_name'] as String?,
+    lastName: json['last_name'] as String?,
+    avatarUrl: json['avatar_url'] as String?,
+    homeCountry: json['home_country'] as String?,
+    cityId: json['city_id'] as int?,
+  );
 }
 
 class ServiceCategory {

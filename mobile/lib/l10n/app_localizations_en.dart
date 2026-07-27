@@ -401,6 +401,214 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAnyway => 'Add anyway';
 
   @override
+  String get friendsTabMy => 'My friends';
+
+  @override
+  String get friendsTabIncoming => 'Incoming';
+
+  @override
+  String get friendsTabOutgoing => 'Outgoing';
+
+  @override
+  String get friendsEmpty => 'No friends yet';
+
+  @override
+  String get findPeople => 'Find people';
+
+  @override
+  String get incomingEmpty => 'No incoming requests';
+
+  @override
+  String get outgoingEmpty => 'No outgoing requests';
+
+  @override
+  String get wantsToBeFriends => 'wants to add you as a friend';
+
+  @override
+  String get acceptRequest => 'Accept';
+
+  @override
+  String get declineRequest => 'Decline';
+
+  @override
+  String get cancelRequest => 'Cancel';
+
+  @override
+  String get cancelRequestTitle => 'Cancel the request?';
+
+  @override
+  String get requestSent => 'Sent ✓';
+
+  @override
+  String get addFriend => '+ Add';
+
+  @override
+  String get alreadyFriends => '✓ Friends';
+
+  @override
+  String get writeMessage => 'Message';
+
+  @override
+  String get removeFriend => 'Remove from friends';
+
+  @override
+  String removeFriendTitle(String name) {
+    return 'Remove $name from friends?';
+  }
+
+  @override
+  String get removeFriendWarning =>
+      'The chat will become unavailable; adding again requires a new request';
+
+  @override
+  String get removeFriendConfirm => 'Remove';
+
+  @override
+  String get blockUser => 'Block';
+
+  @override
+  String blockUserTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String get unblockUser => 'Unblock';
+
+  @override
+  String unblockConfirmTitle(String name) {
+    return 'Unblock $name?';
+  }
+
+  @override
+  String get blockedListEmpty => 'The list is empty';
+
+  @override
+  String get peopleSearchTitle => 'Find people';
+
+  @override
+  String get peopleSearchHint => 'First or last name';
+
+  @override
+  String get compatriots => 'Compatriots';
+
+  @override
+  String allInCity(String city) {
+    return 'Everyone in $city';
+  }
+
+  @override
+  String get nobodyFound => 'Nobody found';
+
+  @override
+  String get authGateActionAddFriend => 'add as a friend';
+
+  @override
+  String get linkCopied => 'Link copied';
+
+  @override
+  String get countFriends => 'Friends';
+
+  @override
+  String get countRecommendations => 'Recommendations';
+
+  @override
+  String get guestProfileTitle => 'Log in to create a profile';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsSectionProfile => 'Profile';
+
+  @override
+  String get settingsSectionAccount => 'Account';
+
+  @override
+  String get settingsSectionDating => 'Dating';
+
+  @override
+  String get settingsSectionPrivacy => 'Privacy';
+
+  @override
+  String get settingsSectionAdmin => 'Admin';
+
+  @override
+  String get settingsSectionAbout => 'About';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPasswordHint => 'Current password';
+
+  @override
+  String get wrongPassword => 'Wrong password';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get blockedUsersTitle => 'Blocked users';
+
+  @override
+  String get adminTitle => 'Administration';
+
+  @override
+  String get termsTitle => 'Terms of Service';
+
+  @override
+  String get privacyTitle => 'Privacy Policy';
+
+  @override
+  String get logoutConfirmTitle => 'Log out?';
+
+  @override
+  String get deleteAccountTitle => 'Delete account';
+
+  @override
+  String get deleteAccountWarning =>
+      'Your profile will be deleted and your service cards hidden. This cannot be undone.';
+
+  @override
+  String get deleteAccountContinue => 'Continue';
+
+  @override
+  String get deleteAccountPasswordTitle => 'Enter your password to confirm';
+
+  @override
+  String get deleteAccountConfirm => 'Delete forever';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get bioHint => 'About me';
+
+  @override
+  String get placeLabel => 'Place';
+
+  @override
+  String get countryLabel => 'Country';
+
+  @override
+  String get birthDateLabel => 'Date of birth';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saved => 'Saved';
+
+  @override
+  String get unsavedChangesTitle => 'Leave without saving?';
+
+  @override
+  String get leaveWithoutSaving => 'Leave';
+
+  @override
   String get favoritesTitle => 'Favorites';
 
   @override

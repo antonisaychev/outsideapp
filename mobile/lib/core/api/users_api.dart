@@ -38,6 +38,31 @@ class UsersApi {
     }
   }
 
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.patch(
+        '/me/password',
+        data: {
+          'current_password': currentPassword,
+          'new_password': newPassword,
+        },
+      );
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  Future<void> deleteAccount({required String password}) async {
+    try {
+      await _dio.delete('/me', data: {'password': password});
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
   Future<String> uploadAvatar(String filePath) async {
     try {
       final formData = FormData.fromMap({

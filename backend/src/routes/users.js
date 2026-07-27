@@ -1,6 +1,7 @@
 // Публичные профили: поиск людей и просмотр профиля по id или @nickname
 const express = require('express');
 const db = require('../db');
+const { required } = require('../middleware/auth');
 const router = express.Router();
 
 const PROFILE_FIELDS = `u.id, u.username, u.first_name, u.last_name, u.avatar_url, u.bio,
@@ -27,6 +28,25 @@ router.get('/', async (req, res) => {
     `SELECT ${PROFILE_FIELDS} FROM users u WHERE ${where.join(' AND ')} ORDER BY u.username LIMIT $${i++} OFFSET $${i}`,
     params);
   res.json(r.rows);
+});
+
+// Жалоба на пользователя (форма 37 со шторки «⋯» на чужом профиле)
+router.post('/:id/report', required, async (req, res) => {
+  if (!UUID_RE.test(req.params.id)) return res.status(404).json({ error: 'NOT_FOUND' });
+  if (req.params.id === req.userId) return res.status(400).json({ error: 'INVALID_USER' });
+  const reason = String(req.body.reason_type || '');
+  const comment = String(req.body.comment || '').trim().slice(0, 300);
+  const errors = {};
+  if (!['spam', 'fraud', 'abuse', 'other'].includes(reason)) errors.reason_type = 'INVALID_REASON';
+  if (reason === 'other' && !comment) errors.comment = 'REQUIRED_FOR_OTHER';
+  if (Object.keys(errors).length) return res.status(400).json({ errors });
+
+  const target = await db.query('SELECT 1 FROM users WHERE id=$1 AND deleted_at IS NULL', [req.params.id]);
+  if (!target.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
+  await db.query(
+    'INSERT INTO user_reports (reporter_id, target_id, reason_type, comment) VALUES ($1,$2,$3,$4)',
+    [req.userId, req.params.id, reason, comment || null]);
+  res.json({ ok: true });
 });
 
 // Профиль по id или @nickname
