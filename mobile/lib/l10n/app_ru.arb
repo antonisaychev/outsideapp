@@ -1,18 +1,19 @@
 {
   "@@locale": "ru",
 
-  "appName": "Outside",
-  "welcomeTagline": "Соцсеть для экспатов рядом с вами",
+  "appName": "outside",
+  "welcomeTagline": "Свои люди в любой стране",
   "createAccount": "Создать аккаунт",
   "login": "Войти",
   "continueAsGuest": "Продолжить без регистрации",
 
-  "registerTitle": "Регистрация",
+  "registerTitle": "Создать аккаунт",
   "emailLabel": "Email",
-  "passwordLabel": "Пароль",
-  "passwordConfirmLabel": "Повторите пароль",
-  "usernameLabel": "Никнейм",
-  "usernameHint": "латиница и _, от 3 символов",
+  "passwordHint": "Пароль (мин. 8 символов)",
+  "passwordConfirmHint": "Повторите пароль",
+  "usernameHint": "@никнейм",
+  "usernameHelper": "Никнейм — это ссылка на ваш профиль. Латинские буквы и _, до 30 символов",
+  "legalNotice": "Создавая аккаунт, вы принимаете Условия использования и Политику конфиденциальности",
   "usernameChecking": "проверяем…",
   "usernameAvailable": "свободно",
   "usernameTaken": "занято",
@@ -24,7 +25,7 @@
   "alreadyHaveAccount": "Уже есть аккаунт? Войти",
 
   "verifyEmailTitle": "Подтвердите почту",
-  "verifyEmailSubtitle": "Мы отправили код на {email}",
+  "verifyEmailSubtitle": "Мы отправили 6-значный код на {email}. Введите его, чтобы завершить регистрацию",
   "@verifyEmailSubtitle": {
     "placeholders": { "email": {"type": "String"} }
   },
@@ -35,15 +36,20 @@
   "errorCodeExpired": "Код истёк или недействителен",
   "errorCodeLocked": "Слишком много попыток. Запросите новый код",
   "resendCode": "Отправить код повторно",
-  "resendCodeTimer": "Повторная отправка через {seconds} с",
+  "resendCodeTimer": "Отправить код повторно через {time}",
   "@resendCodeTimer": {
-    "placeholders": { "seconds": {"type": "int"} }
+    "placeholders": { "time": {"type": "String"} }
   },
   "confirm": "Подтвердить",
 
+  "onboardingStepLabel": "Шаг {step} из 3",
+  "@onboardingStepLabel": {
+    "placeholders": { "step": {"type": "int"} }
+  },
   "onboardingStep1Title": "Как вас зовут?",
-  "firstNameLabel": "Имя",
-  "lastNameLabel": "Фамилия",
+  "firstNameHint": "Имя",
+  "lastNameHint": "Фамилия",
+  "genderLabel": "Пол",
   "genderMale": "Мужской",
   "genderFemale": "Женский",
   "next": "Далее",
@@ -52,6 +58,7 @@
   "searchCountry": "Поиск страны",
   "otherCountry": "Другая страна…",
   "onboardingStep3Title": "Где вы находитесь?",
+  "citiesFootnote": "Скоро добавим новые города",
   "done": "Готово",
 
   "loginTitle": "Вход",
@@ -63,14 +70,21 @@
     "placeholders": { "seconds": {"type": "int"} }
   },
 
-  "forgotPasswordTitle": "Забыли пароль",
+  "forgotPasswordTitle": "Забыли пароль?",
+  "forgotPasswordSubtitle": "Укажите email — пришлём 6-значный код для сброса пароля",
   "sendCode": "Отправить код",
+  "backToLogin": "‹ Вернуться ко входу",
   "codeSentNotice": "Если такой email зарегистрирован, мы отправили код",
   "newPasswordTitle": "Новый пароль",
+  "newPasswordHint": "Новый пароль (мин. 8 символов)",
   "saveAndLogin": "Сохранить и войти",
 
-  "blockedTitle": "Ваш аккаунт заблокирован",
-  "blockedReasonLabel": "Причина:",
+  "blockedTitle": "Аккаунт заблокирован",
+  "blockedReasonLabel": "Причина: {reason}",
+  "@blockedReasonLabel": {
+    "placeholders": { "reason": {"type": "String"} }
+  },
+  "blockedSubtitle": "Если вы считаете это ошибкой — напишите нам, разберёмся",
   "contactSupport": "Написать в поддержку",
   "logout": "Выйти",
 

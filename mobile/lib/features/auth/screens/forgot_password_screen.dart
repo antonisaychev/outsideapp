@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 
 final _emailRe = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 
+/// Экран 24 «Забыли пароль?».
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -30,13 +31,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     setState(() => _submitting = true);
     final email = _emailController.text.trim().toLowerCase();
     try {
-      // Всегда «успех», даже если email не найден — не раскрываем существование аккаунта
+      // Всегда «успех», даже если email не найден — не раскрываем существование
       await ref.read(authApiProvider).forgot(email: email);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.codeSentNotice)),
       );
-      context.go('/verify-reset?email=${Uri.encodeComponent(email)}');
+      context.push('/verify-reset?email=${Uri.encodeComponent(email)}');
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
@@ -47,24 +48,43 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final l10n = AppLocalizations.of(context)!;
     final formValid = _emailRe.hasMatch(_emailController.text.trim());
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.forgotPasswordTitle)),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                l10n.forgotPasswordTitle,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.forgotPasswordSubtitle,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(labelText: l10n.emailLabel),
+                decoration: InputDecoration(hintText: l10n.emailLabel),
               ),
               const SizedBox(height: 24),
               PrimaryButton(
                 label: l10n.sendCode,
                 loading: _submitting,
                 onPressed: formValid ? _submit : null,
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () => context.pop(),
+                  child: Text(l10n.backToLogin),
+                ),
               ),
             ],
           ),

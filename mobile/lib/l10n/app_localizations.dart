@@ -101,13 +101,13 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In ru, this message translates to:
-  /// **'Outside'**
+  /// **'outside'**
   String get appName;
 
   /// No description provided for @welcomeTagline.
   ///
   /// In ru, this message translates to:
-  /// **'Соцсеть для экспатов рядом с вами'**
+  /// **'Свои люди в любой стране'**
   String get welcomeTagline;
 
   /// No description provided for @createAccount.
@@ -131,7 +131,7 @@ abstract class AppLocalizations {
   /// No description provided for @registerTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Регистрация'**
+  /// **'Создать аккаунт'**
   String get registerTitle;
 
   /// No description provided for @emailLabel.
@@ -140,29 +140,35 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get emailLabel;
 
-  /// No description provided for @passwordLabel.
+  /// No description provided for @passwordHint.
   ///
   /// In ru, this message translates to:
-  /// **'Пароль'**
-  String get passwordLabel;
+  /// **'Пароль (мин. 8 символов)'**
+  String get passwordHint;
 
-  /// No description provided for @passwordConfirmLabel.
+  /// No description provided for @passwordConfirmHint.
   ///
   /// In ru, this message translates to:
   /// **'Повторите пароль'**
-  String get passwordConfirmLabel;
-
-  /// No description provided for @usernameLabel.
-  ///
-  /// In ru, this message translates to:
-  /// **'Никнейм'**
-  String get usernameLabel;
+  String get passwordConfirmHint;
 
   /// No description provided for @usernameHint.
   ///
   /// In ru, this message translates to:
-  /// **'латиница и _, от 3 символов'**
+  /// **'@никнейм'**
   String get usernameHint;
+
+  /// No description provided for @usernameHelper.
+  ///
+  /// In ru, this message translates to:
+  /// **'Никнейм — это ссылка на ваш профиль. Латинские буквы и _, до 30 символов'**
+  String get usernameHelper;
+
+  /// No description provided for @legalNotice.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создавая аккаунт, вы принимаете Условия использования и Политику конфиденциальности'**
+  String get legalNotice;
 
   /// No description provided for @usernameChecking.
   ///
@@ -227,7 +233,7 @@ abstract class AppLocalizations {
   /// No description provided for @verifyEmailSubtitle.
   ///
   /// In ru, this message translates to:
-  /// **'Мы отправили код на {email}'**
+  /// **'Мы отправили 6-значный код на {email}. Введите его, чтобы завершить регистрацию'**
   String verifyEmailSubtitle(String email);
 
   /// No description provided for @errorCodeWrong.
@@ -257,8 +263,8 @@ abstract class AppLocalizations {
   /// No description provided for @resendCodeTimer.
   ///
   /// In ru, this message translates to:
-  /// **'Повторная отправка через {seconds} с'**
-  String resendCodeTimer(int seconds);
+  /// **'Отправить код повторно через {time}'**
+  String resendCodeTimer(String time);
 
   /// No description provided for @confirm.
   ///
@@ -266,23 +272,35 @@ abstract class AppLocalizations {
   /// **'Подтвердить'**
   String get confirm;
 
+  /// No description provided for @onboardingStepLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Шаг {step} из 3'**
+  String onboardingStepLabel(int step);
+
   /// No description provided for @onboardingStep1Title.
   ///
   /// In ru, this message translates to:
   /// **'Как вас зовут?'**
   String get onboardingStep1Title;
 
-  /// No description provided for @firstNameLabel.
+  /// No description provided for @firstNameHint.
   ///
   /// In ru, this message translates to:
   /// **'Имя'**
-  String get firstNameLabel;
+  String get firstNameHint;
 
-  /// No description provided for @lastNameLabel.
+  /// No description provided for @lastNameHint.
   ///
   /// In ru, this message translates to:
   /// **'Фамилия'**
-  String get lastNameLabel;
+  String get lastNameHint;
+
+  /// No description provided for @genderLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пол'**
+  String get genderLabel;
 
   /// No description provided for @genderMale.
   ///
@@ -332,6 +350,12 @@ abstract class AppLocalizations {
   /// **'Где вы находитесь?'**
   String get onboardingStep3Title;
 
+  /// No description provided for @citiesFootnote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скоро добавим новые города'**
+  String get citiesFootnote;
+
   /// No description provided for @done.
   ///
   /// In ru, this message translates to:
@@ -371,14 +395,26 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPasswordTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Забыли пароль'**
+  /// **'Забыли пароль?'**
   String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите email — пришлём 6-значный код для сброса пароля'**
+  String get forgotPasswordSubtitle;
 
   /// No description provided for @sendCode.
   ///
   /// In ru, this message translates to:
   /// **'Отправить код'**
   String get sendCode;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'‹ Вернуться ко входу'**
+  String get backToLogin;
 
   /// No description provided for @codeSentNotice.
   ///
@@ -392,6 +428,12 @@ abstract class AppLocalizations {
   /// **'Новый пароль'**
   String get newPasswordTitle;
 
+  /// No description provided for @newPasswordHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый пароль (мин. 8 символов)'**
+  String get newPasswordHint;
+
   /// No description provided for @saveAndLogin.
   ///
   /// In ru, this message translates to:
@@ -401,14 +443,20 @@ abstract class AppLocalizations {
   /// No description provided for @blockedTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Ваш аккаунт заблокирован'**
+  /// **'Аккаунт заблокирован'**
   String get blockedTitle;
 
   /// No description provided for @blockedReasonLabel.
   ///
   /// In ru, this message translates to:
-  /// **'Причина:'**
-  String get blockedReasonLabel;
+  /// **'Причина: {reason}'**
+  String blockedReasonLabel(String reason);
+
+  /// No description provided for @blockedSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Если вы считаете это ошибкой — напишите нам, разберёмся'**
+  String get blockedSubtitle;
 
   /// No description provided for @contactSupport.
   ///

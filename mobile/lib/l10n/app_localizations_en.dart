@@ -9,10 +9,10 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Outside';
+  String get appName => 'outside';
 
   @override
-  String get welcomeTagline => 'A social network for expats near you';
+  String get welcomeTagline => 'Your people, in any country';
 
   @override
   String get createAccount => 'Create account';
@@ -24,22 +24,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueAsGuest => 'Continue without an account';
 
   @override
-  String get registerTitle => 'Sign up';
+  String get registerTitle => 'Create account';
 
   @override
   String get emailLabel => 'Email';
 
   @override
-  String get passwordLabel => 'Password';
+  String get passwordHint => 'Password (min. 8 characters)';
 
   @override
-  String get passwordConfirmLabel => 'Confirm password';
+  String get passwordConfirmHint => 'Confirm password';
 
   @override
-  String get usernameLabel => 'Username';
+  String get usernameHint => '@username';
 
   @override
-  String get usernameHint => 'letters and _, 3+ characters';
+  String get usernameHelper =>
+      'Your username is your profile link. Latin letters and _, up to 30 characters';
+
+  @override
+  String get legalNotice =>
+      'By creating an account you accept the Terms of Service and Privacy Policy';
 
   @override
   String get usernameChecking => 'checking…';
@@ -74,7 +79,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String verifyEmailSubtitle(String email) {
-    return 'We sent a code to $email';
+    return 'We sent a 6-digit code to $email. Enter it to finish signing up';
   }
 
   @override
@@ -92,21 +97,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resendCode => 'Resend code';
 
   @override
-  String resendCodeTimer(int seconds) {
-    return 'Resend in ${seconds}s';
+  String resendCodeTimer(String time) {
+    return 'Resend code in $time';
   }
 
   @override
   String get confirm => 'Confirm';
 
   @override
+  String onboardingStepLabel(int step) {
+    return 'Step $step of 3';
+  }
+
+  @override
   String get onboardingStep1Title => 'What\'s your name?';
 
   @override
-  String get firstNameLabel => 'First name';
+  String get firstNameHint => 'First name';
 
   @override
-  String get lastNameLabel => 'Last name';
+  String get lastNameHint => 'Last name';
+
+  @override
+  String get genderLabel => 'Gender';
 
   @override
   String get genderMale => 'Male';
@@ -134,6 +147,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingStep3Title => 'Where are you now?';
 
   @override
+  String get citiesFootnote => 'More cities coming soon';
+
+  @override
   String get done => 'Done';
 
   @override
@@ -154,10 +170,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get forgotPasswordTitle => 'Forgot password';
+  String get forgotPasswordTitle => 'Forgot password?';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your email — we\'ll send a 6-digit reset code';
 
   @override
   String get sendCode => 'Send code';
+
+  @override
+  String get backToLogin => '‹ Back to log in';
 
   @override
   String get codeSentNotice => 'If that email is registered, we sent a code';
@@ -166,13 +189,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newPasswordTitle => 'New password';
 
   @override
+  String get newPasswordHint => 'New password (min. 8 characters)';
+
+  @override
   String get saveAndLogin => 'Save and log in';
 
   @override
-  String get blockedTitle => 'Your account is blocked';
+  String get blockedTitle => 'Account blocked';
 
   @override
-  String get blockedReasonLabel => 'Reason:';
+  String blockedReasonLabel(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String get blockedSubtitle =>
+      'If you believe this is a mistake — write to us and we\'ll sort it out';
 
   @override
   String get contactSupport => 'Contact support';

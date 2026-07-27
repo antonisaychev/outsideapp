@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
+/// Дизайн-система по макетам Figma: белые поля с тонкой рамкой и
+/// плейсхолдером внутри, кнопки-«пилюли», крупные заголовки в теле экрана
+/// (AppBar — только стрелка «назад», без заголовка).
 ThemeData buildAppTheme() {
   final colorScheme = ColorScheme.fromSeed(
     seedColor: AppColors.coral,
@@ -46,6 +49,7 @@ ThemeData buildAppTheme() {
       backgroundColor: AppColors.background,
       foregroundColor: AppColors.textPrimary,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: false,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -55,9 +59,16 @@ ThemeData buildAppTheme() {
         disabledBackgroundColor: AppColors.border,
         disabledForegroundColor: AppColors.textSecondary,
         minimumSize: const Size.fromHeight(56),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.medium),
-        ),
+        shape: const StadiumBorder(),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.textPrimary,
+        side: const BorderSide(color: AppColors.textPrimary, width: 1.2),
+        minimumSize: const Size.fromHeight(56),
+        shape: const StadiumBorder(),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     ),
@@ -69,16 +80,18 @@ ThemeData buildAppTheme() {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.surface,
+      fillColor: AppColors.background,
+      hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
+      helperStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
       constraints: const BoxConstraints(minHeight: 56),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.small),

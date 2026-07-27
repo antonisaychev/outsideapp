@@ -6,6 +6,7 @@ import '../../../core/widgets/primary_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/session_controller.dart';
 
+/// Экран 31 «Новый пароль».
 class NewPasswordScreen extends ConsumerStatefulWidget {
   const NewPasswordScreen({super.key, required this.resetToken});
 
@@ -40,7 +41,7 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen> {
             resetToken: widget.resetToken,
             newPassword: _passwordController.text,
           );
-      // роутер сам переведёт на онбординг/главный экран по смене статуса сессии
+      // роутер сам переведёт дальше по смене статуса сессии
     } on ApiException catch (e) {
       setState(
         () => _error = e.error == 'RESET_TOKEN_INVALID'
@@ -59,26 +60,33 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen> {
         _passwordController.text.length >= 8 &&
         _confirmController.text == _passwordController.text;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.newPasswordTitle)),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                l10n.newPasswordTitle,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 24),
               TextField(
                 controller: _passwordController,
                 obscureText: true,
+                obscuringCharacter: '●',
                 onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(labelText: l10n.passwordLabel),
+                decoration: InputDecoration(hintText: l10n.newPasswordHint),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _confirmController,
                 obscureText: true,
+                obscuringCharacter: '●',
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: l10n.passwordConfirmLabel,
+                  hintText: l10n.passwordConfirmHint,
                   errorText:
                       _confirmController.text.isNotEmpty &&
                           _confirmController.text != _passwordController.text

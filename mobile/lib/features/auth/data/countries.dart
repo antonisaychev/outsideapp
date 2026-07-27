@@ -16,9 +16,10 @@ class Country {
   );
 }
 
-/// Показываются чипами сразу на экране (docs/TZ_Outside_v5_3_changes.md, шаг 2:
-/// «Сетка стран с флагами: 🇷🇺 🇺🇦 🇰🇿 🇬🇧 🇩🇪 🇺🇸 🇫🇷 и др.»).
-const featuredCountryCodes = ['RU', 'UA', 'KZ', 'GB', 'DE', 'US', 'FR'];
+/// Показываются сеткой сразу на экране — состав и порядок из макета Figma
+/// (экран 16): Россия, Украина, Казахстан, Великобритания, Германия, США,
+/// Франция, Индия.
+const featuredCountryCodes = ['RU', 'UA', 'KZ', 'GB', 'DE', 'US', 'FR', 'IN'];
 
 const allCountries = <Country>[
   Country(code: 'RU', nameRu: 'Россия', nameEn: 'Russia'),

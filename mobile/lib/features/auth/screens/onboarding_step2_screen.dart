@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../../core/widgets/selectable_chip.dart';
 import '../../../l10n/app_localizations.dart';
 import '../data/countries.dart';
 import '../providers/session_controller.dart';
 
-/// Экран 16 «Откуда вы?» — 2 из 3. Одиночный выбор страны.
+/// Экран 16 «Откуда вы?» — 2 из 3. Одиночный выбор страны, сетка 2 колонки.
 class OnboardingStep2Screen extends ConsumerStatefulWidget {
   const OnboardingStep2Screen({super.key});
 
@@ -44,9 +45,9 @@ class _OnboardingStep2ScreenState extends ConsumerState<OnboardingStep2Screen> {
   Future<void> _submit() async {
     setState(() => _submitting = true);
     try {
-      await ref.read(sessionControllerProvider.notifier).updateProfile({
-        'home_country': _selectedCode,
-      });
+      await ref
+          .read(sessionControllerProvider.notifier)
+          .updateProfile({'home_country': _selectedCode});
       // роутер сам переведёт на шаг 3
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -59,83 +60,99 @@ class _OnboardingStep2ScreenState extends ConsumerState<OnboardingStep2Screen> {
     final featured = allCountries
         .where((c) => featuredCountryCodes.contains(c.code))
         .toList();
+    // Выбранная «другая» страна показывается в сетке вместо последней ячейки
+    final gridCountries = List<Country>.of(featured);
+    if (_selectedCode != null && !_selectedIsFeatured) {
+      gridCountries[gridCountries.length - 1] = _selectedCountry!;
+    }
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('2 / 3', style: Theme.of(context).textTheme.bodyMedium),
-              const SizedBox(height: 8),
-              Text(
-                l10n.onboardingStep2Title,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.onboardingStep2Subtitle,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      ...featured.map(
-                        (c) => _CountryChip(
-                          country: c,
-                          selected: _selectedCode == c.code,
-                          onTap: () => setState(() => _selectedCode = c.code),
-                        ),
-                      ),
-                      if (_selectedCode != null && !_selectedIsFeatured)
-                        _CountryChip(
-                          country: _selectedCountry!,
-                          selected: true,
-                          onTap: _openSearch,
-                        ),
-                      ActionChip(
-                        avatar: const Icon(Icons.search, size: 18),
-                        label: Text(l10n.otherCountry),
-                        onPressed: _openSearch,
-                      ),
-                    ],
-                  ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.onboardingStepLabel(2),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.onboardingStep2Title,
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.onboardingStep2Subtitle,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 20),
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 3.4,
+                      children: [
+                        for (final c in gridCountries)
+                          SelectableChip(
+                            selected: _selectedCode == c.code,
+                            onTap: () =>
+                                setState(() => _selectedCode = c.code),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 0,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  c.flag,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    c.nameRu,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: _selectedCode == c.code
+                                          ? AppColors.coral
+                                          : AppColors.textPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                      onPressed: _openSearch,
+                      child: Text(l10n.otherCountry),
+                    ),
+                  ],
                 ),
               ),
-              PrimaryButton(
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+              child: PrimaryButton(
                 label: l10n.next,
                 loading: _submitting,
                 onPressed: _selectedCode != null ? _submit : null,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
-}
-
-class _CountryChip extends StatelessWidget {
-  const _CountryChip({
-    required this.country,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final Country country;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ChoiceChip(
-      label: Text('${country.flag} ${country.nameRu}'),
-      selected: selected,
-      onSelected: (_) => onTap(),
     );
   }
 }
@@ -173,10 +190,8 @@ class _CountrySearchSheetState extends State<_CountrySearchSheet> {
               autofocus: true,
               onChanged: (v) => setState(() => _query = v),
               decoration: InputDecoration(
-                labelText: widget.l10n.searchCountry,
+                hintText: widget.l10n.searchCountry,
                 prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: AppColors.surface,
               ),
             ),
             const SizedBox(height: 12),

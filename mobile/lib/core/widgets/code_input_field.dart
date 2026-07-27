@@ -10,10 +10,12 @@ class CodeInputField extends StatefulWidget {
   const CodeInputField({
     super.key,
     required this.onCompleted,
+    this.onChanged,
     this.hasError = false,
   });
 
   final ValueChanged<String> onCompleted;
+  final ValueChanged<String>? onChanged;
   final bool hasError;
 
   @override
@@ -55,6 +57,7 @@ class CodeInputFieldState extends State<CodeInputField> {
       );
     }
     setState(() {});
+    widget.onChanged?.call(trimmed);
     if (trimmed.length == 6) widget.onCompleted(trimmed);
   }
 
@@ -106,7 +109,7 @@ class CodeInputFieldState extends State<CodeInputField> {
       height: 56,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppRadius.small),
         border: Border.all(
           color: borderColor,

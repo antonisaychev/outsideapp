@@ -1,18 +1,19 @@
 {
   "@@locale": "en",
 
-  "appName": "Outside",
-  "welcomeTagline": "A social network for expats near you",
+  "appName": "outside",
+  "welcomeTagline": "Your people, in any country",
   "createAccount": "Create account",
   "login": "Log in",
   "continueAsGuest": "Continue without an account",
 
-  "registerTitle": "Sign up",
+  "registerTitle": "Create account",
   "emailLabel": "Email",
-  "passwordLabel": "Password",
-  "passwordConfirmLabel": "Confirm password",
-  "usernameLabel": "Username",
-  "usernameHint": "letters and _, 3+ characters",
+  "passwordHint": "Password (min. 8 characters)",
+  "passwordConfirmHint": "Confirm password",
+  "usernameHint": "@username",
+  "usernameHelper": "Your username is your profile link. Latin letters and _, up to 30 characters",
+  "legalNotice": "By creating an account you accept the Terms of Service and Privacy Policy",
   "usernameChecking": "checking…",
   "usernameAvailable": "available",
   "usernameTaken": "taken",
@@ -24,7 +25,7 @@
   "alreadyHaveAccount": "Already have an account? Log in",
 
   "verifyEmailTitle": "Confirm your email",
-  "verifyEmailSubtitle": "We sent a code to {email}",
+  "verifyEmailSubtitle": "We sent a 6-digit code to {email}. Enter it to finish signing up",
   "@verifyEmailSubtitle": {
     "placeholders": { "email": {"type": "String"} }
   },
@@ -35,15 +36,20 @@
   "errorCodeExpired": "Code expired or invalid",
   "errorCodeLocked": "Too many attempts. Request a new code",
   "resendCode": "Resend code",
-  "resendCodeTimer": "Resend in {seconds}s",
+  "resendCodeTimer": "Resend code in {time}",
   "@resendCodeTimer": {
-    "placeholders": { "seconds": {"type": "int"} }
+    "placeholders": { "time": {"type": "String"} }
   },
   "confirm": "Confirm",
 
+  "onboardingStepLabel": "Step {step} of 3",
+  "@onboardingStepLabel": {
+    "placeholders": { "step": {"type": "int"} }
+  },
   "onboardingStep1Title": "What's your name?",
-  "firstNameLabel": "First name",
-  "lastNameLabel": "Last name",
+  "firstNameHint": "First name",
+  "lastNameHint": "Last name",
+  "genderLabel": "Gender",
   "genderMale": "Male",
   "genderFemale": "Female",
   "next": "Next",
@@ -52,6 +58,7 @@
   "searchCountry": "Search country",
   "otherCountry": "Other country…",
   "onboardingStep3Title": "Where are you now?",
+  "citiesFootnote": "More cities coming soon",
   "done": "Done",
 
   "loginTitle": "Log in",
@@ -63,14 +70,21 @@
     "placeholders": { "seconds": {"type": "int"} }
   },
 
-  "forgotPasswordTitle": "Forgot password",
+  "forgotPasswordTitle": "Forgot password?",
+  "forgotPasswordSubtitle": "Enter your email — we'll send a 6-digit reset code",
   "sendCode": "Send code",
+  "backToLogin": "‹ Back to log in",
   "codeSentNotice": "If that email is registered, we sent a code",
   "newPasswordTitle": "New password",
+  "newPasswordHint": "New password (min. 8 characters)",
   "saveAndLogin": "Save and log in",
 
-  "blockedTitle": "Your account is blocked",
-  "blockedReasonLabel": "Reason:",
+  "blockedTitle": "Account blocked",
+  "blockedReasonLabel": "Reason: {reason}",
+  "@blockedReasonLabel": {
+    "placeholders": { "reason": {"type": "String"} }
+  },
+  "blockedSubtitle": "If you believe this is a mistake — write to us and we'll sort it out",
   "contactSupport": "Contact support",
   "logout": "Log out",
 

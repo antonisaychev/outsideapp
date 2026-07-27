@@ -9,10 +9,10 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appName => 'Outside';
+  String get appName => 'outside';
 
   @override
-  String get welcomeTagline => 'Соцсеть для экспатов рядом с вами';
+  String get welcomeTagline => 'Свои люди в любой стране';
 
   @override
   String get createAccount => 'Создать аккаунт';
@@ -24,22 +24,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get continueAsGuest => 'Продолжить без регистрации';
 
   @override
-  String get registerTitle => 'Регистрация';
+  String get registerTitle => 'Создать аккаунт';
 
   @override
   String get emailLabel => 'Email';
 
   @override
-  String get passwordLabel => 'Пароль';
+  String get passwordHint => 'Пароль (мин. 8 символов)';
 
   @override
-  String get passwordConfirmLabel => 'Повторите пароль';
+  String get passwordConfirmHint => 'Повторите пароль';
 
   @override
-  String get usernameLabel => 'Никнейм';
+  String get usernameHint => '@никнейм';
 
   @override
-  String get usernameHint => 'латиница и _, от 3 символов';
+  String get usernameHelper =>
+      'Никнейм — это ссылка на ваш профиль. Латинские буквы и _, до 30 символов';
+
+  @override
+  String get legalNotice =>
+      'Создавая аккаунт, вы принимаете Условия использования и Политику конфиденциальности';
 
   @override
   String get usernameChecking => 'проверяем…';
@@ -74,7 +79,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String verifyEmailSubtitle(String email) {
-    return 'Мы отправили код на $email';
+    return 'Мы отправили 6-значный код на $email. Введите его, чтобы завершить регистрацию';
   }
 
   @override
@@ -92,21 +97,29 @@ class AppLocalizationsRu extends AppLocalizations {
   String get resendCode => 'Отправить код повторно';
 
   @override
-  String resendCodeTimer(int seconds) {
-    return 'Повторная отправка через $seconds с';
+  String resendCodeTimer(String time) {
+    return 'Отправить код повторно через $time';
   }
 
   @override
   String get confirm => 'Подтвердить';
 
   @override
+  String onboardingStepLabel(int step) {
+    return 'Шаг $step из 3';
+  }
+
+  @override
   String get onboardingStep1Title => 'Как вас зовут?';
 
   @override
-  String get firstNameLabel => 'Имя';
+  String get firstNameHint => 'Имя';
 
   @override
-  String get lastNameLabel => 'Фамилия';
+  String get lastNameHint => 'Фамилия';
+
+  @override
+  String get genderLabel => 'Пол';
 
   @override
   String get genderMale => 'Мужской';
@@ -134,6 +147,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingStep3Title => 'Где вы находитесь?';
 
   @override
+  String get citiesFootnote => 'Скоро добавим новые города';
+
+  @override
   String get done => 'Готово';
 
   @override
@@ -154,10 +170,17 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get forgotPasswordTitle => 'Забыли пароль';
+  String get forgotPasswordTitle => 'Забыли пароль?';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Укажите email — пришлём 6-значный код для сброса пароля';
 
   @override
   String get sendCode => 'Отправить код';
+
+  @override
+  String get backToLogin => '‹ Вернуться ко входу';
 
   @override
   String get codeSentNotice =>
@@ -167,13 +190,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get newPasswordTitle => 'Новый пароль';
 
   @override
+  String get newPasswordHint => 'Новый пароль (мин. 8 символов)';
+
+  @override
   String get saveAndLogin => 'Сохранить и войти';
 
   @override
-  String get blockedTitle => 'Ваш аккаунт заблокирован';
+  String get blockedTitle => 'Аккаунт заблокирован';
 
   @override
-  String get blockedReasonLabel => 'Причина:';
+  String blockedReasonLabel(String reason) {
+    return 'Причина: $reason';
+  }
+
+  @override
+  String get blockedSubtitle =>
+      'Если вы считаете это ошибкой — напишите нам, разберёмся';
 
   @override
   String get contactSupport => 'Написать в поддержку';

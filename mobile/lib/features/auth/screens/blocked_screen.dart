@@ -19,9 +19,28 @@ class BlockedScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.block, size: 64, color: AppColors.error),
+              const Spacer(flex: 2),
+              Center(
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    color: AppColors.coralTint,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '!',
+                    style: TextStyle(
+                      color: AppColors.coral,
+                      fontSize: 36,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 24),
               Text(
                 l10n.blockedTitle,
@@ -30,12 +49,28 @@ class BlockedScreen extends ConsumerWidget {
               ),
               if (reason != null) ...[
                 const SizedBox(height: 16),
-                Text(
-                  '${l10n.blockedReasonLabel} $reason',
-                  textAlign: TextAlign.center,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(AppRadius.small),
+                  ),
+                  child: Text(
+                    l10n.blockedReasonLabel(reason),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
+              Text(
+                l10n.blockedSubtitle,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(flex: 3),
               OutlinedButton(
                 onPressed: () => launchUrl(
                   Uri(
@@ -48,10 +83,12 @@ class BlockedScreen extends ConsumerWidget {
                 child: Text(l10n.contactSupport),
               ),
               const SizedBox(height: 12),
-              TextButton(
-                onPressed: () =>
-                    ref.read(sessionControllerProvider.notifier).logout(),
-                child: Text(l10n.logout),
+              Center(
+                child: TextButton(
+                  onPressed: () =>
+                      ref.read(sessionControllerProvider.notifier).logout(),
+                  child: Text(l10n.logout),
+                ),
               ),
             ],
           ),

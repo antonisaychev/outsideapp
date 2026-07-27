@@ -15,6 +15,7 @@ final _emailRe = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 
 enum _UsernameStatus { idle, checking, available, taken, invalid }
 
+/// Экран 03 «Создать аккаунт».
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -44,6 +45,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
+  String get _username =>
+      _usernameController.text.trim().toLowerCase().replaceFirst('@', '');
+
   bool get _formValid =>
       _emailRe.hasMatch(_emailController.text) &&
       _passwordController.text.length >= 8 &&
@@ -52,7 +56,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   void _onUsernameChanged(String value) {
     _debounce?.cancel();
-    final username = value.trim().toLowerCase();
+    final username = _username;
     if (!_usernameRe.hasMatch(username)) {
       setState(() => _usernameStatus = _UsernameStatus.invalid);
       return;
@@ -62,7 +66,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       final available = await ref
           .read(usersApiProvider)
           .checkUsername(username);
-      if (!mounted || _usernameController.text.trim().toLowerCase() != username) {
+      if (!mounted || _username != username) {
         return;
       }
       setState(
@@ -87,10 +91,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           .register(
             email: email,
             password: _passwordController.text,
-            username: _usernameController.text.trim().toLowerCase(),
+            username: _username,
           );
       if (!mounted) return;
-      context.go('/verify?email=${Uri.encodeComponent(email)}');
+      context.push('/verify?email=${Uri.encodeComponent(email)}');
     } on ApiException catch (e) {
       setState(() {
         _emailError = e.fieldError('email') == 'EMAIL_TAKEN'
@@ -109,19 +113,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.registerTitle)),
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                l10n.registerTitle,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 24),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: l10n.emailLabel,
+                  hintText: l10n.emailLabel,
                   errorText: _emailError,
                 ),
               ),
@@ -129,9 +138,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
+                obscuringCharacter: '●',
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: l10n.passwordLabel,
+                  hintText: l10n.passwordHint,
                   errorText: _passwordError,
                 ),
               ),
@@ -139,9 +149,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               TextField(
                 controller: _confirmController,
                 obscureText: true,
+                obscuringCharacter: '●',
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: l10n.passwordConfirmLabel,
+                  hintText: l10n.passwordConfirmHint,
                   errorText:
                       _confirmController.text.isNotEmpty &&
                           _confirmController.text != _passwordController.text
@@ -154,9 +165,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 controller: _usernameController,
                 onChanged: _onUsernameChanged,
                 decoration: InputDecoration(
-                  labelText: l10n.usernameLabel,
-                  prefixText: '@',
-                  helperText: l10n.usernameHint,
+                  hintText: l10n.usernameHint,
+                  helperText: l10n.usernameHelper,
+                  helperMaxLines: 2,
                   suffixIcon: _usernameSuffixIcon(),
                   errorText: _usernameStatus == _UsernameStatus.invalid
                       ? l10n.errorUsernameInvalid
@@ -165,16 +176,26 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       : null,
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
+              Text(
+                l10n.legalNotice,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
               PrimaryButton(
                 label: l10n.createAccount,
                 loading: _submitting,
                 onPressed: _formValid ? _submit : null,
               ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => context.go('/login'),
-                child: Text(l10n.alreadyHaveAccount),
+              const SizedBox(height: 12),
+              Center(
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                  onPressed: () => context.go('/login'),
+                  child: Text(l10n.alreadyHaveAccount),
+                ),
               ),
             ],
           ),

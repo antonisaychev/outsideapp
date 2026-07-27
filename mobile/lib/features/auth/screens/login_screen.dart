@@ -7,6 +7,7 @@ import '../../../core/widgets/primary_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/session_controller.dart';
 
+/// Экран 02 «Вход».
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -38,13 +39,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await ref
           .read(sessionControllerProvider.notifier)
           .login(email: email, password: _passwordController.text);
-      // роутер сам переведёт дальше по смене статуса сессии (включая случай BLOCKED)
+      // роутер сам переведёт дальше по смене статуса сессии (включая BLOCKED)
     } on ApiException catch (e) {
       String message;
       switch (e.error) {
         case 'EMAIL_NOT_VERIFIED':
           if (mounted) {
-            context.go('/verify?email=${Uri.encodeComponent(email)}');
+            context.push('/verify?email=${Uri.encodeComponent(email)}');
           }
           return;
         case 'TRY_LATER':
@@ -67,25 +68,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _emailController.text.trim().isNotEmpty &&
         _passwordController.text.isNotEmpty;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.loginTitle)),
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                l10n.loginTitle,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 24),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(labelText: l10n.emailLabel),
+                decoration: InputDecoration(hintText: l10n.emailLabel),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 obscureText: true,
+                obscuringCharacter: '●',
                 onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(labelText: l10n.passwordLabel),
+                decoration: InputDecoration(hintText: l10n.passwordHint),
               ),
               if (_formError != null) ...[
                 const SizedBox(height: 12),
@@ -96,9 +103,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ],
               const SizedBox(height: 8),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.centerLeft,
                 child: TextButton(
-                  onPressed: () => context.go('/forgot'),
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () => context.push('/forgot'),
                   child: Text(l10n.forgotPassword),
                 ),
               ),
@@ -109,9 +117,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 onPressed: formValid ? _submit : null,
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => context.go('/register'),
-                child: Text(l10n.noAccountCreate),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    foregroundColor:
+                        Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                  onPressed: () => context.go('/register'),
+                  child: Text(l10n.noAccountCreate),
+                ),
               ),
             ],
           ),
