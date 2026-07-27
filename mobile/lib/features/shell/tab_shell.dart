@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/app_localizations.dart';
+import '../friends/providers/friends_providers.dart';
 import '../friends/screens/friends_tab_screen.dart';
 import '../profile/screens/my_profile_tab.dart';
 import '../services/screens/services_list_screen.dart';
@@ -36,7 +37,12 @@ class _TabShellState extends ConsumerState<TabShell> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
+        onDestinationSelected: (i) {
+          // Возврат на «Друзья» перезапрашивает списки: изменения могли
+          // прийти с другого устройства (IndexedStack держит экран живым)
+          if (i == 3) invalidateFriendship(ref);
+          setState(() => _index = i);
+        },
         backgroundColor: AppColors.background,
         indicatorColor: AppColors.coralTint,
         destinations: [

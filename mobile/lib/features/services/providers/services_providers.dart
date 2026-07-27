@@ -44,13 +44,11 @@ final servicesListProvider =
     );
 
 // Деталка содержит liked_by_me/is_favorite — сбрасываем при смене аккаунта
-final serviceDetailProvider = FutureProvider.family<ServiceDetail, String>((
-  ref,
-  id,
-) {
-  ref.watch(currentUserIdProvider);
-  return ref.read(servicesApiProvider).getById(id);
-});
+final serviceDetailProvider = FutureProvider.autoDispose
+    .family<ServiceDetail, String>((ref, id) {
+      ref.watch(currentUserIdProvider);
+      return ref.read(servicesApiProvider).getById(id);
+    });
 
 final favoritesProvider = FutureProvider<List<ServiceSummary>>((ref) {
   ref.watch(currentUserIdProvider);

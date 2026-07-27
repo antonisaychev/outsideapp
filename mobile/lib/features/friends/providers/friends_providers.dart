@@ -30,24 +30,23 @@ final blockedUsersProvider = FutureProvider<List<UserListItem>>((ref) {
   return ref.read(friendsApiProvider).blocked();
 });
 
-final publicProfileProvider = FutureProvider.family<PublicProfile, String>(
-  (ref, id) => ref.read(peopleApiProvider).getById(id),
-);
+final publicProfileProvider = FutureProvider.autoDispose
+    .family<PublicProfile, String>(
+      (ref, id) => ref.read(peopleApiProvider).getById(id),
+    );
 
-final relationStatusProvider = FutureProvider.family<RelationStatus, String>((
-  ref,
-  userId,
-) async {
-  ref.watch(currentUserIdProvider);
-  final map = await ref.read(friendsApiProvider).statuses([userId]);
-  return map[userId] ?? RelationStatus.none;
-});
+final relationStatusProvider = FutureProvider.autoDispose
+    .family<RelationStatus, String>((ref, userId) async {
+      ref.watch(currentUserIdProvider);
+      final map = await ref.read(friendsApiProvider).statuses([userId]);
+      return map[userId] ?? RelationStatus.none;
+    });
 
 /// Пакетные статусы отношений (для поиска людей и других списков).
 /// Ключ — id через запятую. Живёт здесь, чтобы invalidateFriendship
 /// сбрасывал и его.
-final relationStatusesProvider =
-    FutureProvider.family<Map<String, RelationStatus>, String>((ref, idsCsv) {
+final relationStatusesProvider = FutureProvider.autoDispose
+    .family<Map<String, RelationStatus>, String>((ref, idsCsv) {
       ref.watch(currentUserIdProvider);
       final ids = idsCsv.split(',').where((s) => s.isNotEmpty).toList();
       return ref.read(friendsApiProvider).statuses(ids);
@@ -106,8 +105,8 @@ class PeopleSearchQuery {
   int get hashCode => Object.hash(q, cityId, homeCountry);
 }
 
-final peopleSearchProvider =
-    FutureProvider.family<List<UserListItem>, PeopleSearchQuery>(
+final peopleSearchProvider = FutureProvider.autoDispose
+    .family<List<UserListItem>, PeopleSearchQuery>(
       (ref, query) => ref
           .read(peopleApiProvider)
           .search(
