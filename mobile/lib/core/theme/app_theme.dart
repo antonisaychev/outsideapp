@@ -1,114 +1,144 @@
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
 
-/// Дизайн-система по макетам Figma: белые поля с тонкой рамкой и
-/// плейсхолдером внутри, кнопки-«пилюли», крупные заголовки в теле экрана
-/// (AppBar — только стрелка «назад», без заголовка).
+import 'app_colors.dart';
+import 'app_text.dart';
+
+/// Тема Outside 2.0 — собрана из токенов Figma (страница «Outside 2.0»).
+/// Поля: рамка + метка внутри, подсказка под полем; кнопки-«пилюли»;
+/// крупные заголовки в теле экрана (AppBar — только «назад»).
 ThemeData buildAppTheme() {
   final colorScheme = ColorScheme.fromSeed(
     seedColor: AppColors.coral,
     primary: AppColors.coral,
     error: AppColors.error,
-    surface: AppColors.background,
+    surface: AppColors.neutral0,
   );
+
+  const radius = AppRadius.medium;
+  OutlineInputBorder border(Color color, [double width = 1]) =>
+      OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radius),
+        borderSide: BorderSide(color: color, width: width),
+      );
 
   return ThemeData(
     useMaterial3: true,
     fontFamily: 'Inter',
     colorScheme: colorScheme,
-    scaffoldBackgroundColor: AppColors.background,
+    scaffoldBackgroundColor: AppColors.neutral0,
+    splashFactory: InkSparkle.splashFactory,
     textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      ),
-      headlineMedium: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: AppColors.textPrimary,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: AppColors.textSecondary,
-      ),
-      labelLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      displaySmall: AppText.display,
+      headlineLarge: AppText.h1,
+      headlineMedium: AppText.h2,
+      headlineSmall: AppText.h3,
+      titleMedium: AppText.title,
+      titleSmall: AppText.bodyStrong,
+      bodyLarge: AppText.body,
+      bodyMedium: AppText.small,
+      labelLarge: AppText.button,
+      labelMedium: AppText.caption,
+      labelSmall: AppText.overline,
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.background,
-      foregroundColor: AppColors.textPrimary,
+      backgroundColor: AppColors.neutral0,
+      foregroundColor: AppColors.neutral900,
       elevation: 0,
       scrolledUnderElevation: 0,
-      centerTitle: false,
+      centerTitle: true,
+      titleTextStyle: AppText.title,
+    ),
+    dividerTheme: const DividerThemeData(
+      color: AppColors.neutral200,
+      thickness: 1,
+      space: 1,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.coral,
         foregroundColor: Colors.white,
-        disabledBackgroundColor: AppColors.border,
-        disabledForegroundColor: AppColors.textSecondary,
-        minimumSize: const Size.fromHeight(56),
+        disabledBackgroundColor: AppColors.neutral200,
+        disabledForegroundColor: AppColors.neutral400,
+        minimumSize: const Size.fromHeight(54),
         shape: const StadiumBorder(),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        elevation: 0,
+        textStyle: AppText.button,
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.textPrimary,
-        side: const BorderSide(color: AppColors.textPrimary, width: 1.2),
-        minimumSize: const Size.fromHeight(56),
+        foregroundColor: AppColors.neutral800,
+        backgroundColor: AppColors.neutral0,
+        side: const BorderSide(color: AppColors.neutral300, width: 1.5),
+        minimumSize: const Size.fromHeight(54),
         shape: const StadiumBorder(),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        textStyle: AppText.button,
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.coral,
-        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        textStyle: AppText.bodyStrong,
+      ),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith(
+        (s) => s.contains(WidgetState.selected)
+            ? Colors.white
+            : AppColors.neutral0,
+      ),
+      trackColor: WidgetStateProperty.resolveWith(
+        (s) => s.contains(WidgetState.selected)
+            ? AppColors.coral
+            : AppColors.neutral300,
+      ),
+      trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.neutral0,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.screen),
+        ),
+      ),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: AppColors.neutral0,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.card),
+      ),
+      titleTextStyle: AppText.h3,
+      contentTextStyle: AppText.callout.copyWith(color: AppColors.neutral600),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.neutral900,
+      contentTextStyle: AppText.callout.copyWith(color: Colors.white),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.medium),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.background,
-      hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
-      helperStyle: const TextStyle(
-        color: AppColors.textSecondary,
-        fontSize: 12,
-      ),
+      fillColor: AppColors.neutral0,
+      // Метка живёт внутри рамки над значением — приём из макетов
+      labelStyle: AppText.caption,
+      floatingLabelStyle: AppText.caption,
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      hintStyle: AppText.body.copyWith(color: AppColors.neutral400),
+      helperStyle: AppText.small,
+      helperMaxLines: 3,
+      errorMaxLines: 3,
       constraints: const BoxConstraints(minHeight: 56),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: const BorderSide(color: AppColors.border),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: const BorderSide(color: AppColors.border),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: const BorderSide(color: AppColors.coral, width: 1.5),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: const BorderSide(color: AppColors.error, width: 1.5),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadius.small),
-        borderSide: const BorderSide(color: AppColors.error, width: 1.5),
-      ),
-      errorStyle: const TextStyle(color: AppColors.error, fontSize: 13),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: border(AppColors.neutral300),
+      enabledBorder: border(AppColors.neutral300),
+      focusedBorder: border(AppColors.coral, 1.5),
+      errorBorder: border(AppColors.error, 1.5),
+      focusedErrorBorder: border(AppColors.error, 1.5),
+      errorStyle: AppText.small.copyWith(color: AppColors.error),
     ),
   );
 }

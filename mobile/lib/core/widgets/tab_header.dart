@@ -27,7 +27,12 @@ class TabHeader extends StatelessWidget {
   final bool horizontalPadding;
 
   /// Отступы шапки: слева 24 под текст, справа 12 — иконки добирают своим полем
-  static const padding = EdgeInsets.fromLTRB(24, 12, 12, 8);
+  static const padding = EdgeInsets.fromLTRB(
+    AppSpacing.screen,
+    AppSpacing.m,
+    AppSpacing.l,
+    AppSpacing.s,
+  );
 
   @override
   Widget build(BuildContext context) {

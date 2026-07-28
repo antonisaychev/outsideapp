@@ -10,7 +10,8 @@ import '../../auth/providers/session_controller.dart';
 
 /// Активная вкладка таб-шелла (вынесена в провайдер, чтобы экраны могли
 /// переключать вкладки — например «К друзьям» из пустых сообщений).
-final shellTabIndexProvider = StateProvider<int>((ref) => 1);
+/// Стартовая вкладка — «Сервисы» (ShellTab.services)
+final shellTabIndexProvider = StateProvider<int>((ref) => 2);
 
 /// «Написать» из любого места: найти/создать диалог и открыть его.
 Future<void> openChatWith(

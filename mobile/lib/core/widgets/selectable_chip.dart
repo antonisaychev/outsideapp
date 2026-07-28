@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_text.dart';
 
 /// Выбираемый чип/карточка по макету: серый фон в покое,
 /// коралловая рамка + светло-розовый фон при выборе.
@@ -22,19 +23,21 @@ class SelectableChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.small),
+      borderRadius: BorderRadius.circular(AppRadius.full),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 120),
         padding: padding,
         decoration: BoxDecoration(
-          color: selected ? AppColors.coralTint : AppColors.surface,
-          borderRadius: BorderRadius.circular(AppRadius.small),
-          border: Border.all(
-            color: selected ? AppColors.coral : Colors.transparent,
-            width: 1.5,
-          ),
+          // Выбранный — сплошной коралл с белым текстом (макеты Outside 2.0)
+          color: selected ? AppColors.coral : AppColors.neutral100,
+          borderRadius: BorderRadius.circular(AppRadius.full),
         ),
-        child: child,
+        child: DefaultTextStyle.merge(
+          style: AppText.smallMedium.copyWith(
+            color: selected ? Colors.white : AppColors.neutral600,
+          ),
+          child: child,
+        ),
       ),
     );
   }

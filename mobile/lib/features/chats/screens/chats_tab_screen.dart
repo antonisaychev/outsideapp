@@ -6,6 +6,7 @@ import '../../../core/widgets/tab_header.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../shell/tab_shell.dart';
 import '../../auth/providers/session_controller.dart';
 import '../providers/chats_providers.dart';
 
@@ -112,7 +113,7 @@ class ChatsTabScreen extends ConsumerWidget {
                                                 shellTabIndexProvider.notifier,
                                               )
                                               .state =
-                                          3,
+                                          ShellTab.friends,
                                   child: Text(l10n.toFriends),
                                 ),
                               ],

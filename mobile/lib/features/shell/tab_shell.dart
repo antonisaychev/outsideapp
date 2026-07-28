@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../chats/providers/chats_providers.dart';
 import '../chats/screens/chats_tab_screen.dart';
@@ -13,9 +14,21 @@ import '../friends/screens/friends_tab_screen.dart';
 import '../profile/screens/my_profile_tab.dart';
 import '../services/screens/services_list_screen.dart';
 
-/// Бейдж непрочитанных на вкладке «Сообщения»
-class _UnreadBadge extends StatelessWidget {
-  const _UnreadBadge({required this.count, required this.child});
+/// Номера вкладок — по порядку из макетов Outside 2.0.
+/// Порядок задаётся здесь: экраны переключают вкладки только этими константами.
+class ShellTab {
+  ShellTab._();
+
+  static const dating = 0;
+  static const friends = 1;
+  static const services = 2;
+  static const chats = 3;
+  static const profile = 4;
+}
+
+/// Счётчик на иконке вкладки: непрочитанные сообщения, входящие заявки
+class _CountBadge extends StatelessWidget {
+  const _CountBadge({required this.count, required this.child});
 
   final int count;
   final Widget child;
@@ -24,6 +37,12 @@ class _UnreadBadge extends StatelessWidget {
   Widget build(BuildContext context) => Badge(
     isLabelVisible: count > 0,
     backgroundColor: AppColors.coral,
+    textColor: Colors.white,
+    textStyle: AppText.caption.copyWith(
+      color: Colors.white,
+      fontSize: 10.5,
+      height: 1,
+    ),
     label: Text('$count'),
     child: child,
   );
@@ -36,12 +55,12 @@ class TabShell extends ConsumerWidget {
   void _openTab(WidgetRef ref, int i) {
     // IndexedStack держит экраны живыми, поэтому свежесть обеспечиваем сами
     switch (i) {
-      case 0:
+      case ShellTab.dating:
         ref.invalidate(datingProfileProvider);
         ref.read(deckControllerProvider.notifier).load();
-      case 3:
+      case ShellTab.friends:
         invalidateFriendship(ref);
-      case 4:
+      case ShellTab.profile:
         ref.read(sessionControllerProvider.notifier).refreshProfile();
     }
     ref.read(shellTabIndexProvider.notifier).state = i;
@@ -52,62 +71,74 @@ class TabShell extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final index = ref.watch(shellTabIndexProvider);
     final unread = ref.watch(totalUnreadProvider);
+    final requests =
+        ref.watch(incomingRequestsProvider).valueOrNull?.length ?? 0;
+
     return Scaffold(
       body: IndexedStack(
         index: index,
-        children: [
-          const DatingTabScreen(),
-          const ServicesListScreen(),
-          const ChatsTabScreen(),
-          const FriendsTabScreen(),
-          const MyProfileTab(),
+        children: const [
+          DatingTabScreen(),
+          FriendsTabScreen(),
+          ServicesListScreen(),
+          ChatsTabScreen(),
+          MyProfileTab(),
         ],
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.border)),
+          color: AppColors.neutral0,
+          border: Border(top: BorderSide(color: AppColors.neutral200)),
         ),
         child: BottomNavigationBar(
           currentIndex: index,
           onTap: (i) => _openTab(ref, i),
           type: BottomNavigationBarType.fixed,
-          backgroundColor: AppColors.background,
+          backgroundColor: AppColors.neutral0,
           // Выделение активной вкладки только цветом — как в макетах
           selectedItemColor: AppColors.coral,
-          unselectedItemColor: AppColors.textSecondary,
-          selectedFontSize: 11,
-          unselectedFontSize: 11,
+          unselectedItemColor: AppColors.neutral400,
+          selectedLabelStyle: AppText.caption.copyWith(color: AppColors.coral),
+          unselectedLabelStyle: AppText.caption,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
           elevation: 0,
           items: [
             BottomNavigationBarItem(
-              icon: const Icon(Icons.favorite_border, size: 26),
-              activeIcon: const Icon(Icons.favorite, size: 26),
+              icon: const Icon(Icons.favorite_border, size: 25),
+              activeIcon: const Icon(Icons.favorite, size: 25),
               label: l10n.tabDating,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.grid_view_outlined, size: 26),
-              activeIcon: const Icon(Icons.grid_view, size: 26),
+              icon: _CountBadge(
+                count: requests,
+                child: const Icon(Icons.people_outline, size: 25),
+              ),
+              activeIcon: _CountBadge(
+                count: requests,
+                child: const Icon(Icons.people, size: 25),
+              ),
+              label: l10n.tabFriends,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.grid_view_outlined, size: 25),
+              activeIcon: const Icon(Icons.grid_view, size: 25),
               label: l10n.tabServices,
             ),
             BottomNavigationBarItem(
-              icon: _UnreadBadge(
+              icon: _CountBadge(
                 count: unread,
-                child: const Icon(Icons.chat_bubble_outline, size: 26),
+                child: const Icon(Icons.chat_bubble_outline, size: 25),
               ),
-              activeIcon: _UnreadBadge(
+              activeIcon: _CountBadge(
                 count: unread,
-                child: const Icon(Icons.chat_bubble, size: 26),
+                child: const Icon(Icons.chat_bubble, size: 25),
               ),
               label: l10n.tabMessages,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.people_outline, size: 26),
-              activeIcon: const Icon(Icons.people, size: 26),
-              label: l10n.tabFriends,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person_outline, size: 26),
-              activeIcon: const Icon(Icons.person, size: 26),
+              icon: const Icon(Icons.person_outline, size: 25),
+              activeIcon: const Icon(Icons.person, size: 25),
               label: l10n.tabProfile,
             ),
           ],
