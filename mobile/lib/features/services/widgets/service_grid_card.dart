@@ -7,13 +7,13 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/verified_badge.dart';
 
 /// Карточка сервиса в плитке (макет 04/43): фото с сердечком и бейджем
-/// количества фото, название, «Категория · Город», 👍 счётчик.
+/// количества фото, название, категория, 👍 счётчик. Место не пишем —
+/// лента и так показывает только карточки места из профиля.
 class ServiceGridCard extends StatelessWidget {
   const ServiceGridCard({
     super.key,
     required this.service,
     required this.categoryName,
-    required this.cityName,
     required this.isFavorite,
     required this.onTap,
     required this.onFavoriteTap,
@@ -21,7 +21,6 @@ class ServiceGridCard extends StatelessWidget {
 
   final ServiceSummary service;
   final String categoryName;
-  final String cityName;
   final bool isFavorite;
   final VoidCallback onTap;
   final VoidCallback onFavoriteTap;
@@ -141,7 +140,7 @@ class ServiceGridCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$categoryName · $cityName',
+                      categoryName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(

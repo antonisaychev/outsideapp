@@ -6,7 +6,6 @@ import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/models.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/services_api.dart';
-import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../l10n/app_localizations.dart';
@@ -71,7 +70,6 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
     final cityId = ref.watch(viewCityIdProvider);
     final categoryId = ref.watch(selectedCategoryProvider);
     final categoriesAsync = ref.watch(placeCategoriesProvider);
-    final citiesAsync = ref.watch(citiesProvider);
     final session = ref.watch(sessionControllerProvider);
     final isGuest = session.status != SessionStatus.ready;
     final listAsync = ref.watch(
@@ -89,14 +87,6 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
         : (ref.watch(favoritesProvider).valueOrNull ?? [])
               .map((s) => s.id)
               .toSet();
-
-    final cities = citiesAsync.valueOrNull ?? const <City>[];
-    String cityName(int id) {
-      for (final c in cities) {
-        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
-      }
-      return '';
-    }
 
     final categories = categoriesAsync.valueOrNull ?? const <ServiceCategory>[];
     String categoryName(int id) {
@@ -221,7 +211,6 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                             return ServiceGridCard(
                               service: s,
                               categoryName: categoryName(s.categoryId),
-                              cityName: cityName(s.cityId),
                               isFavorite: favoriteIds.contains(s.id),
                               onTap: () => context.push('/services/${s.id}'),
                               onFavoriteTap: () => _toggleFavorite(

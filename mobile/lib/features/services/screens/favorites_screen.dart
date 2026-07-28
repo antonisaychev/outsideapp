@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api/models.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/services_api.dart';
-import '../../../core/api/users_api.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/services_providers.dart';
 import '../widgets/service_grid_card.dart';
@@ -20,17 +19,9 @@ class FavoritesScreen extends ConsumerWidget {
     final favoritesAsync = ref.watch(favoritesProvider);
     final categories =
         ref.watch(categoriesProvider).valueOrNull ?? const <ServiceCategory>[];
-    final cities = ref.watch(citiesProvider).valueOrNull ?? const <City>[];
 
     String categoryName(int id) {
       for (final c in categories) {
-        if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
-      }
-      return '';
-    }
-
-    String cityName(int id) {
-      for (final c in cities) {
         if (c.id == id) return localizedName(context, c.nameRu, c.nameEn);
       }
       return '';
@@ -83,7 +74,6 @@ class FavoritesScreen extends ConsumerWidget {
                           return ServiceGridCard(
                             service: s,
                             categoryName: categoryName(s.categoryId),
-                            cityName: cityName(s.cityId),
                             isFavorite: true,
                             onTap: () => context.push('/services/${s.id}'),
                             onFavoriteTap: () async {
