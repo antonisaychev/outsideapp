@@ -364,3 +364,14 @@ pm2 restart outside-api       # перезапуск после обновлен
 sudo systemctl status nginx   # статус nginx
 sudo systemctl status postgresql
 ```
+
+---
+
+## Настройка nginx одним скриптом
+
+Вместо ручной правки конфига:
+```
+bash ~/outside/backend/scripts/tune_nginx.sh
+```
+Скрипт включает HTTP/2, сжатие JSON, кэш TLS-соединений и раздачу фотографий,
+проверяет конфиг и откатывается при ошибке. Повторный запуск безопасен.
