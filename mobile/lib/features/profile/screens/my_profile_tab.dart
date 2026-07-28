@@ -7,8 +7,7 @@ import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/photo_strip.dart';
-import '../../../core/widgets/user_avatar.dart';
+import '../../../core/widgets/photo_gallery.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
 import '../../auth/providers/session_controller.dart';
@@ -92,18 +91,12 @@ class MyProfileTab extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 4),
-            Center(
-              child: UserAvatar(
-                avatarUrl: profile.avatarUrl,
-                name: name,
-                radius: 52,
-              ),
+            PhotoGallery(
+              photos: profile.photos,
+              fallbackUrl: profile.avatarUrl,
+              name: name,
             ),
-            if (profile.photos.length > 1) ...[
-              const SizedBox(height: 16),
-              PhotoStrip(photos: profile.photos),
-            ],
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Text(
               name,
               textAlign: TextAlign.center,

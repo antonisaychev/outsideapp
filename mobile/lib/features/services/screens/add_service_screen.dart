@@ -56,9 +56,9 @@ class _AddServiceScreenState extends ConsumerState<AddServiceScreen> {
     // Сжатие на клиенте до 1280px (ТЗ v5.6 §4)
     final picked = await ImagePicker().pickImage(
       source: ImageSource.gallery,
-      maxWidth: 1280,
-      maxHeight: 1280,
-      imageQuality: 85,
+      maxWidth: 1920,
+      maxHeight: 1920,
+      imageQuality: 88,
     );
     if (picked != null) setState(() => _photos.add(File(picked.path)));
   }

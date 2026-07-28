@@ -550,11 +550,7 @@ class _DeckCardViewState extends State<_DeckCardView> {
             CachedNetworkImage(
               imageUrl: absoluteFileUrl(photoUrl),
               fit: BoxFit.cover,
-              // декодируем под ширину экрана, а не в оригинале
-              memCacheWidth:
-                  (MediaQuery.sizeOf(context).width *
-                          MediaQuery.devicePixelRatioOf(context))
-                      .round(),
+              filterQuality: FilterQuality.medium,
               fadeInDuration: const Duration(milliseconds: 120),
               placeholder: (context, url) =>
                   Container(color: AppColors.surface),

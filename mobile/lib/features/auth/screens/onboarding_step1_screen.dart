@@ -40,9 +40,9 @@ class _OnboardingStep1ScreenState extends ConsumerState<OnboardingStep1Screen> {
     // Сжатие на клиенте до 1280px по длинной стороне (ТЗ v5.6 §4)
     final picked = await ImagePicker().pickImage(
       source: ImageSource.gallery,
-      maxWidth: 1280,
-      maxHeight: 1280,
-      imageQuality: 85,
+      maxWidth: 2400,
+      maxHeight: 2400,
+      imageQuality: 90,
     );
     if (picked != null) setState(() => _avatarFile = File(picked.path));
   }

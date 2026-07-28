@@ -13,6 +13,10 @@ import '../providers/chats_providers.dart';
 import '../widgets/read_ticks.dart';
 
 /// Экран 09 «Чат»: optimistic-отправка, ✓/✓✓, подгрузка истории вверх.
+/// Высота поля ввода и круглой кнопки отправки — одно значение на двоих,
+/// иначе они не совпадают по краям (QA_NOTES №58)
+const double _composerHeight = 48;
+
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({
     super.key,
@@ -211,8 +215,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                 child: Row(
-                  // по нижнему краю: поле растёт вверх, кнопка стоит на месте
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  // Кнопка тянется по высоте поля — центры и края совпадают
+                  // при любой высоте текста (QA_NOTES №58)
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: TextField(
@@ -230,21 +235,29 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           filled: true,
                           fillColor: AppColors.surface,
                           isDense: true,
-                          constraints: const BoxConstraints(minHeight: 48),
+                          constraints: const BoxConstraints(
+                            minHeight: _composerHeight,
+                          ),
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 18,
                             vertical: 14,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(
+                              _composerHeight / 2,
+                            ),
                             borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(
+                              _composerHeight / 2,
+                            ),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(
+                              _composerHeight / 2,
+                            ),
                             borderSide: const BorderSide(
                               color: AppColors.coral,
                             ),
@@ -257,8 +270,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     GestureDetector(
                       onTap: _textController.text.trim().isEmpty ? null : _send,
                       child: Container(
-                        width: 48,
-                        height: 48,
+                        width: _composerHeight,
+                        height: _composerHeight,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,

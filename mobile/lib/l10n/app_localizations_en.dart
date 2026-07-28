@@ -418,7 +418,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifMatch(String name) {
-    return 'You and $name liked each other — you’re friends now';
+    return 'You and $name are interested in each other — you’re friends now';
   }
 
   @override
@@ -496,7 +496,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String matchSubtitle(String name) {
-    return 'You and $name liked each other';
+    return 'You and $name are interested in each other';
   }
 
   @override

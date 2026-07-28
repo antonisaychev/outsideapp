@@ -839,7 +839,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifMatch.
   ///
   /// In ru, this message translates to:
-  /// **'Вы понравились друг другу с {name} — теперь вы друзья'**
+  /// **'Вы и {name} заинтересовали друг друга — теперь вы друзья'**
   String notifMatch(String name);
 
   /// No description provided for @notifServiceRecommended.
@@ -965,7 +965,7 @@ abstract class AppLocalizations {
   /// No description provided for @matchSubtitle.
   ///
   /// In ru, this message translates to:
-  /// **'Вы понравились друг другу с {name}'**
+  /// **'Вы и {name} заинтересовали друг друга'**
   String matchSubtitle(String name);
 
   /// No description provided for @matchWriteMessage.

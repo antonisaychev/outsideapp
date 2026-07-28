@@ -9,8 +9,7 @@ import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../core/widgets/report_form_sheet.dart';
-import '../../../core/widgets/photo_strip.dart';
-import '../../../core/widgets/user_avatar.dart';
+import '../../../core/widgets/photo_gallery.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
 import '../../auth/providers/session_controller.dart';
@@ -243,18 +242,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
-                  child: UserAvatar(
-                    avatarUrl: profile.avatarUrl,
-                    name: profile.displayName,
-                    radius: 52,
-                  ),
+                PhotoGallery(
+                  photos: profile.photos,
+                  fallbackUrl: profile.avatarUrl,
+                  name: profile.displayName,
                 ),
-                if (profile.photos.length > 1) ...[
-                  const SizedBox(height: 16),
-                  PhotoStrip(photos: profile.photos),
-                ],
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Text(
                   profile.displayName,
                   textAlign: TextAlign.center,

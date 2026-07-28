@@ -177,7 +177,7 @@
   "@notifFriendAccepted": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifMatch": "You and {name} liked each other — you’re friends now",
+  "notifMatch": "You and {name} are interested in each other — you’re friends now",
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
@@ -216,7 +216,7 @@
   "deckEmpty": "You’ve seen everyone nearby. Check back later",
   "likeLimitReached": "You’re out of likes for today",
   "matchTitle": "It's a match! 🎉",
-  "matchSubtitle": "You and {name} liked each other",
+  "matchSubtitle": "You and {name} are interested in each other",
   "@matchSubtitle": {
     "placeholders": { "name": {"type": "String"} }
   },

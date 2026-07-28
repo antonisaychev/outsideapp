@@ -177,7 +177,7 @@
   "@notifFriendAccepted": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifMatch": "Вы понравились друг другу с {name} — теперь вы друзья",
+  "notifMatch": "Вы и {name} заинтересовали друг друга — теперь вы друзья",
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
@@ -216,7 +216,7 @@
   "deckEmpty": "Вы посмотрели всех, кто рядом. Загляните позже",
   "likeLimitReached": "На сегодня лайки закончились",
   "matchTitle": "Это мэтч! 🎉",
-  "matchSubtitle": "Вы понравились друг другу с {name}",
+  "matchSubtitle": "Вы и {name} заинтересовали друг друга",
   "@matchSubtitle": {
     "placeholders": { "name": {"type": "String"} }
   },

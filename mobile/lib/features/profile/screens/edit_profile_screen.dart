@@ -111,9 +111,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   Future<void> _addPhoto() async {
     final picked = await ImagePicker().pickImage(
       source: ImageSource.gallery,
-      maxWidth: 1280,
-      maxHeight: 1280,
-      imageQuality: 85,
+      maxWidth: 2400,
+      maxHeight: 2400,
+      imageQuality: 90,
     );
     if (picked == null) return;
     await _runPhotoAction(
@@ -447,7 +447,6 @@ class _PhotoGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Wrap(
       spacing: 10,
       runSpacing: 10,
@@ -472,22 +471,23 @@ class _PhotoGrid extends StatelessWidget {
                           Container(color: AppColors.surface),
                     ),
                   ),
+                  // Главное фото помечено звездой в углу
                   if (i == 0)
                     Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
+                      top: 6,
+                      right: 6,
                       child: Container(
-                        color: Colors.black54,
-                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        width: 24,
+                        height: 24,
                         alignment: Alignment.center,
-                        child: Text(
-                          l10n.mainPhotoBadge,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.45),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.star_rounded,
+                          size: 16,
+                          color: Colors.white,
                         ),
                       ),
                     ),

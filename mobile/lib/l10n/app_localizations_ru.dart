@@ -417,7 +417,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String notifMatch(String name) {
-    return 'Вы понравились друг другу с $name — теперь вы друзья';
+    return 'Вы и $name заинтересовали друг друга — теперь вы друзья';
   }
 
   @override
@@ -495,7 +495,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String matchSubtitle(String name) {
-    return 'Вы понравились друг другу с $name';
+    return 'Вы и $name заинтересовали друг друга';
   }
 
   @override
