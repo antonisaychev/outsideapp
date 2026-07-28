@@ -8,9 +8,11 @@ for (const key of ['DATABASE_URL', 'JWT_SECRET']) {
     process.exit(1);
   }
 }
+// Короткий ключ — повод его сменить, но не повод ронять работающий сервер:
+// смена JWT_SECRET разлогинивает всех, это делается осознанно, а не при
+// каждом перезапуске (QA_NOTES №71)
 if (process.env.JWT_SECRET.length < 32) {
-  console.error('JWT_SECRET короче 32 символов — подберите длиннее');
-  process.exit(1);
+  console.warn('Внимание: JWT_SECRET короче 32 символов — стоит заменить на длинный');
 }
 
 const express = require('express');
