@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/widgets/tab_header.dart';
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
@@ -89,34 +90,16 @@ class ChatsTabScreen extends ConsumerWidget {
                     ? ListView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 120),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
-                                  child: Text(
-                                    l10n.messagesEmpty,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                TextButton(
-                                  onPressed: () =>
-                                      ref
-                                              .read(
-                                                shellTabIndexProvider.notifier,
-                                              )
-                                              .state =
-                                          ShellTab.friends,
-                                  child: Text(l10n.toFriends),
-                                ),
-                              ],
+                          SizedBox(
+                            height: MediaQuery.sizeOf(context).height * 0.6,
+                            child: EmptyState(
+                              icon: Icons.chat_bubble_outline_rounded,
+                              title: l10n.chatsEmptyTitle,
+                              description: l10n.chatsEmptyBody,
+                              actionLabel: l10n.toFriends,
+                              onAction: () => ref
+                                  .read(shellTabIndexProvider.notifier)
+                                  .state = ShellTab.friends,
                             ),
                           ),
                         ],

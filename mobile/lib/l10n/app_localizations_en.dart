@@ -1057,4 +1057,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminRoleLabel => 'Admin';
+
+  @override
+  String get servicesEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get errorTitle => 'Couldn’t load';
+
+  @override
+  String get errorNetworkBody => 'Check your connection and try again';
+
+  @override
+  String get friendsEmptyTitle => 'No friends yet';
+
+  @override
+  String get friendsEmptyBody =>
+      'Find people you know in search or accept a request';
+
+  @override
+  String get requestsEmptyTitle => 'No requests';
+
+  @override
+  String get requestsEmptyBody => 'Incoming friend requests will appear here';
+
+  @override
+  String get chatsEmptyTitle => 'No messages yet';
+
+  @override
+  String get chatsEmptyBody =>
+      'A chat appears after a match or when you write to a friend';
+
+  @override
+  String get favoritesEmptyTitle => 'No favourites yet';
+
+  @override
+  String get favoritesEmptyBody =>
+      'Tap the heart on a service card to save it here';
+
+  @override
+  String get searchEmptyTitle => 'Nobody found';
+
+  @override
+  String get searchEmptyBody => 'Check the spelling or try an @nickname';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications';
+
+  @override
+  String get notificationsEmptyBody =>
+      'Friend requests, matches and news about your listings appear here';
+
+  @override
+  String get deckEmptyTitle => 'Nobody around yet';
+
+  @override
+  String get blockedEmptyTitle => 'Nothing here';
+
+  @override
+  String get blockedEmptyBody => 'Blocked users will appear here';
 }

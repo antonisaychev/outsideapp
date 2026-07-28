@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/models.dart';
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/services_api.dart';
 import '../../../l10n/app_localizations.dart';
@@ -39,21 +40,12 @@ class FavoritesScreen extends ConsumerWidget {
             ),
           ),
           data: (services) => services.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        l10n.favoritesEmptyHint,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 12),
-                      TextButton(
-                        onPressed: () => context.pop(),
-                        child: Text(l10n.toServices),
-                      ),
-                    ],
-                  ),
+              ? EmptyState(
+                  icon: Icons.favorite_border_rounded,
+                  title: l10n.favoritesEmptyTitle,
+                  description: l10n.favoritesEmptyBody,
+                  actionLabel: l10n.toServices,
+                  onAction: () => context.pop(),
                 )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

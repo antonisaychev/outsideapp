@@ -2017,6 +2017,114 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Администратор'**
   String get adminRoleLabel;
+
+  /// No description provided for @servicesEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здесь пока пусто'**
+  String get servicesEmptyTitle;
+
+  /// No description provided for @errorTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить'**
+  String get errorTitle;
+
+  /// No description provided for @errorNetworkBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверьте интернет и попробуйте ещё раз'**
+  String get errorNetworkBody;
+
+  /// No description provided for @friendsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Друзей пока нет'**
+  String get friendsEmptyTitle;
+
+  /// No description provided for @friendsEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Найдите знакомых в поиске или примите заявку'**
+  String get friendsEmptyBody;
+
+  /// No description provided for @requestsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заявок нет'**
+  String get requestsEmptyTitle;
+
+  /// No description provided for @requestsEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здесь появятся входящие заявки в друзья'**
+  String get requestsEmptyBody;
+
+  /// No description provided for @chatsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет сообщений'**
+  String get chatsEmptyTitle;
+
+  /// No description provided for @chatsEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Диалог появится после мэтча или когда вы напишете другу'**
+  String get chatsEmptyBody;
+
+  /// No description provided for @favoritesEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'В избранном пусто'**
+  String get favoritesEmptyTitle;
+
+  /// No description provided for @favoritesEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите сердечко на карточке сервиса, чтобы сохранить её здесь'**
+  String get favoritesEmptyBody;
+
+  /// No description provided for @searchEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Никого не нашли'**
+  String get searchEmptyTitle;
+
+  /// No description provided for @searchEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверьте написание или попробуйте @никнейм'**
+  String get searchEmptyBody;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомлений нет'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здесь появятся заявки в друзья, мэтчи и новости ваших карточек'**
+  String get notificationsEmptyBody;
+
+  /// No description provided for @deckEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока никого рядом'**
+  String get deckEmptyTitle;
+
+  /// No description provided for @blockedEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Список пуст'**
+  String get blockedEmptyTitle;
+
+  /// No description provided for @blockedEmptyBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокированные пользователи появятся здесь'**
+  String get blockedEmptyBody;
 }
 
 class _AppLocalizationsDelegate

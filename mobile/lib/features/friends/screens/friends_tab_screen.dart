@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/widgets/tab_header.dart';
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
@@ -273,20 +274,14 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
             ? ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 120),
-                    child: Column(
-                      children: [
-                        Text(
-                          l10n.friendsEmpty,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(height: 12),
-                        TextButton(
-                          onPressed: () => context.push('/people-search'),
-                          child: Text(l10n.findPeople),
-                        ),
-                      ],
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.55,
+                    child: EmptyState(
+                      icon: Icons.people_outline_rounded,
+                      title: l10n.friendsEmptyTitle,
+                      description: l10n.friendsEmptyBody,
+                      actionLabel: l10n.findPeople,
+                      onAction: () => context.push('/people-search'),
                     ),
                   ),
                 ],
@@ -349,7 +344,11 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
       data: (requests) => RefreshIndicator(
         onRefresh: () async => ref.invalidate(incomingRequestsProvider),
         child: requests.isEmpty
-            ? _EmptyScrollable(text: l10n.incomingEmpty)
+            ? _EmptyScrollable(
+                icon: Icons.mark_email_unread_outlined,
+                title: l10n.requestsEmptyTitle,
+                description: l10n.requestsEmptyBody,
+              )
             : ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(
@@ -453,7 +452,11 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
       data: (requests) => RefreshIndicator(
         onRefresh: () async => ref.invalidate(outgoingRequestsProvider),
         child: requests.isEmpty
-            ? _EmptyScrollable(text: l10n.outgoingEmpty)
+            ? _EmptyScrollable(
+                icon: Icons.outgoing_mail,
+                title: l10n.requestsEmptyTitle,
+                description: l10n.outgoingEmpty,
+              )
             : ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: requests.length,
@@ -482,20 +485,30 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
 }
 
 /// Пустое состояние, которое можно «потянуть вниз» для обновления.
+/// Пустое состояние внутри прокручиваемого списка — чтобы работал
+/// «потянуть вниз» даже когда показывать нечего
 class _EmptyScrollable extends StatelessWidget {
-  const _EmptyScrollable({required this.text});
+  const _EmptyScrollable({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
 
-  final String text;
+  final IconData icon;
+  final String title;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 120),
-          child: Center(
-            child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.55,
+          child: EmptyState(
+            icon: icon,
+            title: title,
+            description: description,
           ),
         ),
       ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/friends_api.dart';
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../friends/providers/friends_providers.dart';
@@ -55,11 +56,11 @@ class BlockedUsersScreen extends ConsumerWidget {
             ),
           ),
           data: (users) => users.isEmpty
-              ? Center(
-                  child: Text(
-                    l10n.blockedListEmpty,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+              ? EmptyState(
+                  icon: Icons.block_rounded,
+                  tone: EmptyStateTone.neutral,
+                  title: l10n.blockedEmptyTitle,
+                  description: l10n.blockedEmptyBody,
                 )
               : ListView.builder(
                   itemCount: users.length,

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/friends_api.dart';
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
 import '../../../core/api/users_api.dart';
@@ -174,11 +175,11 @@ class _PeopleSearchScreenState extends ConsumerState<PeopleSearchScreen> {
                 data: (users) {
                   final others = users.where((u) => u.id != me?.id).toList();
                   if (others.isEmpty) {
-                    return Center(
-                      child: Text(
-                        l10n.nobodyFound,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                    return EmptyState(
+                      icon: Icons.search_off_rounded,
+                      tone: EmptyStateTone.neutral,
+                      title: l10n.searchEmptyTitle,
+                      description: l10n.searchEmptyBody,
                     );
                   }
                   final statusesAsync = ref.watch(

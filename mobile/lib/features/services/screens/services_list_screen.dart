@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/models.dart';
 import '../../../core/utils/localized_names.dart';
@@ -167,24 +168,23 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
             Expanded(
               child: listAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, st) => Center(
-                  child: TextButton(
-                    onPressed: () => ref.invalidate(servicesListProvider),
-                    child: Text(l10n.retry),
-                  ),
+                error: (err, st) => EmptyState(
+                  icon: Icons.wifi_off_rounded,
+                  tone: EmptyStateTone.error,
+                  title: l10n.errorTitle,
+                  description: l10n.errorNetworkBody,
+                  actionLabel: l10n.retry,
+                  onAction: () => ref.invalidate(servicesListProvider),
                 ),
                 data: (services) => services.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Text(
-                            _tab == 'pending'
-                                ? l10n.servicesEmptyPending
-                                : l10n.servicesEmptyRecommended,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ),
+                    ? EmptyState(
+                        icon: Icons.grid_view_rounded,
+                        title: l10n.servicesEmptyTitle,
+                        description: l10n.servicesEmptyRecommended,
+                        actionLabel: isGuest ? null : l10n.addServiceAction,
+                        onAction: isGuest
+                            ? null
+                            : () => context.push('/services/add'),
                       )
                     : RefreshIndicator(
                         onRefresh: () async {

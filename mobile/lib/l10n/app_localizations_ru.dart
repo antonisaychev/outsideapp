@@ -1056,4 +1056,61 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get adminRoleLabel => 'Администратор';
+
+  @override
+  String get servicesEmptyTitle => 'Здесь пока пусто';
+
+  @override
+  String get errorTitle => 'Не удалось загрузить';
+
+  @override
+  String get errorNetworkBody => 'Проверьте интернет и попробуйте ещё раз';
+
+  @override
+  String get friendsEmptyTitle => 'Друзей пока нет';
+
+  @override
+  String get friendsEmptyBody => 'Найдите знакомых в поиске или примите заявку';
+
+  @override
+  String get requestsEmptyTitle => 'Заявок нет';
+
+  @override
+  String get requestsEmptyBody => 'Здесь появятся входящие заявки в друзья';
+
+  @override
+  String get chatsEmptyTitle => 'Пока нет сообщений';
+
+  @override
+  String get chatsEmptyBody =>
+      'Диалог появится после мэтча или когда вы напишете другу';
+
+  @override
+  String get favoritesEmptyTitle => 'В избранном пусто';
+
+  @override
+  String get favoritesEmptyBody =>
+      'Нажмите сердечко на карточке сервиса, чтобы сохранить её здесь';
+
+  @override
+  String get searchEmptyTitle => 'Никого не нашли';
+
+  @override
+  String get searchEmptyBody => 'Проверьте написание или попробуйте @никнейм';
+
+  @override
+  String get notificationsEmptyTitle => 'Уведомлений нет';
+
+  @override
+  String get notificationsEmptyBody =>
+      'Здесь появятся заявки в друзья, мэтчи и новости ваших карточек';
+
+  @override
+  String get deckEmptyTitle => 'Пока никого рядом';
+
+  @override
+  String get blockedEmptyTitle => 'Список пуст';
+
+  @override
+  String get blockedEmptyBody => 'Заблокированные пользователи появятся здесь';
 }

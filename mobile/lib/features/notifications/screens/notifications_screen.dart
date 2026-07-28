@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/widgets/empty_state.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/api/notifications_api.dart';
 import '../../../core/theme/app_colors.dart';
@@ -160,13 +161,13 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                   ),
                 ),
                 if (items.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 80),
-                    child: Center(
-                      child: Text(
-                        l10n.notificationsEmpty,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.6,
+                    child: EmptyState(
+                      icon: Icons.notifications_none_rounded,
+                      tone: EmptyStateTone.neutral,
+                      title: l10n.notificationsEmptyTitle,
+                      description: l10n.notificationsEmptyBody,
                     ),
                   ),
                 for (final n in _withActionFlags(items, statuses))
