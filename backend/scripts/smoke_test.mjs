@@ -122,7 +122,22 @@ async function cleanup() {
   await db.query(`DELETE FROM users WHERE email LIKE '%@smoke.local'`);
 }
 
+/// pm2 restart возвращает управление раньше, чем процесс откроет порт.
+/// Ждём готовности, иначе первый же запрос упирается в ECONNREFUSED.
+async function waitForServer(seconds = 15) {
+  for (let i = 0; i < seconds * 2; i++) {
+    try {
+      const r = await fetch(BASE + '/health');
+      if (r.ok) return true;
+    } catch {}
+    await new Promise(r => setTimeout(r, 500));
+  }
+  console.error(`Сервер по адресу ${BASE} не отвечает — запущен ли он?`);
+  process.exit(1);
+}
+
 async function main() {
+  await waitForServer();
   await db.connect();
   await cleanup();
 
