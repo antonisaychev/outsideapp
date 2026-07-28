@@ -6,3 +6,4 @@ backend/uploads/*
 !backend/uploads/.gitkeep
 .DS_Store
 npm-debug.log*
+SECRETS.local.md
