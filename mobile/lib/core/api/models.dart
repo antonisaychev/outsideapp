@@ -97,6 +97,7 @@ class PublicProfile {
     this.friendsCount = 0,
     this.servicesCount = 0,
     this.photos = const [],
+    this.isOnline = false,
   });
 
   final String id;
@@ -110,6 +111,9 @@ class PublicProfile {
   final int friendsCount;
   final int servicesCount;
   final List<UserPhoto> photos;
+
+  /// Заходил в приложение за последние 5 минут
+  final bool isOnline;
 
   String get displayName =>
       [firstName, lastName].where((s) => s != null && s.isNotEmpty).join(' ');
@@ -126,6 +130,7 @@ class PublicProfile {
     friendsCount: (json['friends_count'] as int?) ?? 0,
     servicesCount: (json['services_count'] as int?) ?? 0,
     photos: UserPhoto.listFrom(json['photos']),
+    isOnline: (json['is_online'] as bool?) ?? false,
   );
 }
 
@@ -200,6 +205,8 @@ class ServiceSummary {
     this.confirmCount = 0,
     this.confirmThreshold,
     this.photosCount = 1,
+    this.isVerified = false,
+    this.ownerId,
   });
 
   final String id;
@@ -213,6 +220,12 @@ class ServiceSummary {
   final int? confirmThreshold;
   final int photosCount;
 
+  /// Проверено админом лично
+  final bool isVerified;
+
+  /// Владелец бизнеса, если админ его указал
+  final String? ownerId;
+
   factory ServiceSummary.fromJson(Map<String, dynamic> json) => ServiceSummary(
     id: json['id'] as String,
     title: json['title'] as String,
@@ -224,6 +237,8 @@ class ServiceSummary {
     confirmCount: (json['confirm_count'] as int?) ?? 0,
     confirmThreshold: json['confirm_threshold'] as int?,
     photosCount: (json['photos_count'] as int?) ?? 1,
+    isVerified: (json['is_verified'] as bool?) ?? false,
+    ownerId: json['owner_id'] as String?,
   );
 }
 
@@ -260,6 +275,9 @@ class ServiceDetail {
     required this.authorId,
     required this.authorName,
     required this.isAuthor,
+    this.isVerified = false,
+    this.ownerId,
+    this.ownerName,
     required this.likedByMe,
     required this.isFavorite,
     required this.canConfirm,
@@ -281,18 +299,29 @@ class ServiceDetail {
   final String authorId;
   final String authorName;
   final bool isAuthor;
+
+  /// Проверено админом лично
+  final bool isVerified;
+
+  /// Владелец бизнеса — назначается админом, может отличаться от автора
+  final String? ownerId;
+  final String? ownerName;
   final bool likedByMe;
   final bool isFavorite;
   final bool canConfirm;
 
+  /// «Имя Фамилия», иначе @никнейм
+  static String _personName(Map<String, dynamic> person) {
+    final name = [
+      person['first_name'],
+      person['last_name'],
+    ].whereType<String>().where((s) => s.isNotEmpty).join(' ');
+    return name.isEmpty ? '@${person['username'] ?? ''}' : name;
+  }
+
   factory ServiceDetail.fromJson(Map<String, dynamic> json) {
     final author = json['author'] as Map<String, dynamic>? ?? {};
-    final first = author['first_name'] as String?;
-    final last = author['last_name'] as String?;
-    final name = [
-      first,
-      last,
-    ].where((s) => s != null && s.isNotEmpty).join(' ');
+    final owner = json['owner'] as Map<String, dynamic>?;
     return ServiceDetail(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -310,8 +339,11 @@ class ServiceDetail {
       confirmCount: (json['confirm_count'] as int?) ?? 0,
       confirmThreshold: (json['confirm_threshold'] as int?) ?? 30,
       authorId: author['id'] as String? ?? '',
-      authorName: name.isEmpty ? '@${author['username'] ?? ''}' : name,
+      authorName: _personName(author),
       isAuthor: (json['is_author'] as bool?) ?? false,
+      isVerified: (json['is_verified'] as bool?) ?? false,
+      ownerId: owner?['id'] as String?,
+      ownerName: owner == null ? null : _personName(owner),
       likedByMe: (json['liked_by_me'] as bool?) ?? false,
       isFavorite: (json['is_favorite'] as bool?) ?? false,
       canConfirm: (json['can_confirm'] as bool?) ?? false,

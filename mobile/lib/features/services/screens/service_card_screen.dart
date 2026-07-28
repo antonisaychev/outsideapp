@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../../core/utils/external_links.dart';
+import '../../../core/widgets/verified_badge.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/utils/localized_names.dart';
@@ -133,91 +134,161 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
             child: Text(l10n.retry),
           ),
         ),
-        data: (service) => SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildGallery(service),
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      service.title,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${categoryName(service.categoryId)} · ${cityName(service.cityId)}',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.thumb_up,
-                          size: 18,
-                          color: AppColors.coral,
+        data: (service) {
+          final hasWebsite = service.websiteUrl?.trim().isNotEmpty ?? false;
+          final hasMap = service.mapUrl?.trim().isNotEmpty ?? false;
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildGallery(service),
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              service.title,
+                              style: Theme.of(context).textTheme.headlineLarge,
+                            ),
+                          ),
+                          if (service.isVerified) ...[
+                            const SizedBox(width: 8),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: VerifiedBadge(size: 22),
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        '${categoryName(service.categoryId)} · ${cityName(service.cityId)}',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.thumb_up,
+                            size: 18,
+                            color: AppColors.coral,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            l10n.recommendCount(service.likesCount),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        service.description,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 20),
+                      if (hasWebsite || hasMap)
+                        Row(
+                          children: [
+                            if (hasWebsite)
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () => openExternalUrl(
+                                    context,
+                                    service.websiteUrl,
+                                  ),
+                                  child: Text(l10n.siteButton),
+                                ),
+                              ),
+                            if (hasWebsite && hasMap) const SizedBox(width: 12),
+                            if (hasMap)
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () =>
+                                      openExternalUrl(context, service.mapUrl),
+                                  child: Text(l10n.mapButton),
+                                ),
+                              ),
+                          ],
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          l10n.recommendCount(service.likesCount),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
+                      const SizedBox(height: 16),
+                      _buildLikeArea(service, l10n),
+                      if (service.isVerified) ...[
+                        const SizedBox(height: 16),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.coralTint,
+                            borderRadius: BorderRadius.circular(
+                              AppRadius.small,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const VerifiedBadge(size: 20),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      l10n.serviceVerified,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    Text(
+                                      l10n.serviceVerifiedNote,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      service.description,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 20),
-                    if (service.websiteUrl != null || service.mapUrl != null)
-                      Row(
-                        children: [
-                          if (service.websiteUrl != null)
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () => launchUrl(
-                                  Uri.parse(service.websiteUrl!),
-                                  mode: LaunchMode.externalApplication,
-                                ),
-                                child: Text(l10n.siteButton),
-                              ),
-                            ),
-                          if (service.websiteUrl != null &&
-                              service.mapUrl != null)
-                            const SizedBox(width: 12),
-                          if (service.mapUrl != null)
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () => launchUrl(
-                                  Uri.parse(service.mapUrl!),
-                                  mode: LaunchMode.externalApplication,
-                                ),
-                                child: Text(l10n.mapButton),
-                              ),
-                            ),
-                        ],
+                      const SizedBox(height: 16),
+                      _PersonLine(
+                        label: l10n.serviceAddedBy,
+                        name: service.authorName,
+                        onTap: service.authorId.isEmpty
+                            ? null
+                            : () => context.push('/users/${service.authorId}'),
                       ),
-                    const SizedBox(height: 16),
-                    _buildLikeArea(service, l10n),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.addedBy(service.authorName),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
+                      if (service.ownerId != null) ...[
+                        const SizedBox(height: 6),
+                        _PersonLine(
+                          label: l10n.serviceOwner,
+                          name: service.ownerName ?? '',
+                          icon: const OwnerBadge(size: 16),
+                          onTap: () =>
+                              context.push('/users/${service.ownerId}'),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -453,6 +524,47 @@ class _CircleButton extends StatelessWidget {
         ),
         child: Icon(icon, size: 22, color: iconColor ?? AppColors.textPrimary),
       ),
+    );
+  }
+}
+
+/// «Добавил: Мария» / «Владелец: Олег» — имя ведёт в профиль
+class _PersonLine extends StatelessWidget {
+  const _PersonLine({
+    required this.label,
+    required this.name,
+    this.icon,
+    this.onTap,
+  });
+
+  final String label;
+  final String name;
+  final Widget? icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        if (icon != null) ...[icon!, const SizedBox(width: 8)],
+        Text(
+          '$label: ',
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+        ),
+        Flexible(
+          child: GestureDetector(
+            onTap: onTap,
+            child: Text(
+              name,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: onTap != null ? FontWeight.w600 : FontWeight.w400,
+                color: onTap != null ? AppColors.coral : AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

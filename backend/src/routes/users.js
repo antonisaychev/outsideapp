@@ -59,6 +59,7 @@ router.get('/:idOrNick', async (req, res) => {
 
   const r = await db.query(
     `SELECT ${PROFILE_FIELDS}, u.is_blocked,
+       (u.last_seen_at > now() - interval '5 minutes') AS is_online,
        (SELECT count(*)::int FROM friendships f WHERE f.status='accepted' AND (f.requester_id=u.id OR f.addressee_id=u.id)) AS friends_count,
        (SELECT count(*)::int FROM services s WHERE s.author_id=u.id AND s.status<>'hidden') AS services_count,
        COALESCE((SELECT json_agg(json_build_object('id', p.id, 'url', p.url) ORDER BY p.position, p.created_at)

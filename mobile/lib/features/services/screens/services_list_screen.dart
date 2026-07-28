@@ -11,7 +11,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/session_controller.dart';
-import '../../notifications/providers/notifications_providers.dart';
 import '../providers/services_providers.dart';
 import '../widgets/service_grid_card.dart';
 
@@ -25,10 +24,19 @@ class ServicesListScreen extends ConsumerStatefulWidget {
 }
 
 class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
-  String _tab = 'recommended';
+  // Пока показываем только «Рекомендовано»; вкладка «На проверке» скрыта
+  final String _tab = 'recommended';
 
   bool get _isGuest =>
       ref.read(sessionControllerProvider).status != SessionStatus.ready;
+
+  @override
+  void initState() {
+    super.initState();
+    // Справочник категорий живёт всю сессию — перечитываем при каждом заходе,
+    // иначе добавленная админом категория не появится до перезапуска
+    Future.microtask(() => ref.invalidate(categoriesProvider));
+  }
 
   Future<void> _toggleFavorite(ServiceSummary service, bool isFavorite) async {
     final l10n = AppLocalizations.of(context)!;
@@ -63,9 +71,6 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
     final citiesAsync = ref.watch(citiesProvider);
     final session = ref.watch(sessionControllerProvider);
     final isGuest = session.status != SessionStatus.ready;
-    final unreadNotifications = isGuest
-        ? 0
-        : (ref.watch(unreadNotificationsProvider).valueOrNull ?? 0);
     final listAsync = ref.watch(
       servicesListProvider(
         ServicesListKey(tab: _tab, cityId: cityId, categoryId: categoryId),
@@ -125,44 +130,13 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                     }
                   },
                 ),
-                HeaderIconButton(
-                  icon: Badge(
-                    // красная точка при непрочитанных (спека, экран 04)
-                    isLabelVisible: !isGuest && unreadNotifications > 0,
-                    backgroundColor: AppColors.coral,
-                    smallSize: 8,
-                    child: const Icon(Icons.notifications_none),
-                  ),
-                  onPressed: () {
-                    if (isGuest) {
-                      showAuthGateSheet(context, l10n.authGateActionFavorite);
-                    } else {
-                      context.push('/notifications');
-                    }
-                  },
-                ),
+                const NotificationsBellButton(),
               ],
             ),
-            // Табы
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                children: [
-                  _TabLabel(
-                    text: l10n.servicesTabRecommended,
-                    active: _tab == 'recommended',
-                    onTap: () => setState(() => _tab = 'recommended'),
-                  ),
-                  const SizedBox(width: 20),
-                  _TabLabel(
-                    text: l10n.servicesTabPending,
-                    active: _tab == 'pending',
-                    onTap: () => setState(() => _tab = 'pending'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
+            // Вкладка «На проверке» скрыта: такие карточки видит только админ
+            // в панели администрирования. Механика 30 зачётных лайков осталась
+            // в коде — чтобы вернуть раздел, достаточно вернуть эти табы.
+            const SizedBox(height: 4),
             // Чипы категорий
             SizedBox(
               height: 40,
@@ -215,8 +189,10 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                         ),
                       )
                     : RefreshIndicator(
-                        onRefresh: () async =>
-                            ref.invalidate(servicesListProvider),
+                        onRefresh: () async {
+                          ref.invalidate(servicesListProvider);
+                          ref.invalidate(categoriesProvider);
+                        },
                         child: GridView.builder(
                           padding: const EdgeInsets.fromLTRB(24, 0, 24, 96),
                           gridDelegate:
@@ -252,6 +228,9 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
   }
 }
 
+// Используется вкладками «Рекомендовано / На проверке». Раздел «На проверке»
+// временно скрыт, виджет оставлен, чтобы вернуть его одной строкой.
+// ignore: unused_element
 class _TabLabel extends StatelessWidget {
   const _TabLabel({
     required this.text,

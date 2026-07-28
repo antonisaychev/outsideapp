@@ -193,11 +193,7 @@ class AdminApi {
     try {
       final r = await _dio.get(
         '/admin/services',
-        queryParameters: {
-          'status': ?status,
-          'city_id': ?cityId,
-          'limit': 50,
-        },
+        queryParameters: {'status': ?status, 'city_id': ?cityId, 'limit': 50},
       );
       return (r.data as List)
           .map((e) => AdminService.fromJson(e as Map<String, dynamic>))

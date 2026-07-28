@@ -400,5 +400,17 @@
   "adminReportDescription": "Описание",
   "adminReportReporter": "Заявитель",
   "adminNotAvailable": "н/д",
-  "userBlockedProfile": "Пользователь был заблокирован за нарушение условий использования сервиса"
+  "userBlockedProfile": "Пользователь был заблокирован за нарушение условий использования сервиса",
+  "serviceVerified": "Проверенный сервис",
+  "serviceVerifiedNote": "Админ лично проверил эту карточку",
+  "serviceAddedBy": "Добавил",
+  "serviceOwner": "Владелец",
+  "adminVerifiedToggle": "Проверенный сервис",
+  "adminVerifiedHint": "Значок проверки виден всем в списке и в карточке",
+  "adminOwnerLabel": "Владелец",
+  "adminOwnerNone": "Не указан",
+  "adminOwnerPick": "Выбрать владельца",
+  "adminOwnerClear": "Убрать владельца",
+  "online": "в сети",
+  "linkOpenFailed": "Не удалось открыть ссылку"
 }

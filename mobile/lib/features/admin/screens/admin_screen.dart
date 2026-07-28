@@ -121,10 +121,7 @@ class AdminList<T> extends StatelessWidget {
           ?header,
           Expanded(
             child: Center(
-              child: TextButton(
-                onPressed: onRefresh,
-                child: Text(l10n.retry),
-              ),
+              child: TextButton(onPressed: onRefresh, child: Text(l10n.retry)),
             ),
           ),
         ],

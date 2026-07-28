@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/models.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/verified_badge.dart';
 
 /// Карточка сервиса в плитке (макет 04/43): фото с сердечком и бейджем
 /// количества фото, название, «Категория · Город», 👍 счётчик.
@@ -59,26 +60,42 @@ class ServiceGridCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Значки в один ряд: избранное, проверено, есть владелец
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: GestureDetector(
-                      onTap: onFavoriteTap,
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
+                    child: Row(
+                      children: [
+                        if (service.ownerId != null) ...[
+                          const _BadgeBubble(child: OwnerBadge(size: 16)),
+                          const SizedBox(width: 6),
+                        ],
+                        if (service.isVerified) ...[
+                          const _BadgeBubble(child: VerifiedBadge(size: 16)),
+                          const SizedBox(width: 6),
+                        ],
+                        GestureDetector(
+                          onTap: onFavoriteTap,
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              size: 18,
+                              color: isFavorite
+                                  ? AppColors.coral
+                                  : AppColors.textPrimary,
+                            ),
+                          ),
                         ),
-                        child: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          size: 18,
-                          color: isFavorite
-                              ? AppColors.coral
-                              : AppColors.textPrimary,
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                   if (service.photosCount > 1)
@@ -158,6 +175,27 @@ class ServiceGridCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Белый кружок-подложка, чтобы значок читался на любом фото
+class _BadgeBubble extends StatelessWidget {
+  const _BadgeBubble({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 26,
+      height: 26,
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
+      child: child,
     );
   }
 }

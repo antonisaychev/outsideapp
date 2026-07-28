@@ -96,8 +96,10 @@ router.get('/services', async (req, res) => {
   params.push(limit, offset);
   const r = await db.query(`
     SELECT s.id, s.title, s.photo_url, s.city_id, s.category_id, s.status, s.likes_count, s.confirm_count,
+           s.is_verified, s.owner_id, o.username AS owner_username,
            s.author_id, u.username AS author_username, s.created_at, s.published_at
     FROM services s JOIN users u ON u.id = s.author_id
+    LEFT JOIN users o ON o.id = s.owner_id
     ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
     ORDER BY s.created_at DESC LIMIT $${i++} OFFSET $${i}`,
     params);
@@ -203,6 +205,22 @@ router.patch('/services/:id', async (req, res) => {
   if ('status' in body) {
     if (!['pending', 'recommended', 'hidden'].includes(body.status)) errors.status = 'INVALID_STATUS';
     else { sets.push(`status=$${i++}`); params.push(body.status); }
+  }
+  if ('is_verified' in body) {
+    if (typeof body.is_verified !== 'boolean') errors.is_verified = 'INVALID_VALUE';
+    else { sets.push(`is_verified=$${i++}`); params.push(body.is_verified); }
+  }
+  // Владелец карточки — любой существующий пользователь; null снимает владельца
+  if ('owner_id' in body) {
+    if (body.owner_id === null || body.owner_id === '') {
+      sets.push(`owner_id=NULL`);
+    } else if (!UUID_RE.test(String(body.owner_id))) {
+      errors.owner_id = 'INVALID_USER';
+    } else {
+      const u = await db.query('SELECT 1 FROM users WHERE id=$1 AND deleted_at IS NULL', [body.owner_id]);
+      if (!u.rowCount) errors.owner_id = 'INVALID_USER';
+      else { sets.push(`owner_id=$${i++}`); params.push(body.owner_id); }
+    }
   }
 
   if (Object.keys(errors).length) return res.status(400).json({ errors });

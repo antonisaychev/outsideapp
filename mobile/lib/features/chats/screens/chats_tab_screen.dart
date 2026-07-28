@@ -69,7 +69,10 @@ class ChatsTabScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TabHeader(title: l10n.messagesTitle),
+          TabHeader(
+            title: l10n.messagesTitle,
+            actions: const [NotificationsBellButton()],
+          ),
           Expanded(
             child: conversationsAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),

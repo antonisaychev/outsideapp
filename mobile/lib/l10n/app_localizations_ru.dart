@@ -1013,4 +1013,41 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get userBlockedProfile =>
       'Пользователь был заблокирован за нарушение условий использования сервиса';
+
+  @override
+  String get serviceVerified => 'Проверенный сервис';
+
+  @override
+  String get serviceVerifiedNote => 'Админ лично проверил эту карточку';
+
+  @override
+  String get serviceAddedBy => 'Добавил';
+
+  @override
+  String get serviceOwner => 'Владелец';
+
+  @override
+  String get adminVerifiedToggle => 'Проверенный сервис';
+
+  @override
+  String get adminVerifiedHint =>
+      'Значок проверки виден всем в списке и в карточке';
+
+  @override
+  String get adminOwnerLabel => 'Владелец';
+
+  @override
+  String get adminOwnerNone => 'Не указан';
+
+  @override
+  String get adminOwnerPick => 'Выбрать владельца';
+
+  @override
+  String get adminOwnerClear => 'Убрать владельца';
+
+  @override
+  String get online => 'в сети';
+
+  @override
+  String get linkOpenFailed => 'Не удалось открыть ссылку';
 }

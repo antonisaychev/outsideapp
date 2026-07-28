@@ -37,7 +37,11 @@ function pagination(req) {
 
 // Плитка карточек по месту: ?tab=recommended|pending&city_id=&category_id=&page=&limit=
 router.get('/', optional, async (req, res) => {
-  const tab = req.query.tab === 'pending' ? 'pending' : 'recommended';
+  // «На проверке» видит только админ: карточки ждут ручного одобрения.
+  // Механика 30 зачётных лайков осталась в коде, но пользователям не видна.
+  const tab = req.query.tab === 'pending' && req.userRole === 'admin'
+    ? 'pending'
+    : 'recommended';
   let cityId = req.query.city_id ? Number(req.query.city_id) : null;
   if (!cityId && req.userId) {
     const me = await db.query('SELECT city_id FROM users WHERE id=$1', [req.userId]);
@@ -56,6 +60,7 @@ router.get('/', optional, async (req, res) => {
 
   const r = await db.query(
     `SELECT s.id, s.title, s.photo_url, s.category_id, s.city_id, s.status, s.likes_count, s.confirm_count, s.created_at,
+            s.is_verified, s.owner_id,
             (SELECT count(*)::int FROM service_photos sp WHERE sp.service_id=s.id) AS photos_count
      FROM services s WHERE ${where.join(' AND ')} ORDER BY ${order} LIMIT $${i++} OFFSET $${i}`,
     params);
@@ -65,11 +70,17 @@ router.get('/', optional, async (req, res) => {
 router.get('/:id', optional, async (req, res) => {
   if (!UUID_RE.test(req.params.id)) return res.status(404).json({ error: 'NOT_FOUND' });
   const r = await db.query(`
-    SELECT s.*, u.username AS author_username, u.first_name AS author_first_name, u.last_name AS author_last_name
+    SELECT s.*, u.username AS author_username, u.first_name AS author_first_name, u.last_name AS author_last_name,
+           o.username AS owner_username, o.first_name AS owner_first_name, o.last_name AS owner_last_name
     FROM services s JOIN users u ON u.id = s.author_id
+    LEFT JOIN users o ON o.id = s.owner_id
     WHERE s.id=$1`, [req.params.id]);
   if (!r.rowCount || r.rows[0].status === 'hidden') return res.status(404).json({ error: 'NOT_FOUND' });
   const s = r.rows[0];
+  // Пока карточка на проверке — её видят только автор и админ
+  if (s.status === 'pending' && s.author_id !== req.userId && req.userRole !== 'admin') {
+    return res.status(404).json({ error: 'NOT_FOUND' });
+  }
 
   let liked_by_me = false, is_favorite = false, can_confirm = false;
   if (req.userId) {
@@ -90,7 +101,11 @@ router.get('/:id', optional, async (req, res) => {
     website_url: s.website_url, map_url: s.map_url, city_id: s.city_id, category_id: s.category_id,
     status: s.status, likes_count: s.likes_count, confirm_count: s.confirm_count, confirm_threshold: threshold(),
     created_at: s.created_at, published_at: s.published_at,
+    is_verified: s.is_verified,
     author: { id: s.author_id, username: s.author_username, first_name: s.author_first_name, last_name: s.author_last_name },
+    owner: s.owner_id
+      ? { id: s.owner_id, username: s.owner_username, first_name: s.owner_first_name, last_name: s.owner_last_name }
+      : null,
     is_author: req.userId === s.author_id,
     liked_by_me, is_favorite, can_confirm,
     photos: photos.rows,

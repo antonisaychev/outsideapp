@@ -183,6 +183,7 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
             TabHeader(
               title: l10n.tabFriends,
               actions: [
+                const NotificationsBellButton(),
                 HeaderIconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () => context.push('/people-search'),

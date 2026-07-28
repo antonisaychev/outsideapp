@@ -174,8 +174,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     time: _relativeTime(n.createdAt, l10n),
                     handledLabel: _handled[n.id],
                     // Кнопки только у актуальной входящей заявки
-                    showActions: _actionable.contains(n.id) &&
-                        _handled[n.id] == null,
+                    showActions:
+                        _actionable.contains(n.id) && _handled[n.id] == null,
                     onTap: () => _openTarget(n),
                     onAccept: () => _accept(n, l10n),
                     onDecline: () => _decline(n, l10n),

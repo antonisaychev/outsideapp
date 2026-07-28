@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../features/auth/providers/session_controller.dart';
+import 'auth_gate_sheet.dart';
+import '../../features/notifications/providers/notifications_providers.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../theme/app_colors.dart';
 
@@ -73,6 +80,38 @@ class HeaderIconButton extends StatelessWidget {
       constraints: const BoxConstraints.tightFor(width: 44, height: 44),
       padding: EdgeInsets.zero,
       splashRadius: 24,
+    );
+  }
+}
+
+/// Колокольчик с точкой непрочитанного — одинаковый на всех вкладках.
+/// Гостя ведёт на экран регистрации вместо списка уведомлений.
+class NotificationsBellButton extends ConsumerWidget {
+  const NotificationsBellButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final isGuest =
+        ref.watch(sessionControllerProvider).status != SessionStatus.ready;
+    final unread = isGuest
+        ? 0
+        : (ref.watch(unreadNotificationsProvider).valueOrNull ?? 0);
+
+    return HeaderIconButton(
+      icon: Badge(
+        isLabelVisible: unread > 0,
+        backgroundColor: AppColors.coral,
+        smallSize: 8,
+        child: const Icon(Icons.notifications_none),
+      ),
+      onPressed: () {
+        if (isGuest) {
+          showAuthGateSheet(context, l10n.authGateActionFavorite);
+        } else {
+          context.push('/notifications');
+        }
+      },
     );
   }
 }

@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../core/widgets/report_form_sheet.dart';
 import '../../../core/widgets/photo_gallery.dart';
+import '../../../core/widgets/verified_badge.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
 import '../../auth/providers/session_controller.dart';
@@ -264,10 +265,22 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                   name: profile.displayName,
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  profile.displayName,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        profile.displayName,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ),
+                    // Зелёная точка: заходил за последние 5 минут
+                    if (profile.isOnline) ...[
+                      const SizedBox(width: 8),
+                      const OnlineDot(size: 11),
+                    ],
+                  ],
                 ),
                 const SizedBox(height: 6),
                 GestureDetector(

@@ -1013,4 +1013,42 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get userBlockedProfile =>
       'This user was blocked for violating the terms of service';
+
+  @override
+  String get serviceVerified => 'Verified service';
+
+  @override
+  String get serviceVerifiedNote =>
+      'An admin has personally checked this listing';
+
+  @override
+  String get serviceAddedBy => 'Added by';
+
+  @override
+  String get serviceOwner => 'Owner';
+
+  @override
+  String get adminVerifiedToggle => 'Verified service';
+
+  @override
+  String get adminVerifiedHint =>
+      'The badge is visible in the list and on the card';
+
+  @override
+  String get adminOwnerLabel => 'Owner';
+
+  @override
+  String get adminOwnerNone => 'Not set';
+
+  @override
+  String get adminOwnerPick => 'Choose owner';
+
+  @override
+  String get adminOwnerClear => 'Remove owner';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get linkOpenFailed => 'Couldn’t open the link';
 }

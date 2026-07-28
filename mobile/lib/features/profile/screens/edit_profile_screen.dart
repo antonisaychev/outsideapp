@@ -308,7 +308,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     // следим за профилем: фото могли обновиться из другого места
-    ref.watch(sessionControllerProvider.select((s) => s.profile?.photos.length));
+    ref.watch(
+      sessionControllerProvider.select((s) => s.profile?.photos.length),
+    );
     final cities = ref.watch(citiesProvider).valueOrNull ?? [];
 
     String cityName(int? id) {

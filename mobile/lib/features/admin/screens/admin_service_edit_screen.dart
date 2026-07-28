@@ -35,6 +35,9 @@ class _AdminServiceEditScreenState
   final _map = TextEditingController();
   int? _categoryId;
   int? _cityId;
+  bool _verified = false;
+  String? _ownerId;
+  String? _ownerName;
   bool _loaded = false;
   bool _saving = false;
 
@@ -57,6 +60,26 @@ class _AdminServiceEditScreenState
     _map.text = service.mapUrl ?? '';
     _categoryId = service.categoryId;
     _cityId = service.cityId;
+    _verified = service.isVerified;
+    _ownerId = service.ownerId;
+    _ownerName = service.ownerName;
+  }
+
+  /// Владелец выбирается из общего списка пользователей с поиском
+  Future<void> _pickOwner() async {
+    final picked = await showModalBottomSheet<AdminUser>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (context) => const _OwnerPickerSheet(),
+    );
+    if (picked == null) return;
+    setState(() {
+      _ownerId = picked.id;
+      _ownerName = picked.displayName;
+    });
   }
 
   Future<void> _save() async {
@@ -70,6 +93,8 @@ class _AdminServiceEditScreenState
         'map_url': _map.text.trim(),
         if (_categoryId != null) 'category_id': _categoryId,
         if (_cityId != null) 'city_id': _cityId,
+        'is_verified': _verified,
+        'owner_id': _ownerId,
       });
       ref.invalidate(adminServicesProvider);
       ref.invalidate(serviceDetailProvider(widget.serviceId));
@@ -166,9 +191,7 @@ class _AdminServiceEditScreenState
                           horizontal: 14,
                           vertical: 10,
                         ),
-                        child: Text(
-                          localizedName(context, c.nameRu, c.nameEn),
-                        ),
+                        child: Text(localizedName(context, c.nameRu, c.nameEn)),
                       ),
                   ],
                 ),
@@ -190,13 +213,51 @@ class _AdminServiceEditScreenState
                           horizontal: 14,
                           vertical: 10,
                         ),
-                        child: Text(
-                          localizedName(context, c.nameRu, c.nameEn),
-                        ),
+                        child: Text(localizedName(context, c.nameRu, c.nameEn)),
                       ),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const Divider(height: 40),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  activeThumbColor: AppColors.coral,
+                  title: Text(l10n.adminVerifiedToggle),
+                  subtitle: Text(
+                    l10n.adminVerifiedHint,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  value: _verified,
+                  onChanged: (v) => setState(() => _verified = v),
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.adminOwnerLabel),
+                  subtitle: Text(
+                    _ownerName ?? l10n.adminOwnerNone,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: _ownerId == null
+                          ? AppColors.textSecondary
+                          : AppColors.textPrimary,
+                    ),
+                  ),
+                  trailing: _ownerId == null
+                      ? const Icon(Icons.chevron_right)
+                      : IconButton(
+                          tooltip: l10n.adminOwnerClear,
+                          icon: const Icon(
+                            Icons.close,
+                            color: AppColors.textSecondary,
+                          ),
+                          onPressed: () => setState(() {
+                            _ownerId = null;
+                            _ownerName = null;
+                          }),
+                        ),
+                  onTap: _pickOwner,
+                ),
+                const SizedBox(height: 24),
                 PrimaryButton(
                   label: l10n.adminSaveChanges,
                   loading: _saving,
@@ -206,6 +267,81 @@ class _AdminServiceEditScreenState
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// Список пользователей с поиском — выбор владельца карточки
+class _OwnerPickerSheet extends ConsumerStatefulWidget {
+  const _OwnerPickerSheet();
+
+  @override
+  ConsumerState<_OwnerPickerSheet> createState() => _OwnerPickerSheetState();
+}
+
+class _OwnerPickerSheetState extends ConsumerState<_OwnerPickerSheet> {
+  final _search = TextEditingController();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final users = ref.watch(adminUsersProvider);
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: SizedBox(
+        height: MediaQuery.sizeOf(context).height * 0.7,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.adminOwnerPick,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _search,
+                    decoration: InputDecoration(
+                      hintText: l10n.adminSearchUsersHint,
+                    ),
+                    onChanged: (v) =>
+                        ref.read(adminUserQueryProvider.notifier).state = v
+                            .trim(),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: users.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, st) => Center(
+                  child: TextButton(
+                    onPressed: () => ref.invalidate(adminUsersProvider),
+                    child: Text(l10n.retry),
+                  ),
+                ),
+                data: (list) => ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (context, i) => ListTile(
+                    title: Text(list[i].displayName),
+                    subtitle: Text('@${list[i].username}'),
+                    onTap: () => Navigator.of(context).pop(list[i]),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

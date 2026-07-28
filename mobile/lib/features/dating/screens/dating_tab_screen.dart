@@ -233,7 +233,10 @@ class _DeckViewState extends ConsumerState<_DeckView>
         dx.abs() > _distanceThreshold ||
         (velocity.dx.abs() > _velocityThreshold && dx.abs() > 20);
     if (accepted) {
-      _fly(like: dx > 0 || (dx.abs() <= 20 && velocity.dx > 0), velocity: velocity);
+      _fly(
+        like: dx > 0 || (dx.abs() <= 20 && velocity.dx > 0),
+        velocity: velocity,
+      );
     } else {
       _settleBack(velocity);
     }
@@ -279,11 +282,11 @@ class _DeckViewState extends ConsumerState<_DeckView>
     _flight = _Flight.leaving;
     _controller.value = 0;
     // Контроллер unbounded (нужен для пружины), поэтому animateTo, не forward
-    _controller
-        .animateTo(1, duration: const Duration(milliseconds: 260))
-        .then((_) {
-          if (mounted) _commit(like: like);
-        });
+    _controller.animateTo(1, duration: const Duration(milliseconds: 260)).then((
+      _,
+    ) {
+      if (mounted) _commit(like: like);
+    });
   }
 
   /// Свайп ушёл на сервер; карточка снимается с колоды мгновенно
@@ -333,6 +336,7 @@ class _DeckViewState extends ConsumerState<_DeckView>
           TabHeader(
             title: l10n.tabDating,
             actions: [
+              const NotificationsBellButton(),
               HeaderIconButton(
                 icon: const Icon(Icons.tune),
                 onPressed: () => context.push('/dating/settings'),
@@ -527,7 +531,10 @@ class _DeckCardViewState extends State<_DeckCardView> {
   /// Все фото анкеты; если галереи нет — одно главное
   List<String> get _urls => card.photos.isNotEmpty
       ? card.photos.map((p) => p.url).toList()
-      : [if (card.avatarUrl != null && card.avatarUrl!.isNotEmpty) card.avatarUrl!];
+      : [
+          if (card.avatarUrl != null && card.avatarUrl!.isNotEmpty)
+            card.avatarUrl!,
+        ];
 
   void _step(int delta) {
     final urls = _urls;

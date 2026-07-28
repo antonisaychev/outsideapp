@@ -170,10 +170,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           peerId: state.uri.queryParameters['peer'] ?? '',
         ),
       ),
-      GoRoute(
-        path: '/admin',
-        builder: (context, state) => const AdminScreen(),
-      ),
+      GoRoute(path: '/admin', builder: (context, state) => const AdminScreen()),
       GoRoute(
         path: '/admin/services/:id',
         builder: (context, state) =>

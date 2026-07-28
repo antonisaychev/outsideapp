@@ -400,5 +400,17 @@
   "adminReportDescription": "Details",
   "adminReportReporter": "Reported by",
   "adminNotAvailable": "n/a",
-  "userBlockedProfile": "This user was blocked for violating the terms of service"
+  "userBlockedProfile": "This user was blocked for violating the terms of service",
+  "serviceVerified": "Verified service",
+  "serviceVerifiedNote": "An admin has personally checked this listing",
+  "serviceAddedBy": "Added by",
+  "serviceOwner": "Owner",
+  "adminVerifiedToggle": "Verified service",
+  "adminVerifiedHint": "The badge is visible in the list and on the card",
+  "adminOwnerLabel": "Owner",
+  "adminOwnerNone": "Not set",
+  "adminOwnerPick": "Choose owner",
+  "adminOwnerClear": "Remove owner",
+  "online": "online",
+  "linkOpenFailed": "Couldn’t open the link"
 }

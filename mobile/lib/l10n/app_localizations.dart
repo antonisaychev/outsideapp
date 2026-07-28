@@ -1933,6 +1933,78 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Пользователь был заблокирован за нарушение условий использования сервиса'**
   String get userBlockedProfile;
+
+  /// No description provided for @serviceVerified.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверенный сервис'**
+  String get serviceVerified;
+
+  /// No description provided for @serviceVerifiedNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Админ лично проверил эту карточку'**
+  String get serviceVerifiedNote;
+
+  /// No description provided for @serviceAddedBy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавил'**
+  String get serviceAddedBy;
+
+  /// No description provided for @serviceOwner.
+  ///
+  /// In ru, this message translates to:
+  /// **'Владелец'**
+  String get serviceOwner;
+
+  /// No description provided for @adminVerifiedToggle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверенный сервис'**
+  String get adminVerifiedToggle;
+
+  /// No description provided for @adminVerifiedHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Значок проверки виден всем в списке и в карточке'**
+  String get adminVerifiedHint;
+
+  /// No description provided for @adminOwnerLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Владелец'**
+  String get adminOwnerLabel;
+
+  /// No description provided for @adminOwnerNone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не указан'**
+  String get adminOwnerNone;
+
+  /// No description provided for @adminOwnerPick.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбрать владельца'**
+  String get adminOwnerPick;
+
+  /// No description provided for @adminOwnerClear.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать владельца'**
+  String get adminOwnerClear;
+
+  /// No description provided for @online.
+  ///
+  /// In ru, this message translates to:
+  /// **'в сети'**
+  String get online;
+
+  /// No description provided for @linkOpenFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось открыть ссылку'**
+  String get linkOpenFailed;
 }
 
 class _AppLocalizationsDelegate
