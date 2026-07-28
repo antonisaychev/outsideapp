@@ -181,7 +181,7 @@
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifServiceRecommended": "Your card “{title}” made it to Recommended 🎉",
+  "notifServiceRecommended": "Your listing “{title}” has passed review 🎉",
   "@notifServiceRecommended": {
     "placeholders": { "title": {"type": "String"} }
   },

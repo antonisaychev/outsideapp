@@ -181,7 +181,7 @@
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifServiceRecommended": "Ваша карточка «{title}» попала в «Рекомендовано» 🎉",
+  "notifServiceRecommended": "Ваша карточка «{title}» прошла проверку 🎉",
   "@notifServiceRecommended": {
     "placeholders": { "title": {"type": "String"} }
   },

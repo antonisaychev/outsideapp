@@ -116,6 +116,25 @@ gunzip -c ~/backups/outside_ДАТА.sql.gz | psql -U outside -h localhost outsi
 tar -xzf ~/backups/uploads_ДАТА.tar.gz -C ~/outside/backend/
 ```
 
+### Тестовые аккаунты для проверок
+
+Создать 10 «жителей» (пароль у всех `TestPass123!`):
+```
+cd ~/outside/backend
+psql "$DATABASE_URL" -v owner_email=ваша@почта -f scripts/seed_test_users.sql
+psql "$DATABASE_URL" -v owner_email=ваша@почта -f scripts/enrich_test_users.sql
+```
+Второй скрипт даёт им фото (3-5 штук), описания разной длины и разные страны;
+четверо остаются в вашей стране, чтобы колода знакомств не пустовала.
+
+Почту писать **без кавычек** — psql подставит их сам. Если поставить кавычки,
+скрипт отработает вхолостую и ничего не изменит.
+
+Удалить всех разом:
+```
+psql "$DATABASE_URL" -f scripts/remove_test_users.sql
+```
+
 ### Назначить себя админом в приложении
 ```
 psql -U outside -h localhost -d outside -c "UPDATE users SET role='admin' WHERE email='ваша@почта';"

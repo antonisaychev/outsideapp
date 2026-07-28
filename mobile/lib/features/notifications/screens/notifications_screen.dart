@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/api/api_client.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/api/notifications_api.dart';
 import '../../../core/theme/app_colors.dart';
@@ -229,11 +231,29 @@ class _NotificationRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserAvatar(
-              avatarUrl: notification.actorAvatarUrl,
-              name: notification.actorName,
-              radius: 22,
-            ),
+            // У уведомлений о карточке актора нет — показываем её обложку
+            if (notification.entityPhotoUrl?.isNotEmpty ?? false)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadius.small),
+                child: SizedBox(
+                  width: 44,
+                  height: 44,
+                  child: CachedNetworkImage(
+                    imageUrl: absoluteFileUrl(notification.entityPhotoUrl!),
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        Container(color: AppColors.surface),
+                    errorWidget: (context, url, error) =>
+                        Container(color: AppColors.surface),
+                  ),
+                ),
+              )
+            else
+              UserAvatar(
+                avatarUrl: notification.actorAvatarUrl,
+                name: notification.actorName,
+                radius: 22,
+              ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(

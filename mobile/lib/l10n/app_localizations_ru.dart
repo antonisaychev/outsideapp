@@ -422,7 +422,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String notifServiceRecommended(String title) {
-    return 'Ваша карточка «$title» попала в «Рекомендовано» 🎉';
+    return 'Ваша карточка «$title» прошла проверку 🎉';
   }
 
   @override

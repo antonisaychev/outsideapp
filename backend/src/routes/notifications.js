@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
   const r = await db.query(`
     SELECT n.id, n.type, n.entity_id, n.is_read, n.created_at,
            a.id AS actor_id, a.username AS actor_username, a.first_name AS actor_first_name, a.avatar_url AS actor_avatar_url,
-           s.title AS entity_title
+           s.title AS entity_title, s.photo_url AS entity_photo_url
     FROM notifications n
     LEFT JOIN users a ON a.id = n.actor_id
     LEFT JOIN services s ON s.id = n.entity_id

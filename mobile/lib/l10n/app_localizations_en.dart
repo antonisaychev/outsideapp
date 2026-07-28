@@ -423,7 +423,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifServiceRecommended(String title) {
-    return 'Your card “$title” made it to Recommended 🎉';
+    return 'Your listing “$title” has passed review 🎉';
   }
 
   @override

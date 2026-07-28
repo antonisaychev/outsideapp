@@ -845,7 +845,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifServiceRecommended.
   ///
   /// In ru, this message translates to:
-  /// **'Ваша карточка «{title}» попала в «Рекомендовано» 🎉'**
+  /// **'Ваша карточка «{title}» прошла проверку 🎉'**
   String notifServiceRecommended(String title);
 
   /// No description provided for @notifServiceHidden.
