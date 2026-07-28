@@ -44,6 +44,25 @@ class AdminCategoriesTab extends ConsumerWidget {
     AdminCategory category,
   ) async {
     final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.adminDeleteCategoryTitle),
+        content: Text(localizedName(context, category.nameRu, category.nameEn)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.adminNo),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.adminYes),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
     try {
       await ref.read(adminApiProvider).deleteCategory(category.id);
       ref.invalidate(adminCategoriesProvider);
@@ -61,9 +80,8 @@ class AdminCategoriesTab extends ConsumerWidget {
     }
   }
 
-  void _toast(BuildContext context, String text) => ScaffoldMessenger.of(
-    context,
-  ).showSnackBar(SnackBar(content: Text(text)));
+  void _toast(BuildContext context, String text) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -181,7 +199,17 @@ class _NewCategoryDialogState extends State<_NewCategoryDialog> {
     final l10n = AppLocalizations.of(context)!;
     final valid = _ru.text.trim().isNotEmpty && _en.text.trim().isNotEmpty;
     return AlertDialog(
-      title: Text(l10n.adminNewCategoryTitle),
+      title: Row(
+        children: [
+          Expanded(child: Text(l10n.adminNewCategoryTitle)),
+          IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            icon: const Icon(Icons.close, color: AppColors.textSecondary),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -198,10 +226,6 @@ class _NewCategoryDialogState extends State<_NewCategoryDialog> {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
-        ),
         ElevatedButton(
           onPressed: valid
               ? () => Navigator.of(

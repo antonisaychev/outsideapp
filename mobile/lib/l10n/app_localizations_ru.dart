@@ -969,4 +969,48 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get adminEdit => 'Редактировать';
+
+  @override
+  String get adminShow => 'Отображать';
+
+  @override
+  String get adminDelete => 'Удалить';
+
+  @override
+  String get adminDeleteServiceTitle => 'Удалить карточку навсегда?';
+
+  @override
+  String get adminDeleteServiceNote =>
+      'Карточка, её фотографии, лайки и жалобы будут стёрты с сервера. Отменить это нельзя';
+
+  @override
+  String get adminServiceRestored => 'Сервис снова виден';
+
+  @override
+  String get adminServiceDeleted => 'Карточка удалена';
+
+  @override
+  String get adminDeleteCategoryTitle => 'Удалить категорию?';
+
+  @override
+  String get adminYes => 'Да';
+
+  @override
+  String get adminNo => 'Нет';
+
+  @override
+  String get adminReportCategory => 'Категория';
+
+  @override
+  String get adminReportDescription => 'Описание';
+
+  @override
+  String get adminReportReporter => 'Заявитель';
+
+  @override
+  String get adminNotAvailable => 'н/д';
+
+  @override
+  String get userBlockedProfile =>
+      'Пользователь был заблокирован за нарушение условий использования сервиса';
 }

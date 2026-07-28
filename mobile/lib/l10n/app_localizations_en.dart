@@ -969,4 +969,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminEdit => 'Edit';
+
+  @override
+  String get adminShow => 'Show';
+
+  @override
+  String get adminDelete => 'Delete';
+
+  @override
+  String get adminDeleteServiceTitle => 'Delete this service for good?';
+
+  @override
+  String get adminDeleteServiceNote =>
+      'The card, its photos, likes and reports will be wiped from the server. This cannot be undone';
+
+  @override
+  String get adminServiceRestored => 'Service is visible again';
+
+  @override
+  String get adminServiceDeleted => 'Service deleted';
+
+  @override
+  String get adminDeleteCategoryTitle => 'Delete this category?';
+
+  @override
+  String get adminYes => 'Yes';
+
+  @override
+  String get adminNo => 'No';
+
+  @override
+  String get adminReportCategory => 'Category';
+
+  @override
+  String get adminReportDescription => 'Details';
+
+  @override
+  String get adminReportReporter => 'Reported by';
+
+  @override
+  String get adminNotAvailable => 'n/a';
+
+  @override
+  String get userBlockedProfile =>
+      'This user was blocked for violating the terms of service';
 }

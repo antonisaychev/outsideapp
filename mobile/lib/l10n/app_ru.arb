@@ -386,5 +386,19 @@
   "adminEmptyReports": "Необработанных жалоб нет",
   "adminServicesCount": "{count, plural, one{{count} сервис} few{{count} сервиса} other{{count} сервисов}}",
   "@adminServicesCount": {"placeholders": {"count": {"type": "int"}}},
-  "adminEdit": "Редактировать"
+  "adminEdit": "Редактировать",
+  "adminShow": "Отображать",
+  "adminDelete": "Удалить",
+  "adminDeleteServiceTitle": "Удалить карточку навсегда?",
+  "adminDeleteServiceNote": "Карточка, её фотографии, лайки и жалобы будут стёрты с сервера. Отменить это нельзя",
+  "adminServiceRestored": "Сервис снова виден",
+  "adminServiceDeleted": "Карточка удалена",
+  "adminDeleteCategoryTitle": "Удалить категорию?",
+  "adminYes": "Да",
+  "adminNo": "Нет",
+  "adminReportCategory": "Категория",
+  "adminReportDescription": "Описание",
+  "adminReportReporter": "Заявитель",
+  "adminNotAvailable": "н/д",
+  "userBlockedProfile": "Пользователь был заблокирован за нарушение условий использования сервиса"
 }

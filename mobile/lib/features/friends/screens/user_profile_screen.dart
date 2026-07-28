@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/api/api_client.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/users_api.dart';
@@ -230,13 +231,28 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
       body: SafeArea(
         child: profileAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, st) => Center(
-            child: TextButton(
-              onPressed: () =>
-                  ref.invalidate(publicProfileProvider(widget.userId)),
-              child: Text(l10n.retry),
-            ),
-          ),
+          error: (err, st) {
+            // Заблокированному объясняем причину, повторять запрос незачем
+            if (err is ApiException && err.error == 'USER_BLOCKED') {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Text(
+                    l10n.userBlockedProfile,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              );
+            }
+            return Center(
+              child: TextButton(
+                onPressed: () =>
+                    ref.invalidate(publicProfileProvider(widget.userId)),
+                child: Text(l10n.retry),
+              ),
+            );
+          },
           data: (profile) => SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             child: Column(

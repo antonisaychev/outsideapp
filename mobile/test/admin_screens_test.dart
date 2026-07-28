@@ -61,9 +61,21 @@ void main() {
     id: 'r1',
     reasonType: 'fraud',
     comment: 'Указан неверный номер',
+    reporterId: 'u9',
     reporterUsername: 'maria',
     targetId: 's1',
     targetLabel: 'Байк-прокат Kuta',
+  );
+  final hidden = AdminService(
+    id: 's2',
+    title: 'Скрытая карточка',
+    photoUrl: '',
+    cityId: 1,
+    categoryId: 1,
+    status: 'hidden',
+    likesCount: 0,
+    confirmCount: 0,
+    authorUsername: 'oleg',
   );
   final category = AdminCategory(
     id: 1,
@@ -77,7 +89,7 @@ void main() {
       (ref) async => empty ? <AdminUser>[] : [user, blocked],
     ),
     adminServicesProvider.overrideWith(
-      (ref) async => empty ? <AdminService>[] : [service],
+      (ref) async => empty ? <AdminService>[] : [service, hidden],
     ),
     adminReportsProvider.overrideWith(
       (ref) async => empty ? <AdminReport>[] : [report],
@@ -174,5 +186,118 @@ void main() {
     await tester.tap(find.text('Жалобы'));
     await tester.pumpAndSettle();
     expect(find.text('Необработанных жалоб нет'), findsOneWidget);
+  });
+  testWidgets('заблокированные уходят в конец списка', (tester) async {
+    // сортировка живёт в AdminApi.users, здесь проверяем саму отрисовку порядка
+    await tester.pumpWidget(_app(const AdminScreen(), overrides()));
+    await tester.pumpAndSettle();
+
+    final anna = tester.getTopLeft(find.text('Анна Иванова')).dy;
+    final bot = tester.getTopLeft(find.text('Spam Bot')).dy;
+    expect(anna, lessThan(bot));
+  });
+
+  testWidgets('у скрытого сервиса кнопка «Отображать», у видимого — «Скрыть»', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_app(const AdminScreen(), overrides()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Сервисы'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Отображать'), findsOneWidget);
+    expect(find.text('Скрыть'), findsOneWidget);
+    // корзина есть у обеих карточек
+    expect(find.byIcon(Icons.delete_outline), findsNWidgets(2));
+  });
+
+  testWidgets('удаление карточки спрашивает подтверждение', (tester) async {
+    await tester.pumpWidget(_app(const AdminScreen(), overrides()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Сервисы'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.delete_outline).first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Удалить карточку навсегда?'), findsOneWidget);
+    expect(find.text('Да'), findsOneWidget);
+    expect(find.text('Нет'), findsOneWidget);
+  });
+
+  testWidgets('жалоба показывает категорию, описание и заявителя', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_app(const AdminScreen(), overrides()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Жалобы'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Категория: '), findsOneWidget);
+    expect(find.text('Мошенничество'), findsOneWidget);
+    expect(find.text('Указан неверный номер'), findsOneWidget);
+    expect(find.text('@maria'), findsOneWidget);
+  });
+
+  testWidgets('пустое описание жалобы показывается как «н/д»', (tester) async {
+    final noComment = AdminReport(
+      kind: 'user',
+      id: 'r2',
+      reasonType: 'spam',
+      comment: null,
+      reporterId: 'u9',
+      reporterUsername: 'oleg',
+      targetId: 'u2',
+      targetLabel: 'Spam Bot',
+    );
+    await tester.pumpWidget(
+      _app(const AdminScreen(), [
+        ...overrides(),
+        adminReportsProvider.overrideWith((ref) async => [noComment]),
+      ]),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Жалобы'));
+    await tester.pumpAndSettle();
+    expect(find.text('н/д'), findsOneWidget);
+  });
+
+  testWidgets('удаление категории спрашивает «Да/Нет»', (tester) async {
+    await tester.pumpWidget(_app(const AdminScreen(), overrides()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Категории').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.close).first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Удалить категорию?'), findsOneWidget);
+    expect(find.text('Да'), findsOneWidget);
+  });
+
+  testWidgets('в диалоге новой категории вместо «Отмена» крестик', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_app(const AdminScreen(), overrides()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Категории').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Создать'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Новая категория'), findsOneWidget);
+    expect(find.text('Отмена'), findsNothing);
+    // крестик именно в диалоге: в списке категорий такие же иконки удаления
+    expect(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.byIcon(Icons.close),
+      ),
+      findsOneWidget,
+    );
   });
 }

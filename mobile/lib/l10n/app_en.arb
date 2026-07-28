@@ -386,5 +386,19 @@
   "adminEmptyReports": "No open reports",
   "adminServicesCount": "{count, plural, one{{count} service} other{{count} services}}",
   "@adminServicesCount": {"placeholders": {"count": {"type": "int"}}},
-  "adminEdit": "Edit"
+  "adminEdit": "Edit",
+  "adminShow": "Show",
+  "adminDelete": "Delete",
+  "adminDeleteServiceTitle": "Delete this service for good?",
+  "adminDeleteServiceNote": "The card, its photos, likes and reports will be wiped from the server. This cannot be undone",
+  "adminServiceRestored": "Service is visible again",
+  "adminServiceDeleted": "Service deleted",
+  "adminDeleteCategoryTitle": "Delete this category?",
+  "adminYes": "Yes",
+  "adminNo": "No",
+  "adminReportCategory": "Category",
+  "adminReportDescription": "Details",
+  "adminReportReporter": "Reported by",
+  "adminNotAvailable": "n/a",
+  "userBlockedProfile": "This user was blocked for violating the terms of service"
 }

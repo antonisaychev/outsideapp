@@ -132,6 +132,14 @@ class AdminReportsTab extends ConsumerWidget {
     );
   }
 
+  String _reasonLabel(AppLocalizations l10n, String type) => switch (type) {
+    'spam' => l10n.reportReasonSpam,
+    'fraud' => l10n.reportReasonFraud,
+    'abuse' => l10n.reportReasonAbuse,
+    'other' => l10n.reportReasonOther,
+    _ => type.isEmpty ? l10n.adminNotAvailable : type,
+  };
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -160,22 +168,28 @@ class AdminReportsTab extends ConsumerWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                [
-                  if (report.comment?.isNotEmpty ?? false)
-                    '«${report.comment}»'
-                  else
-                    report.reasonType,
-                  l10n.adminReportFrom('@${report.reporterUsername}'),
-                ].join(' '),
-                style: const TextStyle(
-                  fontSize: 14,
-                  height: 1.35,
-                  color: AppColors.textSecondary,
-                ),
-              ),
               const SizedBox(height: 12),
+              _ReportField(
+                label: l10n.adminReportCategory,
+                value: _reasonLabel(l10n, report.reasonType),
+              ),
+              const SizedBox(height: 6),
+              _ReportField(
+                label: l10n.adminReportDescription,
+                value: (report.comment?.trim().isNotEmpty ?? false)
+                    ? report.comment!.trim()
+                    : l10n.adminNotAvailable,
+              ),
+              const SizedBox(height: 6),
+              _ReportField(
+                label: l10n.adminReportReporter,
+                value: '@${report.reporterUsername}',
+                // ник заявителя открывает его профиль
+                onTapValue: report.reporterId.isEmpty
+                    ? null
+                    : () => context.push('/users/${report.reporterId}'),
+              ),
+              const SizedBox(height: 14),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(0, 38),
@@ -192,6 +206,50 @@ class AdminReportsTab extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Строка карточки жалобы: «Категория: Спам»
+class _ReportField extends StatelessWidget {
+  const _ReportField({
+    required this.label,
+    required this.value,
+    this.onTapValue,
+  });
+
+  final String label;
+  final String value;
+  final VoidCallback? onTapValue;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Text(
+      value,
+      style: TextStyle(
+        fontSize: 14,
+        height: 1.35,
+        fontWeight: onTapValue != null ? FontWeight.w600 : FontWeight.w400,
+        color: onTapValue != null ? AppColors.coral : AppColors.textPrimary,
+      ),
+    );
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label: ',
+          style: const TextStyle(
+            fontSize: 14,
+            height: 1.35,
+            color: AppColors.textSecondary,
+          ),
+        ),
+        Expanded(
+          child: onTapValue == null
+              ? text
+              : GestureDetector(onTap: onTapValue, child: text),
+        ),
+      ],
     );
   }
 }

@@ -92,6 +92,7 @@ class AdminReport {
     required this.id,
     required this.reasonType,
     this.comment,
+    required this.reporterId,
     required this.reporterUsername,
     required this.targetId,
     required this.targetLabel,
@@ -102,6 +103,7 @@ class AdminReport {
   final String id;
   final String reasonType;
   final String? comment;
+  final String reporterId;
   final String reporterUsername;
   final String targetId;
   final String targetLabel;
@@ -111,6 +113,7 @@ class AdminReport {
     id: json['id'] as String,
     reasonType: json['reason_type'] as String? ?? '',
     comment: json['comment'] as String?,
+    reporterId: json['reporter_id'] as String? ?? '',
     reporterUsername: json['reporter_username'] as String? ?? '',
     targetId: json['target_id'] as String,
     targetLabel: json['target_label'] as String? ?? '',
@@ -154,9 +157,15 @@ class AdminApi {
           'page': page,
         },
       );
-      return (r.data as List)
+      final users = (r.data as List)
           .map((e) => AdminUser.fromJson(e as Map<String, dynamic>))
           .toList();
+      // Заблокированные опускаются в конец, порядок внутри групп сохраняется
+      users.sort((a, b) {
+        if (a.isBlocked == b.isBlocked) return 0;
+        return a.isBlocked ? 1 : -1;
+      });
+      return users;
     } on DioException catch (e) {
       throw toApiException(e);
     }
@@ -209,6 +218,23 @@ class AdminApi {
   Future<void> hideService(String id) async {
     try {
       await _dio.post('/admin/services/$id/hide');
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  Future<void> unhideService(String id) async {
+    try {
+      await _dio.post('/admin/services/$id/unhide');
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  /// Жёсткое удаление: карточка, фото и связанные записи стираются
+  Future<void> deleteService(String id) async {
+    try {
+      await _dio.delete('/admin/services/$id');
     } on DioException catch (e) {
       throw toApiException(e);
     }

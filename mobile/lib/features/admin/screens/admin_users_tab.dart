@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/api/admin_api.dart';
 import '../../../core/api/api_client.dart';
@@ -52,9 +53,8 @@ class _AdminUsersTabState extends ConsumerState<AdminUsersTab> {
     }
   }
 
-  void _toast(String text) => ScaffoldMessenger.of(
-    context,
-  ).showSnackBar(SnackBar(content: Text(text)));
+  void _toast(String text) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
   @override
   Widget build(BuildContext context) {
@@ -72,70 +72,75 @@ class _AdminUsersTabState extends ConsumerState<AdminUsersTab> {
               ref.read(adminUserQueryProvider.notifier).state = v.trim(),
         ),
       ),
-      itemBuilder: (context, user) => Padding(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user.displayName,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    [
-                      user.email,
-                      if (user.isBlocked) l10n.adminBlockedLabel,
-                    ].join(' · '),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  if (user.isBlocked && (user.blockedReason?.isNotEmpty ?? false))
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        user.blockedReason!,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppColors.error,
-                        ),
+      itemBuilder: (context, user) => InkWell(
+        // тап по строке открывает профиль, «назад» возвращает в админку
+        onTap: () => context.push('/users/${user.id}'),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.displayName,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(0, 36),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                foregroundColor: user.isBlocked
-                    ? AppColors.success
-                    : AppColors.error,
-                side: BorderSide(
-                  color: user.isBlocked ? AppColors.success : AppColors.error,
+                    const SizedBox(height: 2),
+                    Text(
+                      [
+                        user.email,
+                        if (user.isBlocked) l10n.adminBlockedLabel,
+                      ].join(' · '),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    if (user.isBlocked &&
+                        (user.blockedReason?.isNotEmpty ?? false))
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          user.blockedReason!,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.error,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-                textStyle: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, 36),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  foregroundColor: user.isBlocked
+                      ? AppColors.success
+                      : AppColors.error,
+                  side: BorderSide(
+                    color: user.isBlocked ? AppColors.success : AppColors.error,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onPressed: () => user.isBlocked ? _unblock(user) : _block(user),
+                child: Text(
+                  user.isBlocked ? l10n.adminUnblock : l10n.adminBlock,
                 ),
               ),
-              onPressed: () => user.isBlocked ? _unblock(user) : _block(user),
-              child: Text(
-                user.isBlocked ? l10n.adminUnblock : l10n.adminBlock,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -178,7 +183,10 @@ class _BlockDialogState extends State<_BlockDialog> {
         children: [
           Text(
             '${widget.user.displayName} · ${widget.user.email}',
-            style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.textSecondary,
+            ),
           ),
           const SizedBox(height: 16),
           TextField(

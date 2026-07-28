@@ -125,6 +125,42 @@ router.post('/services/:id/hide', async (req, res) => {
   res.json({ ok: true });
 });
 
+// Вернуть скрытый сервис в ленту: рекомендованным, если он уже заслужил это
+router.post('/services/:id/unhide', async (req, res) => {
+  if (!UUID_RE.test(req.params.id)) return res.status(404).json({ error: 'NOT_FOUND' });
+  const threshold = Number(process.env.CONFIRM_THRESHOLD) || 30;
+  const r = await db.query(
+    `UPDATE services SET status = CASE
+        WHEN approved_by_admin = true OR confirm_count >= $2 THEN 'recommended'
+        ELSE 'pending' END
+     WHERE id=$1 AND status='hidden' RETURNING id, status`,
+    [req.params.id, threshold]);
+  if (!r.rowCount) return res.status(400).json({ error: 'NOT_HIDDEN' });
+  res.json({ ok: true, status: r.rows[0].status });
+});
+
+// Полное удаление мусорной карточки: строки, фото на диске — без следа.
+// Единственное жёсткое удаление в проекте, остальные — мягкие.
+router.delete('/services/:id', async (req, res) => {
+  if (!UUID_RE.test(req.params.id)) return res.status(404).json({ error: 'NOT_FOUND' });
+  const id = req.params.id;
+  const exists = await db.query('SELECT 1 FROM services WHERE id=$1', [id]);
+  if (!exists.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
+
+  await db.query('DELETE FROM service_reports WHERE service_id=$1', [id]);
+  await db.query('DELETE FROM service_likes WHERE service_id=$1', [id]);
+  await db.query('DELETE FROM service_favorites WHERE service_id=$1', [id]);
+  await db.query('DELETE FROM service_photos WHERE service_id=$1', [id]);
+  await db.query(`DELETE FROM notifications WHERE entity_id=$1`, [id]);
+  await db.query('DELETE FROM services WHERE id=$1', [id]);
+
+  // Папка с фотографиями сервиса больше не нужна
+  const dir = path.join(__dirname, '..', '..', 'uploads', 'services', id);
+  fs.rmSync(dir, { recursive: true, force: true });
+
+  res.json({ ok: true });
+});
+
 // Редактирование любых полей карточки — для любого статуса
 router.patch('/services/:id', async (req, res) => {
   if (!UUID_RE.test(req.params.id)) return res.status(404).json({ error: 'NOT_FOUND' });

@@ -58,14 +58,17 @@ router.get('/:idOrNick', async (req, res) => {
   if (!byNick && !UUID_RE.test(value)) return res.status(404).json({ error: 'NOT_FOUND' });
 
   const r = await db.query(
-    `SELECT ${PROFILE_FIELDS},
+    `SELECT ${PROFILE_FIELDS}, u.is_blocked,
        (SELECT count(*)::int FROM friendships f WHERE f.status='accepted' AND (f.requester_id=u.id OR f.addressee_id=u.id)) AS friends_count,
        (SELECT count(*)::int FROM services s WHERE s.author_id=u.id AND s.status<>'hidden') AS services_count,
        COALESCE((SELECT json_agg(json_build_object('id', p.id, 'url', p.url) ORDER BY p.position, p.created_at)
                  FROM user_photos p WHERE p.user_id=u.id), '[]'::json) AS photos
-     FROM users u WHERE ${field}=$1 AND u.deleted_at IS NULL AND u.is_blocked = false`, [value]);
+     FROM users u WHERE ${field}=$1 AND u.deleted_at IS NULL`, [value]);
   if (!r.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
-  res.json(r.rows[0]);
+  // Заблокированного не прячем за 404: приложению нужно объяснить, что случилось
+  const { is_blocked, ...profile } = r.rows[0];
+  if (is_blocked) return res.status(403).json({ error: 'USER_BLOCKED' });
+  res.json(profile);
 });
 
 module.exports = router;

@@ -1849,6 +1849,90 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Редактировать'**
   String get adminEdit;
+
+  /// No description provided for @adminShow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отображать'**
+  String get adminShow;
+
+  /// No description provided for @adminDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get adminDelete;
+
+  /// No description provided for @adminDeleteServiceTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить карточку навсегда?'**
+  String get adminDeleteServiceTitle;
+
+  /// No description provided for @adminDeleteServiceNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карточка, её фотографии, лайки и жалобы будут стёрты с сервера. Отменить это нельзя'**
+  String get adminDeleteServiceNote;
+
+  /// No description provided for @adminServiceRestored.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервис снова виден'**
+  String get adminServiceRestored;
+
+  /// No description provided for @adminServiceDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карточка удалена'**
+  String get adminServiceDeleted;
+
+  /// No description provided for @adminDeleteCategoryTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить категорию?'**
+  String get adminDeleteCategoryTitle;
+
+  /// No description provided for @adminYes.
+  ///
+  /// In ru, this message translates to:
+  /// **'Да'**
+  String get adminYes;
+
+  /// No description provided for @adminNo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет'**
+  String get adminNo;
+
+  /// No description provided for @adminReportCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get adminReportCategory;
+
+  /// No description provided for @adminReportDescription.
+  ///
+  /// In ru, this message translates to:
+  /// **'Описание'**
+  String get adminReportDescription;
+
+  /// No description provided for @adminReportReporter.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заявитель'**
+  String get adminReportReporter;
+
+  /// No description provided for @adminNotAvailable.
+  ///
+  /// In ru, this message translates to:
+  /// **'н/д'**
+  String get adminNotAvailable;
+
+  /// No description provided for @userBlockedProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользователь был заблокирован за нарушение условий использования сервиса'**
+  String get userBlockedProfile;
 }
 
 class _AppLocalizationsDelegate

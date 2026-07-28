@@ -45,6 +45,39 @@ class AdminServicesTab extends ConsumerWidget {
     }
   }
 
+  Future<void> _confirmDelete(
+    BuildContext context,
+    WidgetRef ref,
+    AdminService service,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.adminDeleteServiceTitle),
+        content: Text('${service.title}\n\n${l10n.adminDeleteServiceNote}'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.adminNo),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.adminYes),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    await _run(
+      context,
+      ref,
+      () => ref.read(adminApiProvider).deleteService(service.id),
+      l10n.adminServiceDeleted,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -64,21 +97,26 @@ class AdminServicesTab extends ConsumerWidget {
       emptyText: l10n.adminEmptyServices,
       onRefresh: () => ref.invalidate(adminServicesProvider),
       header: SizedBox(
-        height: 44,
+        height: 48,
         child: ListView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 24),
           children: [
             for (final e in filters.entries) ...[
-              SelectableChip(
-                selected: status == e.key,
-                onTap: () =>
-                    ref.read(adminServiceStatusProvider.notifier).state = e.key,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
+              // Center — иначе чип растягивается на всю высоту списка
+              // и текст прижимается к верху (QA_NOTES №66)
+              Center(
+                child: SelectableChip(
+                  selected: status == e.key,
+                  onTap: () =>
+                      ref.read(adminServiceStatusProvider.notifier).state =
+                          e.key,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 9,
+                  ),
+                  child: Text(e.value),
                 ),
-                child: Text(e.value),
               ),
               const SizedBox(width: 8),
             ],
@@ -105,59 +143,64 @@ class AdminServicesTab extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppRadius.small),
-                    child: SizedBox(
-                      width: 56,
-                      height: 56,
-                      child: service.photoUrl.isEmpty
-                          ? Container(color: AppColors.surface)
-                          : CachedNetworkImage(
-                              imageUrl: absoluteFileUrl(service.photoUrl),
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  Container(color: AppColors.surface),
-                              errorWidget: (context, url, error) =>
-                                  Container(color: AppColors.surface),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                // из карточки — на страницу сервиса, «назад» вернёт в админку
+                onTap: () => context.push('/services/${service.id}'),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppRadius.small),
+                      child: SizedBox(
+                        width: 56,
+                        height: 56,
+                        child: service.photoUrl.isEmpty
+                            ? Container(color: AppColors.surface)
+                            : CachedNetworkImage(
+                                imageUrl: absoluteFileUrl(service.photoUrl),
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Container(color: AppColors.surface),
+                                errorWidget: (context, url, error) =>
+                                    Container(color: AppColors.surface),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            service.title,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
                             ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          service.title,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          [
-                            ?cityName,
-                            ?categoryName,
-                            statusText,
-                            if (service.isPending)
-                              '${service.confirmCount}/30'
-                            else
-                              '👍 ${service.likesCount}',
-                          ].join(' · '),
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textSecondary,
+                          const SizedBox(height: 2),
+                          Text(
+                            [
+                              ?cityName,
+                              ?categoryName,
+                              statusText,
+                              if (service.isPending)
+                                '${service.confirmCount}/30'
+                              else
+                                '👍 ${service.likesCount}',
+                            ].join(' · '),
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               Row(
@@ -193,11 +236,32 @@ class AdminServicesTab extends ConsumerWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    onPressed: () => context.push('/admin/services/${service.id}'),
+                    onPressed: () =>
+                        context.push('/admin/services/${service.id}'),
                     child: Text(l10n.adminEdit),
                   ),
-                  if (!service.isHidden) ...[
-                    const SizedBox(width: 8),
+                  const SizedBox(width: 8),
+                  if (service.isHidden)
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 36),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        textStyle: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: () => _run(
+                        context,
+                        ref,
+                        () => ref
+                            .read(adminApiProvider)
+                            .unhideService(service.id),
+                        l10n.adminServiceRestored,
+                      ),
+                      child: Text(l10n.adminShow),
+                    )
+                  else
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size(0, 36),
@@ -218,7 +282,16 @@ class AdminServicesTab extends ConsumerWidget {
                       ),
                       child: Text(l10n.adminHide),
                     ),
-                  ],
+                  const Spacer(),
+                  // Мусорные карточки стираем совсем, чтобы не копить их на диске
+                  IconButton(
+                    tooltip: l10n.adminDelete,
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: AppColors.error,
+                    ),
+                    onPressed: () => _confirmDelete(context, ref, service),
+                  ),
                 ],
               ),
             ],
