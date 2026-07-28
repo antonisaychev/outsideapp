@@ -15,6 +15,7 @@ import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
 import '../../auth/providers/session_controller.dart';
+import '../../dating/providers/dating_providers.dart';
 
 /// Экран 32 «Редактировать профиль».
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -194,6 +195,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         if (_birthDate != null)
           'birth_date': _birthDate!.toIso8601String().substring(0, 10),
       });
+      // Анкета знакомств зависит от фото/пола/даты — её кэш устарел
+      ref.invalidate(datingProfileProvider);
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,

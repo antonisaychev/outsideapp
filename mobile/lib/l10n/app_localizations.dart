@@ -932,6 +932,30 @@ abstract class AppLocalizations {
   /// **'Для знакомств нужны имя, фото, пол и дата рождения'**
   String get datingProfileIncompleteBody;
 
+  /// No description provided for @datingIncompleteBanner.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте фото, пол и дату рождения — иначе вас не покажут другим'**
+  String get datingIncompleteBanner;
+
+  /// No description provided for @datingIncompleteAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заполнить'**
+  String get datingIncompleteAction;
+
+  /// No description provided for @datingVisibilityNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вас показывают другим в этом разделе'**
+  String get datingVisibilityNote;
+
+  /// No description provided for @datingVisibilityChange.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить'**
+  String get datingVisibilityChange;
+
   /// No description provided for @deckEmpty.
   ///
   /// In ru, this message translates to:

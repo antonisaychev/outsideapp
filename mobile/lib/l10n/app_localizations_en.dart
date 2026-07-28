@@ -479,6 +479,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Dating requires a name, photo, gender and date of birth';
 
   @override
+  String get datingIncompleteBanner =>
+      'Add a photo, gender and date of birth — otherwise others won’t see you';
+
+  @override
+  String get datingIncompleteAction => 'Fill in';
+
+  @override
+  String get datingVisibilityNote => 'Others can see you in this section';
+
+  @override
+  String get datingVisibilityChange => 'Change';
+
+  @override
   String get deckEmpty => 'You\'ve seen everyone. Check back later';
 
   @override

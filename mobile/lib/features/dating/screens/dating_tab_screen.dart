@@ -62,51 +62,26 @@ class DatingTabScreen extends ConsumerWidget {
           child: Text(l10n.retry),
         ),
       ),
+      // Знакомства включены по умолчанию; выключить можно в настройках раздела
       data: (profile) =>
-          profile.isActive ? const _DeckView() : _EnableView(profile: profile),
+          profile.isActive ? _DeckView(profile: profile) : _DisabledView(),
     );
   }
 }
 
-/// Экран 19 «Включение знакомств».
-class _EnableView extends ConsumerStatefulWidget {
-  const _EnableView({required this.profile});
-
-  final DatingProfile profile;
+/// Экран 19: знакомства выключены самим пользователем — предлагаем вернуть.
+class _DisabledView extends ConsumerStatefulWidget {
+  const _DisabledView();
 
   @override
-  ConsumerState<_EnableView> createState() => _EnableViewState();
+  ConsumerState<_DisabledView> createState() => _DisabledViewState();
 }
 
-class _EnableViewState extends ConsumerState<_EnableView> {
+class _DisabledViewState extends ConsumerState<_DisabledView> {
   bool _submitting = false;
 
   Future<void> _enable() async {
     final l10n = AppLocalizations.of(context)!;
-    // Нужны имя, фото, пол и дата рождения — иначе сначала в профиль
-    if (!widget.profile.eligible) {
-      final goToProfile = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(l10n.datingProfileIncompleteTitle),
-          content: Text(l10n.datingProfileIncompleteBody),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.cancel),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.editProfile),
-            ),
-          ],
-        ),
-      );
-      if (goToProfile == true && mounted) {
-        context.push('/settings/edit-profile');
-      }
-      return;
-    }
     setState(() => _submitting = true);
     try {
       await ref.read(datingApiProvider).updateProfile(isActive: true);
@@ -181,7 +156,9 @@ class _EnableViewState extends ConsumerState<_EnableView> {
 
 /// Экран 07 «Колода»: свайп вправо/влево или кнопки.
 class _DeckView extends ConsumerStatefulWidget {
-  const _DeckView();
+  const _DeckView({required this.profile});
+
+  final DatingProfile profile;
 
   @override
   ConsumerState<_DeckView> createState() => _DeckViewState();
@@ -356,6 +333,71 @@ class _DeckViewState extends ConsumerState<_DeckView>
               ],
             ),
           ),
+          // Честно предупреждаем: раздел включён по умолчанию, вас видят
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 4),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    l10n.datingVisibilityNote,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                GestureDetector(
+                  onTap: () => context.push('/dating/settings'),
+                  child: Text(
+                    l10n.datingVisibilityChange,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.coral,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Без фото/пола/даты рождения карточка не показывается другим
+          if (!widget.profile.eligible)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+              child: Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: AppColors.coralTint,
+                  borderRadius: BorderRadius.circular(AppRadius.small),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.datingIncompleteBanner,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          height: 1.35,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () => context.push('/settings/edit-profile'),
+                      child: Text(l10n.datingIncompleteAction),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           if (deck.limitReached)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),

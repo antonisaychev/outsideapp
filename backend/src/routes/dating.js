@@ -20,7 +20,8 @@ router.get('/profile', async (req, res) => {
     WHERE u.id=$1`, [req.userId]);
   const row = r.rows[0];
   res.json({
-    is_active: row.is_active || false,
+    // Знакомства включены по умолчанию: запись появляется только при отключении
+    is_active: row.is_active === null || row.is_active === undefined ? true : row.is_active,
     looking_for: row.looking_for || 'any',
     show_gender: row.show_gender || 'any',
     eligible: !!(row.first_name && row.avatar_url && row.gender && row.birth_date),
@@ -47,14 +48,6 @@ router.patch('/profile', async (req, res) => {
   }
   if (Object.keys(errors).length) return res.status(400).json({ errors });
 
-  if (isActive === true) {
-    const u = await db.query('SELECT first_name, avatar_url, gender, birth_date FROM users WHERE id=$1', [req.userId]);
-    const row = u.rows[0];
-    if (!row.first_name || !row.avatar_url || !row.gender || !row.birth_date) {
-      return res.status(400).json({ error: 'PROFILE_INCOMPLETE' });
-    }
-  }
-
   await db.query(`
     INSERT INTO dating_profiles (user_id, is_active, looking_for, show_gender)
     VALUES ($1, COALESCE($2,false), COALESCE($3,'any'), COALESCE($4,'any'))
@@ -76,15 +69,18 @@ router.get('/deck', async (req, res) => {
     FROM users u LEFT JOIN dating_profiles dp ON dp.user_id=u.id
     WHERE u.id=$1`, [req.userId]);
   const my = me.rows[0];
-  if (!my.is_active) return res.status(403).json({ error: 'DATING_NOT_ACTIVE' });
+  if (my.is_active === false) return res.status(403).json({ error: 'DATING_NOT_ACTIVE' });
   if (!my.city_id) return res.json([]);
 
   const r = await db.query(`
     SELECT u.id, u.username, u.first_name, u.avatar_url, u.bio, u.gender, u.birth_date
-    FROM users u JOIN dating_profiles dp ON dp.user_id = u.id
-    WHERE dp.is_active = true AND u.id <> $1 AND u.deleted_at IS NULL AND u.is_blocked = false
+    FROM users u LEFT JOIN dating_profiles dp ON dp.user_id = u.id
+    WHERE COALESCE(dp.is_active, true) = true AND u.id <> $1
+      AND u.deleted_at IS NULL AND u.is_blocked = false
       AND u.city_id = $2
-      AND (dp.show_gender = 'any' OR dp.show_gender = $3)
+      -- без фото, пола и возраста карточку показывать нечем
+      AND u.avatar_url IS NOT NULL AND u.gender IS NOT NULL AND u.birth_date IS NOT NULL
+      AND (COALESCE(dp.show_gender, 'any') = 'any' OR dp.show_gender = $3)
       AND ($4 = 'any' OR u.gender = $4)
       AND NOT EXISTS (
         SELECT 1 FROM swipes s WHERE s.swiper_id=$1 AND s.target_id=u.id
@@ -95,7 +91,8 @@ router.get('/deck', async (req, res) => {
           AND ((f.requester_id=$1 AND f.addressee_id=u.id) OR (f.requester_id=u.id AND f.addressee_id=$1))
       )
     ORDER BY random() LIMIT $5`,
-    [req.userId, my.city_id, my.gender, my.show_gender, limit]);
+    // show_gender по умолчанию 'any': записи в dating_profiles может не быть
+    [req.userId, my.city_id, my.gender, my.show_gender || 'any', limit]);
   res.json(r.rows);
 });
 
@@ -107,7 +104,7 @@ router.post('/swipe', async (req, res) => {
   if (!targetId || targetId === req.userId) return res.status(400).json({ error: 'INVALID_USER' });
 
   const my = await db.query('SELECT is_active FROM dating_profiles WHERE user_id=$1', [req.userId]);
-  if (!my.rowCount || !my.rows[0].is_active) return res.status(403).json({ error: 'DATING_NOT_ACTIVE' });
+  if (my.rowCount && my.rows[0].is_active === false) return res.status(403).json({ error: 'DATING_NOT_ACTIVE' });
 
   const target = await db.query('SELECT 1 FROM users WHERE id=$1 AND deleted_at IS NULL AND is_blocked=false', [targetId]);
   if (!target.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });

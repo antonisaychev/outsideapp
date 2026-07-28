@@ -479,6 +479,19 @@ class AppLocalizationsRu extends AppLocalizations {
       'Для знакомств нужны имя, фото, пол и дата рождения';
 
   @override
+  String get datingIncompleteBanner =>
+      'Добавьте фото, пол и дату рождения — иначе вас не покажут другим';
+
+  @override
+  String get datingIncompleteAction => 'Заполнить';
+
+  @override
+  String get datingVisibilityNote => 'Вас показывают другим в этом разделе';
+
+  @override
+  String get datingVisibilityChange => 'Изменить';
+
+  @override
   String get deckEmpty => 'Вы посмотрели всех. Загляните позже';
 
   @override
