@@ -432,5 +432,10 @@
   "notificationsEmptyBody": "Здесь появятся заявки в друзья, мэтчи и новости ваших карточек",
   "deckEmptyTitle": "Пока никого рядом",
   "blockedEmptyTitle": "Список пуст",
-  "blockedEmptyBody": "Заблокированные пользователи появятся здесь"
+  "blockedEmptyBody": "Заблокированные пользователи появятся здесь",
+  "serviceOwnerCaption": "Владелец сервиса",
+  "serviceAddedByLine": "Карточку добавил(а)",
+  "profileFrom": "Из",
+  "profileNowIn": "Сейчас в {place}",
+  "@profileNowIn": {"placeholders": {"place": {"type": "String"}}}
 }

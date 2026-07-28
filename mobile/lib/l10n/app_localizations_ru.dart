@@ -1113,4 +1113,18 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get blockedEmptyBody => 'Заблокированные пользователи появятся здесь';
+
+  @override
+  String get serviceOwnerCaption => 'Владелец сервиса';
+
+  @override
+  String get serviceAddedByLine => 'Карточку добавил(а)';
+
+  @override
+  String get profileFrom => 'Из';
+
+  @override
+  String profileNowIn(String place) {
+    return 'Сейчас в $place';
+  }
 }

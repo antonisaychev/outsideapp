@@ -432,5 +432,10 @@
   "notificationsEmptyBody": "Friend requests, matches and news about your listings appear here",
   "deckEmptyTitle": "Nobody around yet",
   "blockedEmptyTitle": "Nothing here",
-  "blockedEmptyBody": "Blocked users will appear here"
+  "blockedEmptyBody": "Blocked users will appear here",
+  "serviceOwnerCaption": "Service owner",
+  "serviceAddedByLine": "Listing added by",
+  "profileFrom": "From",
+  "profileNowIn": "Now in {place}",
+  "@profileNowIn": {"placeholders": {"place": {"type": "String"}}}
 }

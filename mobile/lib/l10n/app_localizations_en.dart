@@ -1115,4 +1115,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get blockedEmptyBody => 'Blocked users will appear here';
+
+  @override
+  String get serviceOwnerCaption => 'Service owner';
+
+  @override
+  String get serviceAddedByLine => 'Listing added by';
+
+  @override
+  String get profileFrom => 'From';
+
+  @override
+  String profileNowIn(String place) {
+    return 'Now in $place';
+  }
 }

@@ -53,6 +53,19 @@ class MeProfile {
 
   bool get isAdmin => role == 'admin';
 
+  /// Возраст из даты рождения — показывается рядом с именем
+  int? get age {
+    if (birthDate == null) return null;
+    final d = DateTime.tryParse(birthDate!);
+    if (d == null) return null;
+    final now = DateTime.now();
+    var years = now.year - d.year;
+    if (now.month < d.month || (now.month == d.month && now.day < d.day)) {
+      years--;
+    }
+    return years < 0 || years > 120 ? null : years;
+  }
+
   factory MeProfile.fromJson(Map<String, dynamic> json) => MeProfile(
     id: json['id'] as String,
     email: json['email'] as String,

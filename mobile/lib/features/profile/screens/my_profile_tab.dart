@@ -7,6 +7,7 @@ import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../core/widgets/photo_gallery.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
@@ -99,9 +100,8 @@ class MyProfileTab extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              name,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineMedium,
+              profile.age == null ? name : '$name, ${profile.age}',
+              style: AppText.h2,
             ),
             const SizedBox(height: 6),
             GestureDetector(
@@ -118,33 +118,34 @@ class MyProfileTab extends ConsumerWidget {
                 }
               },
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     '@${profile.username}',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: AppText.callout.copyWith(
+                      color: AppColors.coral,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  const Icon(
-                    Icons.copy,
-                    size: 14,
-                    color: AppColors.textSecondary,
-                  ),
+                  const SizedBox(width: 5),
+                  const Icon(Icons.copy, size: 15, color: AppColors.coral),
                 ],
               ),
             ),
             const SizedBox(height: 6),
             Text(
-              '${countryFlag(profile.homeCountry)} → ${cityName(profile.cityId)}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
+              [
+                if (profile.homeCountry != null)
+                  '${countryFlag(profile.homeCountry)} ${l10n.profileFrom}',
+                if (profile.cityId != null)
+                  l10n.profileNowIn(cityName(profile.cityId)),
+              ].join(' · '),
+              style: AppText.callout.copyWith(color: AppColors.neutral500),
             ),
             const SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _Counter(value: profile.friendsCount, label: l10n.countFriends),
-                const SizedBox(width: 40),
+                const SizedBox(width: 28),
                 _Counter(
                   value: profile.servicesCount,
                   label: l10n.countRecommendations,
@@ -153,7 +154,10 @@ class MyProfileTab extends ConsumerWidget {
             ),
             if (profile.bio != null && profile.bio!.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(profile.bio!, textAlign: TextAlign.center),
+              Text(
+                profile.bio!,
+                style: AppText.callout.copyWith(color: AppColors.neutral600),
+              ),
             ],
             const SizedBox(height: 24),
             OutlinedButton(

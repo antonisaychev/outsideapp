@@ -11,6 +11,8 @@ import '../../../core/api/models.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
+import '../../../core/widgets/user_avatar.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../l10n/app_localizations.dart';
@@ -125,6 +127,13 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
     }
 
     return Scaffold(
+      bottomNavigationBar: detailAsync.valueOrNull == null
+          ? null
+          : _ActionBar(
+              service: detailAsync.value!,
+              onFavorite: () => _toggleFavorite(detailAsync.value!),
+              action: _buildLikeArea(detailAsync.value!, l10n),
+            ),
       body: detailAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, st) => Center(
@@ -156,13 +165,6 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
                               style: Theme.of(context).textTheme.headlineLarge,
                             ),
                           ),
-                          if (service.isVerified) ...[
-                            const SizedBox(width: 8),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 6),
-                              child: VerifiedBadge(size: 22),
-                            ),
-                          ],
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -219,8 +221,6 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
                               ),
                           ],
                         ),
-                      const SizedBox(height: 16),
-                      _buildLikeArea(service, l10n),
                       if (service.isVerified) ...[
                         const SizedBox(height: 16),
                         Container(
@@ -252,24 +252,25 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
                           ),
                         ),
                       ],
-                      const SizedBox(height: 16),
-                      _PersonLine(
-                        label: l10n.serviceAddedBy,
+                      if (service.ownerId != null) ...[
+                        const SizedBox(height: 16),
+                        const Divider(),
+                        const SizedBox(height: 16),
+                        _OwnerCard(
+                          name: service.ownerName ?? '',
+                          onTap: () =>
+                              context.push('/users/${service.ownerId}'),
+                        ),
+                      ],
+                      // Кто добавил карточку — справочная информация,
+                      // поэтому подаётся минорной строкой под всем содержимым
+                      const SizedBox(height: 14),
+                      _AddedByLine(
                         name: service.authorName,
                         onTap: service.authorId.isEmpty
                             ? null
                             : () => context.push('/users/${service.authorId}'),
                       ),
-                      if (service.ownerId != null) ...[
-                        const SizedBox(height: 6),
-                        _PersonLine(
-                          label: l10n.serviceOwner,
-                          name: service.ownerName ?? '',
-                          icon: const OwnerBadge(size: 16),
-                          onTap: () =>
-                              context.push('/users/${service.ownerId}'),
-                        ),
-                      ],
                     ],
                   ),
                 ),
@@ -517,42 +518,135 @@ class _CircleButton extends StatelessWidget {
 }
 
 /// «Добавил: Мария» / «Владелец: Олег» — имя ведёт в профиль
-class _PersonLine extends StatelessWidget {
-  const _PersonLine({
-    required this.label,
-    required this.name,
-    this.icon,
-    this.onTap,
-  });
+/// Владелец сервиса — заметный блок с аватаром и переходом в профиль.
+/// Появляется, только когда админ назначил владельца.
+class _OwnerCard extends StatelessWidget {
+  const _OwnerCard({required this.name, required this.onTap});
 
-  final String label;
   final String name;
-  final Widget? icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.medium),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.neutral100,
+          borderRadius: BorderRadius.circular(AppRadius.medium),
+        ),
+        child: Row(
+          children: [
+            UserAvatar(name: name, radius: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(name, style: AppText.bodyStrong),
+                  const SizedBox(height: 2),
+                  Text(l10n.serviceOwnerCaption, style: AppText.small),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: AppColors.neutral400,
+              size: 22,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// «Карточку добавила Мария Ковалёва» — имя кораллом как ссылка в профиль
+class _AddedByLine extends StatelessWidget {
+  const _AddedByLine({required this.name, this.onTap});
+
+  final String name;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (icon != null) ...[icon!, const SizedBox(width: 8)],
-        Text(
-          '$label: ',
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-        ),
-        Flexible(
-          child: GestureDetector(
-            onTap: onTap,
-            child: Text(
-              name,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: onTap != null ? FontWeight.w600 : FontWeight.w400,
-                color: onTap != null ? AppColors.coral : AppColors.textPrimary,
+    final l10n = AppLocalizations.of(context)!;
+    return GestureDetector(
+      onTap: onTap,
+      child: Text.rich(
+        TextSpan(
+          style: AppText.small.copyWith(color: AppColors.neutral400),
+          children: [
+            TextSpan(text: '${l10n.serviceAddedByLine} '),
+            TextSpan(
+              text: name,
+              style: AppText.small.copyWith(
+                color: AppColors.coral,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+}
+
+/// Липкая панель снизу: избранное и главное действие всегда на экране
+class _ActionBar extends StatelessWidget {
+  const _ActionBar({
+    required this.service,
+    required this.onFavorite,
+    required this.action,
+  });
+
+  final ServiceDetail service;
+  final VoidCallback onFavorite;
+  final Widget action;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+      decoration: const BoxDecoration(
+        color: AppColors.neutral0,
+        border: Border(top: BorderSide(color: AppColors.neutral200)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          children: [
+            InkWell(
+              onTap: onFavorite,
+              customBorder: const CircleBorder(),
+              child: Container(
+                width: 52,
+                height: 52,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: AppColors.neutral100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  service.isFavorite
+                      ? Icons.favorite
+                      : Icons.favorite_border_rounded,
+                  color: service.isFavorite
+                      ? AppColors.coral
+                      : AppColors.neutral800,
+                  size: 24,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: action),
+          ],
+        ),
+      ),
     );
   }
 }

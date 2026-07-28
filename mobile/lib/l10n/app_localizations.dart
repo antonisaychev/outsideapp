@@ -2125,6 +2125,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Заблокированные пользователи появятся здесь'**
   String get blockedEmptyBody;
+
+  /// No description provided for @serviceOwnerCaption.
+  ///
+  /// In ru, this message translates to:
+  /// **'Владелец сервиса'**
+  String get serviceOwnerCaption;
+
+  /// No description provided for @serviceAddedByLine.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карточку добавил(а)'**
+  String get serviceAddedByLine;
+
+  /// No description provided for @profileFrom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Из'**
+  String get profileFrom;
+
+  /// No description provided for @profileNowIn.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сейчас в {place}'**
+  String profileNowIn(String place);
 }
 
 class _AppLocalizationsDelegate
