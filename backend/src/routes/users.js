@@ -19,7 +19,12 @@ router.get('/', async (req, res) => {
   const where = ['u.deleted_at IS NULL', 'u.is_blocked = false'];
   const params = [];
   let i = 1;
-  if (q) { where.push(`(u.first_name ILIKE $${i} OR u.last_name ILIKE $${i} OR u.username ILIKE $${i})`); params.push(`%${q}%`); i++; }
+  // Выражение совпадает с индексом idx_users_search_trgm — иначе Postgres
+  // не сможет им воспользоваться и пойдёт перебирать всю таблицу
+  if (q) {
+    where.push(`(coalesce(u.first_name,'') || ' ' || coalesce(u.last_name,'') || ' ' || u.username) ILIKE $${i}`);
+    params.push(`%${q}%`); i++;
+  }
   if (cityId) { where.push(`u.city_id = $${i++}`); params.push(cityId); }
   if (homeCountry) { where.push(`u.home_country = $${i++}`); params.push(homeCountry); }
 

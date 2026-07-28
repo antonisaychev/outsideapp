@@ -148,10 +148,27 @@ router.post('/swipe', async (req, res) => {
     return res.json({ match: false });
   }
 
+  // Мэтч, дружба и диалог создаются вместе: если что-то упадёт посередине,
+  // не должно остаться мэтча без диалога или дружбы без мэтча
   const [a, b] = req.userId < targetId ? [req.userId, targetId] : [targetId, req.userId];
-  await db.query('INSERT INTO matches (user_a, user_b) VALUES ($1,$2) ON CONFLICT DO NOTHING', [a, b]);
-  await ensureFriendship(req.userId, targetId);
-  await db.query('INSERT INTO conversations (user_a, user_b) VALUES ($1,$2) ON CONFLICT DO NOTHING', [a, b]);
+  await db.withTransaction(async (tx) => {
+    await tx.query('INSERT INTO matches (user_a, user_b) VALUES ($1,$2) ON CONFLICT DO NOTHING', [a, b]);
+    const existing = await tx.query(
+      `SELECT id, status FROM friendships
+        WHERE (requester_id=$1 AND addressee_id=$2) OR (requester_id=$2 AND addressee_id=$1)`,
+      [req.userId, targetId]);
+    if (!existing.rowCount) {
+      await tx.query(
+        `INSERT INTO friendships (requester_id, addressee_id, status) VALUES ($1,$2,'accepted')`,
+        [req.userId, targetId]);
+    } else if (existing.rows[0].status !== 'accepted') {
+      await tx.query(`UPDATE friendships SET status='accepted', updated_at=now() WHERE id=$1`,
+        [existing.rows[0].id]);
+    }
+    await tx.query('INSERT INTO conversations (user_a, user_b) VALUES ($1,$2) ON CONFLICT DO NOTHING', [a, b]);
+  });
+  // Уведомления вне сделки: их потеря не ломает данные, а падение письма
+  // не должно откатывать сам мэтч
   await notify(req.userId, 'match', { actorId: targetId });
   await notify(targetId, 'match', { actorId: req.userId });
 

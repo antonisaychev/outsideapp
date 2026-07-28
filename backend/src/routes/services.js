@@ -100,19 +100,26 @@ router.get('/:id', optional, async (req, res) => {
     return res.status(404).json({ error: 'NOT_FOUND' });
   }
 
+  // Лайк, избранное, право подтвердить и фотографии — одним запросом вместо
+  // четырёх: на открытие карточки приходится половина трафика приложения
   let liked_by_me = false, is_favorite = false, can_confirm = false;
+  const extra = await db.query(`
+    SELECT
+      EXISTS (SELECT 1 FROM service_likes WHERE service_id=$1 AND user_id=$2) AS liked,
+      EXISTS (SELECT 1 FROM service_favorites WHERE service_id=$1 AND user_id=$2) AS favorite,
+      (SELECT city_id FROM users WHERE id=$2) AS my_city,
+      COALESCE((SELECT json_agg(json_build_object('id', p.id, 'url', p.url, 'sort', p.sort) ORDER BY p.sort)
+                FROM service_photos p WHERE p.service_id=$1), '[]'::json) AS photos`,
+    [s.id, req.userId || null]);
+  const row = extra.rows[0];
   if (req.userId) {
-    const l = await db.query('SELECT 1 FROM service_likes WHERE service_id=$1 AND user_id=$2', [s.id, req.userId]);
-    liked_by_me = !!l.rowCount;
-    const f = await db.query('SELECT 1 FROM service_favorites WHERE service_id=$1 AND user_id=$2', [s.id, req.userId]);
-    is_favorite = !!f.rowCount;
+    liked_by_me = row.liked;
+    is_favorite = row.favorite;
     if (s.status === 'pending' && s.author_id !== req.userId) {
-      const me = await db.query('SELECT city_id FROM users WHERE id=$1', [req.userId]);
-      can_confirm = !!me.rows[0] && me.rows[0].city_id === s.city_id;
+      can_confirm = row.my_city === s.city_id;
     }
   }
-
-  const photos = await db.query('SELECT id, url, sort FROM service_photos WHERE service_id=$1 ORDER BY sort', [s.id]);
+  const photos = { rows: row.photos };
 
   // Отмечаем просмотр — карточка опустится в выдаче до следующей правки
   if (req.userId) {

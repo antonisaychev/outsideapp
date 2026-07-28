@@ -19,6 +19,30 @@ function tokens(userId) {
   return { access_token: access, refresh_token: refresh };
 }
 
+// Письма с кодом: не чаще одного в минуту и не больше пяти в час на адрес.
+// Без этого /resend и /forgot можно дёргать бесконечно — засыпать чужой ящик
+// письмами и выжечь квоту почтового сервиса.
+const mailHits = new Map(); // email -> массив времён отправки
+function mailLimit(req, res, next) {
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  if (!email) return next();
+  const now = Date.now();
+  const sent = (mailHits.get(email) || []).filter(t => now - t < 3600_000);
+  if (sent.length >= 5 || (sent.length && now - sent[sent.length - 1] < 60_000)) {
+    // Ответ такой же, как при успехе: существование аккаунта не раскрываем
+    return res.json({ ok: true });
+  }
+  sent.push(now);
+  mailHits.set(email, sent);
+  // Карта не должна расти бесконечно: раз в час чистим протухшие записи
+  if (mailHits.size > 10_000) {
+    for (const [key, times] of mailHits) {
+      if (!times.some(t => now - t < 3600_000)) mailHits.delete(key);
+    }
+  }
+  next();
+}
+
 // Простейший rate-limit по IP на регистрацию: 5/час (в памяти)
 const regHits = new Map();
 function regLimit(req, res, next) {
@@ -71,7 +95,7 @@ router.post('/verify', async (req, res) => {
 });
 
 // Повторная отправка кода
-router.post('/resend', async (req, res) => {
+router.post('/resend', mailLimit, async (req, res) => {
   const email = String(req.body.email || '').trim().toLowerCase();
   const r = await db.query('SELECT email_verified FROM users WHERE email=$1', [email]);
   if (r.rowCount && !r.rows[0].email_verified) {
@@ -121,7 +145,7 @@ router.post('/refresh', async (req, res) => {
 });
 
 // Забыли пароль → код на почту
-router.post('/forgot', async (req, res) => {
+router.post('/forgot', mailLimit, async (req, res) => {
   const email = String(req.body.email || '').trim().toLowerCase();
   const r = await db.query('SELECT 1 FROM users WHERE email=$1 AND deleted_at IS NULL', [email]);
   if (r.rowCount) {

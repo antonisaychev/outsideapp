@@ -49,7 +49,7 @@ router.get('/users', async (req, res) => {
   const params = [];
   let i = 1;
   if (q) {
-    where.push(`(email ILIKE $${i} OR first_name ILIKE $${i} OR last_name ILIKE $${i} OR username ILIKE $${i})`);
+    where.push(`((coalesce(first_name,'') || ' ' || coalesce(last_name,'') || ' ' || username) ILIKE $${i} OR email ILIKE $${i})`);
     params.push(`%${q}%`); i++;
   }
   params.push(limit, offset);
@@ -150,12 +150,16 @@ router.delete('/services/:id', async (req, res) => {
   const exists = await db.query('SELECT 1 FROM services WHERE id=$1', [id]);
   if (!exists.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
 
-  await db.query('DELETE FROM service_reports WHERE service_id=$1', [id]);
-  await db.query('DELETE FROM service_likes WHERE service_id=$1', [id]);
-  await db.query('DELETE FROM service_favorites WHERE service_id=$1', [id]);
-  await db.query('DELETE FROM service_photos WHERE service_id=$1', [id]);
-  await db.query(`DELETE FROM notifications WHERE entity_id=$1`, [id]);
-  await db.query('DELETE FROM services WHERE id=$1', [id]);
+  // Одной сделкой: половина удалённой карточки хуже, чем неудалённая
+  await db.withTransaction(async (tx) => {
+    await tx.query('DELETE FROM service_reports WHERE service_id=$1', [id]);
+    await tx.query('DELETE FROM service_likes WHERE service_id=$1', [id]);
+    await tx.query('DELETE FROM service_favorites WHERE service_id=$1', [id]);
+    await tx.query('DELETE FROM service_photos WHERE service_id=$1', [id]);
+    await tx.query('DELETE FROM service_views WHERE service_id=$1', [id]);
+    await tx.query('DELETE FROM notifications WHERE entity_id=$1', [id]);
+    await tx.query('DELETE FROM services WHERE id=$1', [id]);
+  });
 
   // Папка с фотографиями сервиса больше не нужна
   const dir = path.join(__dirname, '..', '..', 'uploads', 'services', id);
