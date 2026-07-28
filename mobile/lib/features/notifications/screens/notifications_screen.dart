@@ -73,6 +73,27 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     }
   }
 
+  /// id уведомлений, у которых показываем «Принять/Отклонить»
+  final _actionable = <String>{};
+
+  /// Кнопки — только у САМОГО СВЕЖЕГО friend_request от каждого отправителя
+  /// и только если заявка ещё висит (старые записи остаются историей).
+  List<AppNotification> _withActionFlags(
+    List<AppNotification> items,
+    Map<String, RelationStatus> statuses,
+  ) {
+    _actionable.clear();
+    final seen = <String>{};
+    for (final n in items) {
+      if (n.type != 'friend_request' || n.actorId == null) continue;
+      if (!seen.add(n.actorId!)) continue; // уже был свежее — этот в историю
+      if (statuses[n.actorId] == RelationStatus.pendingIncoming) {
+        _actionable.add(n.id);
+      }
+    }
+    return items;
+  }
+
   Future<void> _accept(AppNotification n, AppLocalizations l10n) async {
     await runFriendAction(
       ref,
@@ -146,18 +167,15 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                       ),
                     ),
                   ),
-                for (final n in items)
+                for (final n in _withActionFlags(items, statuses))
                   _NotificationRow(
                     notification: n,
                     text: _text(n, l10n),
                     time: _relativeTime(n.createdAt, l10n),
                     handledLabel: _handled[n.id],
                     // Кнопки только у актуальной входящей заявки
-                    showActions:
-                        n.type == 'friend_request' &&
-                        n.actorId != null &&
-                        _handled[n.id] == null &&
-                        statuses[n.actorId] == RelationStatus.pendingIncoming,
+                    showActions: _actionable.contains(n.id) &&
+                        _handled[n.id] == null,
                     onTap: () => _openTarget(n),
                     onAccept: () => _accept(n, l10n),
                     onDecline: () => _decline(n, l10n),

@@ -4,11 +4,16 @@ const ws = require('../ws');
 
 async function notify(userId, type, { actorId = null, entityId = null } = {}) {
   // Повторное событие того же типа от того же человека не плодит строки —
-  // «поднимаем» существующее непрочитанное (заявка → отмена → заявка)
+  // «поднимаем» последнее (заявка → отмена → заявка снова даёт одну запись,
+  // независимо от того, было ли предыдущее уже прочитано)
   if (actorId) {
     const dup = await db.query(
       `UPDATE notifications SET created_at=now(), is_read=false
-       WHERE user_id=$1 AND type=$2 AND actor_id=$3 AND is_read=false
+       WHERE id = (
+         SELECT id FROM notifications
+         WHERE user_id=$1 AND type=$2 AND actor_id=$3
+         ORDER BY created_at DESC LIMIT 1
+       )
        RETURNING id, created_at`,
       [userId, type, actorId]);
     if (dup.rowCount) {
