@@ -29,6 +29,24 @@ class ServiceCardScreen extends ConsumerStatefulWidget {
 
 class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
   int _photoIndex = 0;
+  final _photoController = PageController();
+
+  @override
+  void dispose() {
+    _photoController.dispose();
+    super.dispose();
+  }
+
+  /// Соседнее фото по кругу — тап по краю галереи
+  void _stepPhoto(int delta, int count) {
+    final next = (_photoIndex + delta + count) % count;
+    _photoController.animateToPage(
+      next,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
+    );
+  }
+
   bool _liking = false;
 
   bool get _isGuest =>
@@ -213,6 +231,7 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
       child: Stack(
         children: [
           PageView.builder(
+            controller: _photoController,
             itemCount: photos.length,
             onPageChanged: (i) => setState(() => _photoIndex = i),
             itemBuilder: (context, index) => CachedNetworkImage(
@@ -229,6 +248,26 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
               ),
             ),
           ),
+          // Тап по левой/правой половине листает; свайп работает как раньше
+          if (photos.length > 1)
+            Positioned.fill(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _stepPhoto(-1, photos.length),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _stepPhoto(1, photos.length),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           // Кнопки поверх фото
           Positioned(
             top: MediaQuery.of(context).padding.top + 8,
@@ -268,36 +307,43 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
               bottom: 12,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < photos.length; i++)
-                    Container(
-                      width: 6,
-                      height: 6,
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: i == _photoIndex
-                            ? AppColors.coral
-                            : Colors.white70,
+              child: IgnorePointer(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < photos.length; i++)
+                      Container(
+                        width: 6,
+                        height: 6,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: i == _photoIndex
+                              ? AppColors.coral
+                              : Colors.white70,
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
             Positioned(
               bottom: 12,
               right: 12,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  '${_photoIndex + 1}/${photos.length}',
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+              child: IgnorePointer(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '${_photoIndex + 1}/${photos.length}',
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
                 ),
               ),
             ),
