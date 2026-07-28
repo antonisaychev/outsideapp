@@ -8,7 +8,12 @@ app.set('trust proxy', 1);
 app.use(express.json({ limit: '1mb' }));
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-app.get('/health', (req, res) => res.json({ ok: true, service: 'outside-api' }));
+// version — чтобы одной командой понять, обновлён ли сервер после git pull
+app.get('/health', (req, res) => res.json({
+  ok: true,
+  service: 'outside-api',
+  version: require('../package.json').version,
+}));
 
 app.use('/auth', require('./routes/auth'));
 app.use('/', require('./routes/public'));

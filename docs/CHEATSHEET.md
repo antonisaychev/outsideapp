@@ -45,10 +45,18 @@ pm2 restart outside-api
 ```
 pm2 status                    # запущен ли сервер
 pm2 logs outside-api          # логи (последние строки)
-curl https://api.outside.ink/health   # должно вернуть {"ok":true,...}
+curl https://api.outside.ink/health   # вернёт {"ok":true,...,"version":"1.1.0"}
 systemctl status nginx
 systemctl status postgresql
 ```
+
+### Приложение выдаёт странную ошибку — сначала проверьте версию сервера
+```
+curl https://api.outside.ink/health
+```
+Если `version` меньше, чем в файле `backend/package.json` на Mac, — сервер
+работает на старом коде, нужно обновить (команды выше). Половина «багов»
+приложения — это просто необновлённый сервер.
 
 ### Если что-то сломалось
 ```

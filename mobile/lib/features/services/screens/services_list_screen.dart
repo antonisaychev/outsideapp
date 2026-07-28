@@ -30,50 +30,6 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
   bool get _isGuest =>
       ref.read(sessionControllerProvider).status != SessionStatus.ready;
 
-  Future<void> _openCityPicker() async {
-    final l10n = AppLocalizations.of(context)!;
-    final cities = await ref.read(citiesProvider.future);
-    if (!mounted) return;
-    final selected = await showModalBottomSheet<int>(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
-              child: Text(
-                l10n.placeSheetTitle,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ),
-            for (final city in cities)
-              ListTile(
-                leading: Text(city.flag, style: const TextStyle(fontSize: 24)),
-                title: Text(localizedName(context, city.nameRu, city.nameEn)),
-                subtitle: Text(
-                  localizedName(
-                    context,
-                    localizedName(context, city.countryRu, city.countryEn),
-                    city.countryEn,
-                  ),
-                ),
-                onTap: () => Navigator.of(context).pop(city.id),
-              ),
-            const SizedBox(height: 12),
-          ],
-        ),
-      ),
-    );
-    if (selected != null) {
-      ref.read(viewCityIdProvider.notifier).state = selected;
-    }
-  }
-
   Future<void> _toggleFavorite(ServiceSummary service, bool isFavorite) async {
     final l10n = AppLocalizations.of(context)!;
     if (_isGuest) {
@@ -184,15 +140,6 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                       context.push('/notifications');
                     }
                   },
-                ),
-                TextButton(
-                  onPressed: _openCityPicker,
-                  child: Row(
-                    children: [
-                      Text(cityName(cityId)),
-                      const Icon(Icons.keyboard_arrow_down, size: 20),
-                    ],
-                  ),
                 ),
               ],
             ),
