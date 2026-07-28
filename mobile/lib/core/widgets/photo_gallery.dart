@@ -59,39 +59,58 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               controller: _controller,
               itemCount: urls.length,
               onPageChanged: (i) => setState(() => _index = i),
-              itemBuilder: (context, i) => GestureDetector(
-                onTap: () => _openViewer(i),
-                child: CachedNetworkImage(
-                  imageUrl: absoluteFileUrl(urls[i]),
-                  fit: BoxFit.cover,
-                  filterQuality: FilterQuality.medium,
-                  placeholder: (context, url) =>
-                      Container(color: AppColors.surface),
-                  errorWidget: (context, url, error) =>
-                      Container(color: AppColors.surface),
-                ),
+              itemBuilder: (context, i) => CachedNetworkImage(
+                imageUrl: absoluteFileUrl(urls[i]),
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
+                placeholder: (context, url) =>
+                    Container(color: AppColors.surface),
+                errorWidget: (context, url, error) =>
+                    Container(color: AppColors.surface),
               ),
             ),
+            // Тап по левой/правой половине листает; свайп по-прежнему работает —
+            // при перетаскивании жест уходит в PageView
+            if (urls.length > 1)
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _step(-1, urls.length),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _step(1, urls.length),
+                    ),
+                  ),
+                ],
+              ),
             if (urls.length > 1)
               Positioned(
                 left: 0,
                 right: 0,
                 bottom: 14,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var i = 0; i < urls.length; i++)
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        width: i == _index ? 18 : 6,
-                        height: 6,
-                        decoration: BoxDecoration(
-                          color: i == _index ? Colors.white : Colors.white54,
-                          borderRadius: BorderRadius.circular(3),
+                // точки не должны перехватывать тап по нижней части фото
+                child: IgnorePointer(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < urls.length; i++)
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          margin: const EdgeInsets.symmetric(horizontal: 3),
+                          width: i == _index ? 18 : 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: i == _index ? Colors.white : Colors.white54,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
           ],
@@ -100,13 +119,13 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     );
   }
 
-  void _openViewer(int initialIndex) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: true,
-        builder: (context) =>
-            _PhotoViewer(urls: _urls, initial: initialIndex),
-      ),
+  /// Соседнее фото по кругу: с последнего — снова на первое
+  void _step(int delta, int count) {
+    final next = (_index + delta + count) % count;
+    _controller.animateToPage(
+      next,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
     );
   }
 }
@@ -132,37 +151,6 @@ class _Placeholder extends StatelessWidget {
             fontSize: 42,
             fontWeight: FontWeight.w600,
             color: AppColors.textSecondary,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _PhotoViewer extends StatelessWidget {
-  const _PhotoViewer({required this.urls, required this.initial});
-
-  final List<String> urls;
-  final int initial;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: PageView.builder(
-        controller: PageController(initialPage: initial),
-        itemCount: urls.length,
-        itemBuilder: (context, index) => InteractiveViewer(
-          child: Center(
-            child: CachedNetworkImage(
-              imageUrl: absoluteFileUrl(urls[index]),
-              fit: BoxFit.contain,
-            ),
           ),
         ),
       ),
