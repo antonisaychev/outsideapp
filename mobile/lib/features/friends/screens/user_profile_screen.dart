@@ -9,6 +9,7 @@ import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/auth_gate_sheet.dart';
 import '../../../core/widgets/report_form_sheet.dart';
+import '../../../core/widgets/photo_strip.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
@@ -249,6 +250,10 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                     radius: 52,
                   ),
                 ),
+                if (profile.photos.length > 1) ...[
+                  const SizedBox(height: 16),
+                  PhotoStrip(photos: profile.photos),
+                ],
                 const SizedBox(height: 16),
                 Text(
                   profile.displayName,

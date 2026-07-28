@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/widgets/tab_header.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
@@ -68,13 +69,7 @@ class ChatsTabScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
-            child: Text(
-              l10n.messagesTitle,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-          ),
+          TabHeader(title: l10n.messagesTitle),
           Expanded(
             child: conversationsAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),

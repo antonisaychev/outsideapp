@@ -1,3 +1,18 @@
+/// Фото профиля: до 10 штук, первое — главное (оно же аватар).
+class UserPhoto {
+  const UserPhoto({required this.id, required this.url});
+
+  final String id;
+  final String url;
+
+  factory UserPhoto.fromJson(Map<String, dynamic> json) =>
+      UserPhoto(id: json['id'] as String, url: json['url'] as String);
+
+  static List<UserPhoto> listFrom(dynamic raw) => (raw as List? ?? [])
+      .map((e) => UserPhoto.fromJson(e as Map<String, dynamic>))
+      .toList();
+}
+
 /// Профиль текущего пользователя (ответ GET/PATCH /me).
 class MeProfile {
   MeProfile({
@@ -16,6 +31,7 @@ class MeProfile {
     this.role,
     this.friendsCount = 0,
     this.servicesCount = 0,
+    this.photos = const [],
   });
 
   final String id;
@@ -33,6 +49,7 @@ class MeProfile {
   final String? role;
   final int friendsCount;
   final int servicesCount;
+  final List<UserPhoto> photos;
 
   bool get isAdmin => role == 'admin';
 
@@ -52,6 +69,7 @@ class MeProfile {
     role: json['role'] as String?,
     friendsCount: (json['friends_count'] as int?) ?? 0,
     servicesCount: (json['services_count'] as int?) ?? 0,
+    photos: UserPhoto.listFrom(json['photos']),
   );
 
   // Онбординг (docs/TZ_Outside_v5_3_changes.md, п.2) — 3 обязательных шага.
@@ -78,6 +96,7 @@ class PublicProfile {
     this.homeCountry,
     this.friendsCount = 0,
     this.servicesCount = 0,
+    this.photos = const [],
   });
 
   final String id;
@@ -90,6 +109,7 @@ class PublicProfile {
   final String? homeCountry;
   final int friendsCount;
   final int servicesCount;
+  final List<UserPhoto> photos;
 
   String get displayName =>
       [firstName, lastName].where((s) => s != null && s.isNotEmpty).join(' ');
@@ -105,6 +125,7 @@ class PublicProfile {
     homeCountry: json['home_country'] as String?,
     friendsCount: (json['friends_count'] as int?) ?? 0,
     servicesCount: (json['services_count'] as int?) ?? 0,
+    photos: UserPhoto.listFrom(json['photos']),
   );
 }
 

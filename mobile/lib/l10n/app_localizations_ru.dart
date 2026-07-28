@@ -138,7 +138,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get onboardingStep2Subtitle =>
-      'Выберите ваших соотечественников или с кем хотите пообщаться';
+      'Отметьте страну, откуда вы приехали — так вас найдут земляки';
 
   @override
   String get searchCountry => 'Поиск страны';
@@ -150,7 +150,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingStep3Title => 'Где вы находитесь?';
 
   @override
-  String get citiesFootnote => 'Скоро добавим новые города';
+  String get citiesFootnote => 'Скоро добавим новые места';
 
   @override
   String get done => 'Готово';
@@ -208,7 +208,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get blockedSubtitle =>
-      'Если вы считаете это ошибкой — напишите нам, разберёмся';
+      'Считаете, что это ошибка? Напишите нам — разберёмся';
 
   @override
   String get contactSupport => 'Написать в поддержку';
@@ -218,7 +218,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get avatarUploadFailed =>
-      'Не удалось загрузить фото — добавите его позже в профиле';
+      'Не удалось загрузить фото. Попробуйте ещё раз';
 
   @override
   String get homeWelcomeTitle => 'Добро пожаловать в Outside!';
@@ -290,10 +290,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get recommendButton => '👍 Рекомендую';
+  String get recommendButton => 'Рекомендую';
 
   @override
-  String get youRecommend => '✓ Вы рекомендуете';
+  String get youRecommend => 'Вы рекомендуете';
 
   @override
   String confirmButton(int count, int threshold) {
@@ -342,8 +342,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reportSubmit => 'Отправить жалобу';
 
   @override
-  String get reportSent =>
-      'Жалоба отправлена. Мы все проверим и примем решение.';
+  String get reportSent => 'Жалоба отправлена — мы её рассмотрим';
 
   @override
   String get addServiceTitle => 'Новая рекомендация';
@@ -363,7 +362,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get makeCover => 'Сделать обложкой';
 
   @override
-  String get deletePhoto => 'Удалить';
+  String get deletePhoto => 'Удалить фото';
 
   @override
   String get serviceNameHint => 'Название сервиса';
@@ -413,12 +412,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String notifFriendAccepted(String name) {
-    return '$name принял(а) вашу заявку в друзья';
+    return '$name принял(а) заявку — теперь вы друзья';
   }
 
   @override
   String notifMatch(String name) {
-    return 'Это мэтч! Вы и $name теперь друзья';
+    return 'Вы понравились друг другу с $name — теперь вы друзья';
   }
 
   @override
@@ -466,7 +465,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get datingEnableBody =>
-      'Включите участие — и мы покажем вас другим экспатам в вашем месте. Выключить можно в любой момент';
+      'Включите — и вас начнут показывать другим экспатам рядом. Выключить можно в любой момент';
 
   @override
   String get datingEnableButton => 'Включить знакомства';
@@ -486,16 +485,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get datingIncompleteAction => 'Заполнить';
 
   @override
-  String get datingVisibilityNote => 'Вас показывают другим в этом разделе';
+  String get deckEmpty => 'Вы посмотрели всех, кто рядом. Загляните позже';
 
   @override
-  String get datingVisibilityChange => 'Изменить';
-
-  @override
-  String get deckEmpty => 'Вы посмотрели всех. Загляните позже';
-
-  @override
-  String get likeLimitReached => 'Лимит лайков на сегодня исчерпан';
+  String get likeLimitReached => 'На сегодня лайки закончились';
 
   @override
   String get matchTitle => 'Это мэтч! 🎉';
@@ -512,14 +505,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get matchLater => 'Позже';
 
   @override
-  String get datingSettingsTitle => 'Анкета';
+  String get datingSettingsTitle => 'Настройки знакомств';
 
   @override
-  String get datingParticipate => 'Участвовать';
+  String get datingParticipate => 'Показывать меня в Знакомствах';
 
   @override
   String get datingParticipateHint =>
-      'Показывать вас в колоде и показывать вам других';
+      'Другие видят ваш профиль в этом разделе. Выключите — и вас перестанут показывать';
 
   @override
   String get lookingForLabel => 'Что ищете';
@@ -543,12 +536,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showGenderAny => 'Всех';
 
   @override
-  String get myMatches => 'Мои мэтчи';
-
-  @override
-  String get matchesEmpty => 'Мэтчей пока нет — свайпайте!';
-
-  @override
   String get messageDeleted => 'Сообщение удалено';
 
   @override
@@ -558,8 +545,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get messagesTitle => 'Сообщения';
 
   @override
-  String get messagesEmpty =>
-      'Пока нет диалогов. Сообщения доступны между друзьями';
+  String get messagesEmpty => 'Здесь появятся переписки. Писать можно друзьям';
 
   @override
   String get toFriends => 'К друзьям';
@@ -568,7 +554,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get messageHint => 'Сообщение';
 
   @override
-  String get cannotMessageUser => 'Вы не можете писать этому пользователю';
+  String get cannotMessageUser => 'Написать можно только друзьям';
 
   @override
   String get guestMessagesTitle => 'Войдите, чтобы переписываться с друзьями';
@@ -610,16 +596,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get cancelRequestTitle => 'Отменить заявку?';
 
   @override
-  String get requestSent => 'Отправлено ✓';
+  String get requestSent => 'Заявка отправлена';
 
   @override
-  String get addFriend => '+ Добавить';
+  String get addFriend => 'Добавить в друзья';
 
   @override
-  String get alreadyFriends => '✓ Друзья';
+  String get alreadyFriends => 'Вы друзья';
 
   @override
-  String get writeMessage => 'Написать';
+  String get writeMessage => 'Написать сообщение';
 
   @override
   String get removeFriend => 'Удалить из друзей';
@@ -666,7 +652,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String allInCity(String city) {
-    return 'Все на $city';
+    return 'Все, кто здесь';
   }
 
   @override
@@ -746,7 +732,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get deleteAccountWarning =>
-      'Профиль будет удалён, ваши карточки сервисов скроются. Действие необратимо.';
+      'Профиль удалится, ваши карточки сервисов скроются. Отменить это нельзя';
 
   @override
   String get deleteAccountContinue => 'Продолжить';
@@ -758,7 +744,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteAccountConfirm => 'Удалить навсегда';
 
   @override
-  String get changePhoto => 'Изменить фото';
+  String get photosLabel => 'Фото';
+
+  @override
+  String get photosHint =>
+      'До 10 фото. Первое видят в знакомствах и рядом с именем';
+
+  @override
+  String get photosLimitReached => 'Больше 10 фото добавить нельзя';
+
+  @override
+  String get makeMainPhoto => 'Сделать главным';
+
+  @override
+  String get mainPhotoBadge => 'Главное';
 
   @override
   String get bioHint => 'О себе';

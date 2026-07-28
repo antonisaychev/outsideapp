@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/models.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/services_api.dart';
@@ -155,53 +156,45 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Шапка: заголовок + избранное + колокольчик + место
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 12, 16, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.servicesTitle,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
+            TabHeader(
+              title: l10n.servicesTitle,
+              actions: [
+                HeaderIconButton(
+                  icon: const Icon(Icons.favorite_border),
+                  onPressed: () {
+                    if (isGuest) {
+                      showAuthGateSheet(context, l10n.authGateActionFavorite);
+                    } else {
+                      context.push('/favorites');
+                    }
+                  },
+                ),
+                HeaderIconButton(
+                  icon: Badge(
+                    // красная точка при непрочитанных (спека, экран 04)
+                    isLabelVisible: !isGuest && unreadNotifications > 0,
+                    backgroundColor: AppColors.coral,
+                    smallSize: 8,
+                    child: const Icon(Icons.notifications_none),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.favorite_border),
-                    onPressed: () {
-                      if (isGuest) {
-                        showAuthGateSheet(context, l10n.authGateActionFavorite);
-                      } else {
-                        context.push('/favorites');
-                      }
-                    },
+                  onPressed: () {
+                    if (isGuest) {
+                      showAuthGateSheet(context, l10n.authGateActionFavorite);
+                    } else {
+                      context.push('/notifications');
+                    }
+                  },
+                ),
+                TextButton(
+                  onPressed: _openCityPicker,
+                  child: Row(
+                    children: [
+                      Text(cityName(cityId)),
+                      const Icon(Icons.keyboard_arrow_down, size: 20),
+                    ],
                   ),
-                  IconButton(
-                    icon: Badge(
-                      // красная точка при непрочитанных (спека, экран 04)
-                      isLabelVisible: !isGuest && unreadNotifications > 0,
-                      backgroundColor: AppColors.coral,
-                      smallSize: 8,
-                      child: const Icon(Icons.notifications_none),
-                    ),
-                    onPressed: () {
-                      if (isGuest) {
-                        showAuthGateSheet(context, l10n.authGateActionFavorite);
-                      } else {
-                        context.push('/notifications');
-                      }
-                    },
-                  ),
-                  TextButton(
-                    onPressed: _openCityPicker,
-                    child: Row(
-                      children: [
-                        Text(cityName(cityId)),
-                        const Icon(Icons.keyboard_arrow_down, size: 20),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             // Табы
             Padding(

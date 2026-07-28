@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +10,6 @@ import '../../../core/api/models.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/primary_button.dart';
-import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
 import '../../auth/providers/session_controller.dart';
@@ -33,8 +31,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   String? _homeCountry;
   String? _gender;
   DateTime? _birthDate;
-  File? _newAvatar;
+  late List<UserPhoto> _photos;
   bool _submitting = false;
+  bool _photoBusy = false;
+
+  static const _maxPhotos = 10;
 
   MeProfile get _profile => ref.read(sessionControllerProvider).profile!;
 
@@ -49,6 +50,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     _homeCountry = p.homeCountry;
     _gender = p.gender;
     _birthDate = p.birthDate != null ? DateTime.tryParse(p.birthDate!) : null;
+    _photos = List.of(p.photos);
   }
 
   @override
@@ -64,8 +66,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final origBirth = p.birthDate != null
         ? DateTime.tryParse(p.birthDate!)
         : null;
-    return _newAvatar != null ||
-        _firstNameController.text.trim() != (p.firstName ?? '') ||
+    return _firstNameController.text.trim() != (p.firstName ?? '') ||
         _lastNameController.text.trim() != (p.lastName ?? '') ||
         _bioController.text.trim() != (p.bio ?? '') ||
         _cityId != p.cityId ||
@@ -79,14 +80,86 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       _firstNameController.text.trim().isNotEmpty &&
       _lastNameController.text.trim().isNotEmpty;
 
-  Future<void> _pickAvatar() async {
+  /// Фото применяются сразу, отдельно от кнопки «Сохранить»
+  Future<void> _runPhotoAction(
+    Future<List<UserPhoto>> Function() action,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _photoBusy = true);
+    try {
+      final photos = await action();
+      if (mounted) setState(() => _photos = photos);
+      await ref.read(sessionControllerProvider.notifier).refreshProfile();
+      ref.invalidate(datingProfileProvider);
+    } on ApiException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.error == 'TOO_MANY_PHOTOS'
+                  ? l10n.photosLimitReached
+                  : l10n.avatarUploadFailed,
+            ),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _photoBusy = false);
+    }
+  }
+
+  Future<void> _addPhoto() async {
     final picked = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       maxWidth: 1280,
       maxHeight: 1280,
       imageQuality: 85,
     );
-    if (picked != null) setState(() => _newAvatar = File(picked.path));
+    if (picked == null) return;
+    await _runPhotoAction(
+      () => ref.read(usersApiProvider).addPhoto(picked.path),
+    );
+  }
+
+  /// Тап по фото: сделать главным или удалить
+  Future<void> _photoMenu(UserPhoto photo, bool isMain) async {
+    final l10n = AppLocalizations.of(context)!;
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!isMain)
+              ListTile(
+                leading: const Icon(Icons.star_outline),
+                title: Text(l10n.makeMainPhoto),
+                onTap: () => Navigator.of(context).pop('main'),
+              ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: AppColors.error),
+              title: Text(
+                l10n.deletePhoto,
+                style: const TextStyle(color: AppColors.error),
+              ),
+              onTap: () => Navigator.of(context).pop('delete'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (action == 'main') {
+      await _runPhotoAction(
+        () => ref.read(usersApiProvider).makeMainPhoto(photo.id),
+      );
+    } else if (action == 'delete') {
+      await _runPhotoAction(
+        () => ref.read(usersApiProvider).deletePhoto(photo.id),
+      );
+    }
   }
 
   Future<void> _pickCity() async {
@@ -174,17 +247,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _submitting = true);
     try {
-      if (_newAvatar != null) {
-        try {
-          await ref.read(usersApiProvider).uploadAvatar(_newAvatar!.path);
-        } on ApiException {
-          if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(l10n.avatarUploadFailed)));
-          }
-        }
-      }
       await ref.read(sessionControllerProvider.notifier).updateProfile({
         'first_name': _firstNameController.text.trim(),
         'last_name': _lastNameController.text.trim(),
@@ -245,7 +307,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final profile = ref.watch(sessionControllerProvider).profile!;
+    // следим за профилем: фото могли обновиться из другого места
+    ref.watch(sessionControllerProvider.select((s) => s.profile?.photos.length));
     final cities = ref.watch(citiesProvider).valueOrNull ?? [];
 
     String cityName(int? id) {
@@ -277,34 +340,30 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       child: Scaffold(
         appBar: AppBar(title: Text(l10n.editProfile)),
         body: SafeArea(
+          bottom: false,
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
-                  child: GestureDetector(
-                    onTap: _pickAvatar,
-                    child: _newAvatar != null
-                        ? CircleAvatar(
-                            radius: 44,
-                            backgroundImage: FileImage(_newAvatar!),
-                          )
-                        : UserAvatar(
-                            avatarUrl: profile.avatarUrl,
-                            name: profile.firstName,
-                            radius: 44,
-                          ),
-                  ),
+                Text(
+                  l10n.photosLabel,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const SizedBox(height: 8),
-                Center(
-                  child: TextButton(
-                    onPressed: _pickAvatar,
-                    child: Text(l10n.changePhoto),
-                  ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.photosHint,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
+                _PhotoGrid(
+                  photos: _photos,
+                  busy: _photoBusy,
+                  canAdd: _photos.length < _maxPhotos,
+                  onAdd: _addPhoto,
+                  onTapPhoto: _photoMenu,
+                ),
+                const SizedBox(height: 24),
                 TextField(
                   controller: _firstNameController,
                   onChanged: (_) => setState(() {}),
@@ -352,17 +411,117 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   value: birthLabel(),
                   onTap: _pickBirthDate,
                 ),
-                const SizedBox(height: 24),
-                PrimaryButton(
-                  label: l10n.save,
-                  loading: _submitting,
-                  onPressed: _hasChanges && _valid ? _save : null,
-                ),
               ],
             ),
           ),
         ),
+        // Кнопка закреплена снизу: в скролле её перекрывала системная зона
+        bottomNavigationBar: SafeArea(
+          minimum: const EdgeInsets.fromLTRB(24, 8, 24, 12),
+          child: PrimaryButton(
+            label: l10n.save,
+            loading: _submitting,
+            onPressed: _hasChanges && _valid ? _save : null,
+          ),
+        ),
       ),
+    );
+  }
+}
+
+/// Сетка фото профиля: до 10 штук, первое — главное
+class _PhotoGrid extends StatelessWidget {
+  const _PhotoGrid({
+    required this.photos,
+    required this.busy,
+    required this.canAdd,
+    required this.onAdd,
+    required this.onTapPhoto,
+  });
+
+  final List<UserPhoto> photos;
+  final bool busy;
+  final bool canAdd;
+  final VoidCallback onAdd;
+  final void Function(UserPhoto photo, bool isMain) onTapPhoto;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        for (var i = 0; i < photos.length; i++)
+          GestureDetector(
+            onTap: busy ? null : () => onTapPhoto(photos[i], i == 0),
+            child: SizedBox(
+              width: 92,
+              height: 92,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadius.small),
+                    child: CachedNetworkImage(
+                      imageUrl: absoluteFileUrl(photos[i].url),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          Container(color: AppColors.surface),
+                      errorWidget: (context, url, error) =>
+                          Container(color: AppColors.surface),
+                    ),
+                  ),
+                  if (i == 0)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        color: Colors.black54,
+                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        alignment: Alignment.center,
+                        child: Text(
+                          l10n.mainPhotoBadge,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        if (canAdd)
+          GestureDetector(
+            onTap: busy ? null : onAdd,
+            child: Container(
+              width: 92,
+              height: 92,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppRadius.small),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: busy
+                  ? const Center(
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  : const Icon(
+                      Icons.add,
+                      size: 28,
+                      color: AppColors.textSecondary,
+                    ),
+            ),
+          ),
+      ],
     );
   }
 }

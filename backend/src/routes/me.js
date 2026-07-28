@@ -21,7 +21,9 @@ async function loadMe(userId) {
            u.bio, u.city_id, u.home_country, u.gender, u.birth_date, u.lang, u.account_type,
            u.role, u.created_at, u.last_seen_at,
            (SELECT count(*)::int FROM friendships f WHERE f.status='accepted' AND (f.requester_id=u.id OR f.addressee_id=u.id)) AS friends_count,
-           (SELECT count(*)::int FROM services s WHERE s.author_id=u.id AND s.status<>'hidden') AS services_count
+           (SELECT count(*)::int FROM services s WHERE s.author_id=u.id AND s.status<>'hidden') AS services_count,
+           COALESCE((SELECT json_agg(json_build_object('id', p.id, 'url', p.url) ORDER BY p.position, p.created_at)
+                     FROM user_photos p WHERE p.user_id=u.id), '[]'::json) AS photos
     FROM users u WHERE u.id=$1`, [userId]);
   return r.rows[0];
 }
@@ -82,7 +84,7 @@ router.patch('/', async (req, res) => {
   if (Object.keys(errors).length) return res.status(400).json({ errors });
   if (sets.length) {
     params.push(req.userId);
-    await db.query(`UPDATE users SET ${sets.join(', ')} WHERE id=$${i}`, params);
+    await db.query(`UPDATE users SET ${sets.join(', ')}, profile_updated_at=now() WHERE id=$${i}`, params);
   }
   res.json(await loadMe(req.userId));
 });
@@ -96,13 +98,70 @@ const upload = multer({
   fileFilter: (req, file, cb) => cb(null, ['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)),
 });
 
+const MAX_PHOTOS = 10;
+
+// Главное фото — первое в галерее; users.avatar_url держим синхронно,
+// чтобы старые экраны и запросы продолжали работать
+async function syncAvatar(userId) {
+  await db.query(`
+    UPDATE users SET avatar_url = (
+      SELECT p.url FROM user_photos p WHERE p.user_id=$1 ORDER BY p.position, p.created_at LIMIT 1
+    ), profile_updated_at = now() WHERE id=$1`, [userId]);
+}
+
+async function listPhotos(userId) {
+  const r = await db.query(
+    'SELECT id, url FROM user_photos WHERE user_id=$1 ORDER BY position, created_at', [userId]);
+  return r.rows;
+}
+
+// Совместимость: старая загрузка аватара = добавление первого фото
 router.post('/avatar', (req, res) => {
   upload.single('avatar')(req, res, async (err) => {
     if (err || !req.file) return res.status(400).json({ error: 'INVALID_FILE' });
-    const avatar_url = `/uploads/${req.file.filename}`;
-    await db.query('UPDATE users SET avatar_url=$1 WHERE id=$2', [avatar_url, req.userId]);
-    res.json({ avatar_url });
+    const url = `/uploads/${req.file.filename}`;
+    await db.query('DELETE FROM user_photos WHERE user_id=$1 AND position=0', [req.userId]);
+    await db.query('INSERT INTO user_photos (user_id, url, position) VALUES ($1,$2,0)', [req.userId, url]);
+    await syncAvatar(req.userId);
+    res.json({ avatar_url: url, photos: await listPhotos(req.userId) });
   });
+});
+
+router.get('/photos', async (req, res) => {
+  res.json(await listPhotos(req.userId));
+});
+
+// Добавить фото в галерею (максимум 10)
+router.post('/photos', (req, res) => {
+  upload.single('photo')(req, res, async (err) => {
+    if (err || !req.file) return res.status(400).json({ error: 'INVALID_FILE' });
+    const count = await db.query('SELECT count(*)::int AS c FROM user_photos WHERE user_id=$1', [req.userId]);
+    if (count.rows[0].c >= MAX_PHOTOS) return res.status(400).json({ error: 'TOO_MANY_PHOTOS' });
+    const url = `/uploads/${req.file.filename}`;
+    await db.query(
+      `INSERT INTO user_photos (user_id, url, position)
+       VALUES ($1, $2, COALESCE((SELECT max(position)+1 FROM user_photos WHERE user_id=$1), 0))`,
+      [req.userId, url]);
+    await syncAvatar(req.userId);
+    res.json({ photos: await listPhotos(req.userId) });
+  });
+});
+
+router.delete('/photos/:id', async (req, res) => {
+  const r = await db.query('DELETE FROM user_photos WHERE id=$1 AND user_id=$2 RETURNING id', [req.params.id, req.userId]);
+  if (!r.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
+  await syncAvatar(req.userId);
+  res.json({ photos: await listPhotos(req.userId) });
+});
+
+// Сделать фото главным — уезжает на позицию 0, остальные сдвигаются
+router.post('/photos/:id/main', async (req, res) => {
+  const own = await db.query('SELECT id FROM user_photos WHERE id=$1 AND user_id=$2', [req.params.id, req.userId]);
+  if (!own.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
+  await db.query('UPDATE user_photos SET position = position + 1 WHERE user_id=$1', [req.userId]);
+  await db.query('UPDATE user_photos SET position = 0 WHERE id=$1', [req.params.id]);
+  await syncAvatar(req.userId);
+  res.json({ photos: await listPhotos(req.userId) });
 });
 
 router.patch('/password', async (req, res) => {

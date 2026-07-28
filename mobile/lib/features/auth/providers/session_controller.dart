@@ -40,6 +40,10 @@ class SessionController extends StateNotifier<SessionState> {
     await _loadProfile();
   }
 
+  /// Перечитать профиль с сервера — данные могли измениться на другом
+  /// устройстве (QA_NOTES №46). Ошибки не показываем: это фоновая сверка.
+  Future<void> refreshProfile() => _loadProfile();
+
   Future<void> _loadProfile() async {
     try {
       final profile = await _usersApi.getMe();

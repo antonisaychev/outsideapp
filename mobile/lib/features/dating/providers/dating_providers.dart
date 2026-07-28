@@ -11,11 +11,6 @@ final datingProfileProvider = FutureProvider<DatingProfile>((ref) {
   return ref.read(datingApiProvider).getProfile();
 });
 
-final matchesProvider = FutureProvider<List<DatingMatch>>((ref) {
-  ref.watch(currentUserIdProvider);
-  return ref.read(datingApiProvider).matches();
-});
-
 /// Колода: локально снимаем свайпнутые карточки, подгружаем новую пачку,
 /// когда осталось мало (сервер сам исключает уже свайпнутых).
 class DeckState {
@@ -70,10 +65,7 @@ class DeckController extends StateNotifier<DeckState> {
     try {
       final result = await _api.swipe(card.id, like: like);
       if (state.cards.length <= 2) await load();
-      if (result.match) {
-        _ref.invalidate(matchesProvider);
-        return result.user;
-      }
+      if (result.match) return result.user;
     } on ApiException catch (e) {
       if (e.error == 'LIKE_LIMIT_REACHED') {
         state = state.copyWith(limitReached: true);

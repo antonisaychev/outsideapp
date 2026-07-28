@@ -60,7 +60,9 @@ router.get('/:idOrNick', async (req, res) => {
   const r = await db.query(
     `SELECT ${PROFILE_FIELDS},
        (SELECT count(*)::int FROM friendships f WHERE f.status='accepted' AND (f.requester_id=u.id OR f.addressee_id=u.id)) AS friends_count,
-       (SELECT count(*)::int FROM services s WHERE s.author_id=u.id AND s.status<>'hidden') AS services_count
+       (SELECT count(*)::int FROM services s WHERE s.author_id=u.id AND s.status<>'hidden') AS services_count,
+       COALESCE((SELECT json_agg(json_build_object('id', p.id, 'url', p.url) ORDER BY p.position, p.created_at)
+                 FROM user_photos p WHERE p.user_id=u.id), '[]'::json) AS photos
      FROM users u WHERE ${field}=$1 AND u.deleted_at IS NULL AND u.is_blocked = false`, [value]);
   if (!r.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
   res.json(r.rows[0]);

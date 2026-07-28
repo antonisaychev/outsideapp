@@ -74,6 +74,46 @@ class UsersApi {
       throw toApiException(e);
     }
   }
+
+  /// Фото профиля: до 10 штук, первое — главное
+  Future<List<UserPhoto>> photos() async {
+    try {
+      final r = await _dio.get('/me/photos');
+      return UserPhoto.listFrom(r.data);
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  Future<List<UserPhoto>> addPhoto(String filePath) async {
+    try {
+      final formData = FormData.fromMap({
+        'photo': await MultipartFile.fromFile(filePath),
+      });
+      final r = await _dio.post('/me/photos', data: formData);
+      return UserPhoto.listFrom(r.data['photos']);
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  Future<List<UserPhoto>> deletePhoto(String photoId) async {
+    try {
+      final r = await _dio.delete('/me/photos/$photoId');
+      return UserPhoto.listFrom(r.data['photos']);
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
+
+  Future<List<UserPhoto>> makeMainPhoto(String photoId) async {
+    try {
+      final r = await _dio.post('/me/photos/$photoId/main');
+      return UserPhoto.listFrom(r.data['photos']);
+    } on DioException catch (e) {
+      throw toApiException(e);
+    }
+  }
 }
 
 final usersApiProvider = Provider<UsersApi>(

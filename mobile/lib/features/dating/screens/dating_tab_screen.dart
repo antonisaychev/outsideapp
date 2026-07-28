@@ -4,7 +4,9 @@ import 'package:flutter/physics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/api_client.dart';
+import '../../../core/api/chats_api.dart';
 import '../../../core/api/dating_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
@@ -295,6 +297,15 @@ class _DeckViewState extends ConsumerState<_DeckView>
     final match = await pending;
     if (!mounted || match == null) return;
 
+    // Диалог готовим заранее: кнопка «Написать» не должна ждать сеть
+    String? conversationId;
+    try {
+      conversationId = await ref.read(chatsApiProvider).openWith(match.id);
+    } catch (_) {
+      // не страшно — попробуем ещё раз по нажатию кнопки
+    }
+    if (!mounted) return;
+
     // Экран 08 «Это мэтч!» — поверх всего, вместе с нижними вкладками
     final write = await Navigator.of(context, rootNavigator: true).push<bool>(
       MaterialPageRoute(
@@ -303,7 +314,10 @@ class _DeckViewState extends ConsumerState<_DeckView>
       ),
     );
     // Чат открываем отсюда: у экрана мэтча после закрытия context уже мёртв
-    if (write == true && mounted) {
+    if (write != true || !mounted) return;
+    if (conversationId != null) {
+      context.push('/chats/$conversationId?peer=${match.id}');
+    } else {
       await openChatWith(context, ref, match.id);
     }
   }
@@ -316,51 +330,14 @@ class _DeckViewState extends ConsumerState<_DeckView>
     return SafeArea(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 12, 12, 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    l10n.tabDating,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.tune),
-                  onPressed: () => context.push('/dating/settings'),
-                ),
-              ],
-            ),
-          ),
-          // Честно предупреждаем: раздел включён по умолчанию, вас видят
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 4),
-            child: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    l10n.datingVisibilityNote,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 6),
-                GestureDetector(
-                  onTap: () => context.push('/dating/settings'),
-                  child: Text(
-                    l10n.datingVisibilityChange,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.coral,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          TabHeader(
+            title: l10n.tabDating,
+            actions: [
+              HeaderIconButton(
+                icon: const Icon(Icons.tune),
+                onPressed: () => context.push('/dating/settings'),
+              ),
+            ],
           ),
           // Без фото/пола/даты рождения карточка не показывается другим
           if (!widget.profile.eligible)
@@ -445,6 +422,11 @@ class _DeckViewState extends ConsumerState<_DeckView>
                         // 0 → карточка в центре, 1 → на пороге принятия
                         final progress = (drag.dx.abs() / _distanceThreshold)
                             .clamp(0.0, 1.0);
+                        // значок проступает не сразу, а после первых 25 px
+                        final overlay = ((drag.dx.abs() - 25) / 85).clamp(
+                          0.0,
+                          1.0,
+                        );
                         return Stack(
                           alignment: Alignment.center,
                           children: [
@@ -477,10 +459,11 @@ class _DeckViewState extends ConsumerState<_DeckView>
                                       fit: StackFit.expand,
                                       children: [
                                         card!,
-                                        if (progress > 0.02)
+                                        if (overlay > 0)
                                           Opacity(
-                                            opacity: progress,
+                                            opacity: overlay,
                                             child: _SwipeOverlay(
+                                              scale: 0.7 + 0.3 * overlay,
                                               color: drag.dx > 0
                                                   ? AppColors.coral
                                                   : Colors.white,
@@ -527,22 +510,52 @@ class _DeckViewState extends ConsumerState<_DeckView>
   }
 }
 
-class _DeckCardView extends StatelessWidget {
+class _DeckCardView extends StatefulWidget {
   const _DeckCardView({super.key, required this.card});
 
   final DeckCard card;
 
   @override
+  State<_DeckCardView> createState() => _DeckCardViewState();
+}
+
+class _DeckCardViewState extends State<_DeckCardView> {
+  int _photoIndex = 0;
+
+  DeckCard get card => widget.card;
+
+  /// Все фото анкеты; если галереи нет — одно главное
+  List<String> get _urls => card.photos.isNotEmpty
+      ? card.photos.map((p) => p.url).toList()
+      : [if (card.avatarUrl != null && card.avatarUrl!.isNotEmpty) card.avatarUrl!];
+
+  void _step(int delta) {
+    final urls = _urls;
+    if (urls.length < 2) return;
+    setState(() => _photoIndex = (_photoIndex + delta) % urls.length);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final urls = _urls;
+    final photoUrl = urls.isEmpty
+        ? null
+        : urls[_photoIndex.clamp(0, urls.length - 1)];
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppRadius.large),
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (card.avatarUrl != null && card.avatarUrl!.isNotEmpty)
+          if (photoUrl != null)
             CachedNetworkImage(
-              imageUrl: absoluteFileUrl(card.avatarUrl!),
+              imageUrl: absoluteFileUrl(photoUrl),
               fit: BoxFit.cover,
+              // декодируем под ширину экрана, а не в оригинале
+              memCacheWidth:
+                  (MediaQuery.sizeOf(context).width *
+                          MediaQuery.devicePixelRatioOf(context))
+                      .round(),
+              fadeInDuration: const Duration(milliseconds: 120),
               placeholder: (context, url) =>
                   Container(color: AppColors.surface),
               errorWidget: (context, url, error) =>
@@ -560,6 +573,48 @@ class _DeckCardView extends StatelessWidget {
               ),
             ),
           ),
+          if (urls.length > 1) ...[
+            // зоны листания фото: левая и правая трети карточки
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => _step(-1),
+                  ),
+                ),
+                const Spacer(),
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => _step(1),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 12,
+              left: 12,
+              right: 12,
+              child: Row(
+                children: [
+                  for (var i = 0; i < urls.length; i++)
+                    Expanded(
+                      child: Container(
+                        height: 3,
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          color: i == _photoIndex
+                              ? Colors.white
+                              : Colors.white38,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
           Positioned(
             left: 20,
             right: 20,
@@ -596,17 +651,25 @@ class _DeckCardView extends StatelessWidget {
 }
 
 class _SwipeOverlay extends StatelessWidget {
-  const _SwipeOverlay({required this.color, required this.icon});
+  const _SwipeOverlay({
+    required this.color,
+    required this.icon,
+    this.scale = 1,
+  });
 
   final Color color;
   final IconData icon;
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black26,
       alignment: Alignment.center,
-      child: Icon(icon, size: 96, color: color),
+      child: Transform.scale(
+        scale: scale,
+        child: Icon(icon, size: 96, color: color),
+      ),
     );
   }
 }

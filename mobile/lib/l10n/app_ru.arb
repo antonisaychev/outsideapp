@@ -55,11 +55,11 @@
   "genderFemale": "Женский",
   "next": "Далее",
   "onboardingStep2Title": "Откуда вы?",
-  "onboardingStep2Subtitle": "Выберите ваших соотечественников или с кем хотите пообщаться",
+  "onboardingStep2Subtitle": "Отметьте страну, откуда вы приехали — так вас найдут земляки",
   "searchCountry": "Поиск страны",
   "otherCountry": "Другая страна…",
   "onboardingStep3Title": "Где вы находитесь?",
-  "citiesFootnote": "Скоро добавим новые города",
+  "citiesFootnote": "Скоро добавим новые места",
   "done": "Готово",
 
   "loginTitle": "Вход",
@@ -85,11 +85,11 @@
   "@blockedReasonLabel": {
     "placeholders": { "reason": {"type": "String"} }
   },
-  "blockedSubtitle": "Если вы считаете это ошибкой — напишите нам, разберёмся",
+  "blockedSubtitle": "Считаете, что это ошибка? Напишите нам — разберёмся",
   "contactSupport": "Написать в поддержку",
   "logout": "Выйти",
 
-  "avatarUploadFailed": "Не удалось загрузить фото — добавите его позже в профиле",
+  "avatarUploadFailed": "Не удалось загрузить фото. Попробуйте ещё раз",
   "homeWelcomeTitle": "Добро пожаловать в Outside!",
 
   "tabDating": "Знакомства",
@@ -121,8 +121,8 @@
   "@recommendCount": {
     "placeholders": { "count": {"type": "int"} }
   },
-  "recommendButton": "👍 Рекомендую",
-  "youRecommend": "✓ Вы рекомендуете",
+  "recommendButton": "Рекомендую",
+  "youRecommend": "Вы рекомендуете",
   "confirmButton": "Подтвердить ({count}/{threshold})",
   "@confirmButton": {
     "placeholders": { "count": {"type": "int"}, "threshold": {"type": "int"} }
@@ -144,7 +144,7 @@
   "reportCommentHint": "Комментарий (необязательно)",
   "reportCommentRequired": "Для «Другое» опишите проблему",
   "reportSubmit": "Отправить жалобу",
-  "reportSent": "Жалоба отправлена. Мы все проверим и примем решение.",
+  "reportSent": "Жалоба отправлена — мы её рассмотрим",
 
   "addServiceTitle": "Новая рекомендация",
   "addServiceSubtitle": "Рекомендуйте организации и сервисы, а не отдельных людей",
@@ -173,11 +173,11 @@
   "@notifFriendRequest": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifFriendAccepted": "{name} принял(а) вашу заявку в друзья",
+  "notifFriendAccepted": "{name} принял(а) заявку — теперь вы друзья",
   "@notifFriendAccepted": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifMatch": "Это мэтч! Вы и {name} теперь друзья",
+  "notifMatch": "Вы понравились друг другу с {name} — теперь вы друзья",
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
@@ -207,16 +207,14 @@
   "requestDeclined": "Заявка отклонена",
   "guestDatingTitle": "Войдите, чтобы знакомиться",
   "datingEnableTitle": "Знакомьтесь с людьми рядом",
-  "datingEnableBody": "Включите участие — и мы покажем вас другим экспатам в вашем месте. Выключить можно в любой момент",
+  "datingEnableBody": "Включите — и вас начнут показывать другим экспатам рядом. Выключить можно в любой момент",
   "datingEnableButton": "Включить знакомства",
   "datingProfileIncompleteTitle": "Заполните профиль",
   "datingProfileIncompleteBody": "Для знакомств нужны имя, фото, пол и дата рождения",
   "datingIncompleteBanner": "Добавьте фото, пол и дату рождения — иначе вас не покажут другим",
   "datingIncompleteAction": "Заполнить",
-  "datingVisibilityNote": "Вас показывают другим в этом разделе",
-  "datingVisibilityChange": "Изменить",
-  "deckEmpty": "Вы посмотрели всех. Загляните позже",
-  "likeLimitReached": "Лимит лайков на сегодня исчерпан",
+  "deckEmpty": "Вы посмотрели всех, кто рядом. Загляните позже",
+  "likeLimitReached": "На сегодня лайки закончились",
   "matchTitle": "Это мэтч! 🎉",
   "matchSubtitle": "Вы понравились друг другу с {name}",
   "@matchSubtitle": {
@@ -224,9 +222,9 @@
   },
   "matchWriteMessage": "Написать сообщение",
   "matchLater": "Позже",
-  "datingSettingsTitle": "Анкета",
-  "datingParticipate": "Участвовать",
-  "datingParticipateHint": "Показывать вас в колоде и показывать вам других",
+  "datingSettingsTitle": "Настройки знакомств",
+  "datingParticipate": "Показывать меня в Знакомствах",
+  "datingParticipateHint": "Другие видят ваш профиль в этом разделе. Выключите — и вас перестанут показывать",
   "lookingForLabel": "Что ищете",
   "lookingForAny": "Не важно",
   "lookingForFriends": "Друзей",
@@ -234,15 +232,13 @@
   "lookingForNetworking": "Нетворкинг",
   "showGenderLabel": "Кого показывать",
   "showGenderAny": "Всех",
-  "myMatches": "Мои мэтчи",
-  "matchesEmpty": "Мэтчей пока нет — свайпайте!",
   "messageDeleted": "Сообщение удалено",
   "deleteMessage": "Удалить сообщение",
   "messagesTitle": "Сообщения",
-  "messagesEmpty": "Пока нет диалогов. Сообщения доступны между друзьями",
+  "messagesEmpty": "Здесь появятся переписки. Писать можно друзьям",
   "toFriends": "К друзьям",
   "messageHint": "Сообщение",
-  "cannotMessageUser": "Вы не можете писать этому пользователю",
+  "cannotMessageUser": "Написать можно только друзьям",
   "guestMessagesTitle": "Войдите, чтобы переписываться с друзьями",
 
   "friendsTabMy": "Мои друзья",
@@ -257,10 +253,10 @@
   "declineRequest": "Отклонить",
   "cancelRequest": "Отменить",
   "cancelRequestTitle": "Отменить заявку?",
-  "requestSent": "Отправлено ✓",
-  "addFriend": "+ Добавить",
-  "alreadyFriends": "✓ Друзья",
-  "writeMessage": "Написать",
+  "requestSent": "Заявка отправлена",
+  "addFriend": "Добавить в друзья",
+  "alreadyFriends": "Вы друзья",
+  "writeMessage": "Написать сообщение",
   "removeFriend": "Удалить из друзей",
   "removeFriendTitle": "Удалить {name} из друзей?",
   "@removeFriendTitle": {
@@ -282,7 +278,7 @@
   "peopleSearchTitle": "Поиск людей",
   "peopleSearchHint": "Имя или фамилия",
   "compatriots": "Земляки",
-  "allInCity": "Все на {city}",
+  "allInCity": "Все, кто здесь",
   "@allInCity": {
     "placeholders": { "city": {"type": "String"} }
   },
@@ -312,11 +308,16 @@
   "privacyTitle": "Политика конфиденциальности",
   "logoutConfirmTitle": "Выйти из аккаунта?",
   "deleteAccountTitle": "Удалить аккаунт",
-  "deleteAccountWarning": "Профиль будет удалён, ваши карточки сервисов скроются. Действие необратимо.",
+  "deleteAccountWarning": "Профиль удалится, ваши карточки сервисов скроются. Отменить это нельзя",
   "deleteAccountContinue": "Продолжить",
   "deleteAccountPasswordTitle": "Введите пароль для подтверждения",
   "deleteAccountConfirm": "Удалить навсегда",
-  "changePhoto": "Изменить фото",
+  "photosLabel": "Фото",
+  "photosHint": "До 10 фото. Первое видят в знакомствах и рядом с именем",
+  "photosLimitReached": "Больше 10 фото добавить нельзя",
+  "makeMainPhoto": "Сделать главным",
+  "deletePhoto": "Удалить фото",
+  "mainPhotoBadge": "Главное",
   "bioHint": "О себе",
   "placeLabel": "Место",
   "countryLabel": "Страна",

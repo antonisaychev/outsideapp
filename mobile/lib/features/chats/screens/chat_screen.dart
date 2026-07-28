@@ -211,7 +211,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  // по нижнему краю: поле растёт вверх, кнопка стоит на месте
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
                       child: TextField(
@@ -222,11 +223,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           LengthLimitingTextInputFormatter(2000),
                         ],
                         onChanged: (_) => setState(() {}),
+                        // Поле-«таблетка» как в макете 09: тот же размер,
+                        // что и круглая кнопка рядом
                         decoration: InputDecoration(
                           hintText: l10n.messageHint,
+                          filled: true,
+                          fillColor: AppColors.surface,
+                          isDense: true,
+                          constraints: const BoxConstraints(minHeight: 48),
                           contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+                            horizontal: 18,
+                            vertical: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: const BorderSide(
+                              color: AppColors.coral,
+                            ),
                           ),
                         ),
                       ),

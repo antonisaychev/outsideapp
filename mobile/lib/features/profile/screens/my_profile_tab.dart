@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/photo_strip.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/data/countries.dart';
@@ -76,17 +78,20 @@ class MyProfileTab extends ConsumerWidget {
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+        padding: const EdgeInsets.fromLTRB(24, 0, 14, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: const Icon(Icons.settings_outlined),
-                onPressed: () => context.push('/settings'),
-              ),
+            TabHeader(
+              horizontalPadding: false,
+              actions: [
+                HeaderIconButton(
+                  icon: const Icon(Icons.settings_outlined),
+                  onPressed: () => context.push('/settings'),
+                ),
+              ],
             ),
+            const SizedBox(height: 4),
             Center(
               child: UserAvatar(
                 avatarUrl: profile.avatarUrl,
@@ -94,6 +99,10 @@ class MyProfileTab extends ConsumerWidget {
                 radius: 52,
               ),
             ),
+            if (profile.photos.length > 1) ...[
+              const SizedBox(height: 16),
+              PhotoStrip(photos: profile.photos),
+            ],
             const SizedBox(height: 16),
             Text(
               name,

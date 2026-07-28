@@ -55,11 +55,11 @@
   "genderFemale": "Female",
   "next": "Next",
   "onboardingStep2Title": "Where are you from?",
-  "onboardingStep2Subtitle": "Pick your compatriots or who you'd like to meet",
+  "onboardingStep2Subtitle": "Pick the country you came from — that’s how fellow expats find you",
   "searchCountry": "Search country",
   "otherCountry": "Other country…",
   "onboardingStep3Title": "Where are you now?",
-  "citiesFootnote": "More cities coming soon",
+  "citiesFootnote": "More places coming soon",
   "done": "Done",
 
   "loginTitle": "Log in",
@@ -85,11 +85,11 @@
   "@blockedReasonLabel": {
     "placeholders": { "reason": {"type": "String"} }
   },
-  "blockedSubtitle": "If you believe this is a mistake — write to us and we'll sort it out",
+  "blockedSubtitle": "Think this is a mistake? Write to us and we’ll sort it out",
   "contactSupport": "Contact support",
   "logout": "Log out",
 
-  "avatarUploadFailed": "Couldn't upload the photo — you can add it later in your profile",
+  "avatarUploadFailed": "Couldn’t upload the photo. Please try again",
   "homeWelcomeTitle": "Welcome to Outside!",
 
   "tabDating": "Dating",
@@ -121,8 +121,8 @@
   "@recommendCount": {
     "placeholders": { "count": {"type": "int"} }
   },
-  "recommendButton": "👍 Recommend",
-  "youRecommend": "✓ You recommend",
+  "recommendButton": "Recommend",
+  "youRecommend": "You recommend this",
   "confirmButton": "Confirm ({count}/{threshold})",
   "@confirmButton": {
     "placeholders": { "count": {"type": "int"}, "threshold": {"type": "int"} }
@@ -144,7 +144,7 @@
   "reportCommentHint": "Comment (optional)",
   "reportCommentRequired": "For \"Other\" please describe the problem",
   "reportSubmit": "Submit report",
-  "reportSent": "Report sent. We'll review it and take action.",
+  "reportSent": "Report sent — we’ll look into it",
 
   "addServiceTitle": "New recommendation",
   "addServiceSubtitle": "Recommend organizations and services, not individuals",
@@ -173,11 +173,11 @@
   "@notifFriendRequest": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifFriendAccepted": "{name} accepted your friend request",
+  "notifFriendAccepted": "{name} accepted your request — you’re friends now",
   "@notifFriendAccepted": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifMatch": "It's a match! You and {name} are now friends",
+  "notifMatch": "You and {name} liked each other — you’re friends now",
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
@@ -207,16 +207,14 @@
   "requestDeclined": "Request declined",
   "guestDatingTitle": "Log in to meet people",
   "datingEnableTitle": "Meet people nearby",
-  "datingEnableBody": "Turn on participation and we'll show you to other expats in your place. You can turn it off anytime",
+  "datingEnableBody": "Turn it on and we’ll show you to other expats nearby. You can switch it off anytime",
   "datingEnableButton": "Enable dating",
   "datingProfileIncompleteTitle": "Complete your profile",
   "datingProfileIncompleteBody": "Dating requires a name, photo, gender and date of birth",
   "datingIncompleteBanner": "Add a photo, gender and date of birth — otherwise others won’t see you",
   "datingIncompleteAction": "Fill in",
-  "datingVisibilityNote": "Others can see you in this section",
-  "datingVisibilityChange": "Change",
-  "deckEmpty": "You've seen everyone. Check back later",
-  "likeLimitReached": "You've reached today's like limit",
+  "deckEmpty": "You’ve seen everyone nearby. Check back later",
+  "likeLimitReached": "You’re out of likes for today",
   "matchTitle": "It's a match! 🎉",
   "matchSubtitle": "You and {name} liked each other",
   "@matchSubtitle": {
@@ -224,9 +222,9 @@
   },
   "matchWriteMessage": "Send a message",
   "matchLater": "Later",
-  "datingSettingsTitle": "Dating profile",
-  "datingParticipate": "Participate",
-  "datingParticipateHint": "Show you in the deck and show others to you",
+  "datingSettingsTitle": "Dating settings",
+  "datingParticipate": "Show me in Dating",
+  "datingParticipateHint": "Others see your profile in this section. Turn it off to hide",
   "lookingForLabel": "Looking for",
   "lookingForAny": "Anything",
   "lookingForFriends": "Friends",
@@ -234,15 +232,13 @@
   "lookingForNetworking": "Networking",
   "showGenderLabel": "Show me",
   "showGenderAny": "Everyone",
-  "myMatches": "My matches",
-  "matchesEmpty": "No matches yet — start swiping!",
   "messageDeleted": "Message deleted",
   "deleteMessage": "Delete message",
   "messagesTitle": "Messages",
-  "messagesEmpty": "No conversations yet. Messaging is available between friends",
+  "messagesEmpty": "Your chats will appear here. You can message friends",
   "toFriends": "To friends",
   "messageHint": "Message",
-  "cannotMessageUser": "You can't message this user",
+  "cannotMessageUser": "You can only message friends",
   "guestMessagesTitle": "Log in to message your friends",
 
   "friendsTabMy": "My friends",
@@ -257,10 +253,10 @@
   "declineRequest": "Decline",
   "cancelRequest": "Cancel",
   "cancelRequestTitle": "Cancel the request?",
-  "requestSent": "Sent ✓",
-  "addFriend": "+ Add",
-  "alreadyFriends": "✓ Friends",
-  "writeMessage": "Message",
+  "requestSent": "Request sent",
+  "addFriend": "Add friend",
+  "alreadyFriends": "You’re friends",
+  "writeMessage": "Send a message",
   "removeFriend": "Remove from friends",
   "removeFriendTitle": "Remove {name} from friends?",
   "@removeFriendTitle": {
@@ -282,7 +278,7 @@
   "peopleSearchTitle": "Find people",
   "peopleSearchHint": "First or last name",
   "compatriots": "Compatriots",
-  "allInCity": "Everyone in {city}",
+  "allInCity": "Everyone here",
   "@allInCity": {
     "placeholders": { "city": {"type": "String"} }
   },
@@ -312,11 +308,16 @@
   "privacyTitle": "Privacy Policy",
   "logoutConfirmTitle": "Log out?",
   "deleteAccountTitle": "Delete account",
-  "deleteAccountWarning": "Your profile will be deleted and your service cards hidden. This cannot be undone.",
+  "deleteAccountWarning": "Your profile will be deleted and your service cards hidden. This can’t be undone",
   "deleteAccountContinue": "Continue",
   "deleteAccountPasswordTitle": "Enter your password to confirm",
   "deleteAccountConfirm": "Delete forever",
-  "changePhoto": "Change photo",
+  "photosLabel": "Photos",
+  "photosHint": "Up to 10 photos. The first one appears in Dating and next to your name",
+  "photosLimitReached": "You can’t add more than 10 photos",
+  "makeMainPhoto": "Set as main",
+  "deletePhoto": "Delete photo",
+  "mainPhotoBadge": "Main",
   "bioHint": "About me",
   "placeLabel": "Place",
   "countryLabel": "Country",

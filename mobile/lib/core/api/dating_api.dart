@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_client.dart';
+import 'models.dart';
 
 /// Анкета знакомств (GET/PATCH /dating/profile).
 class DatingProfile {
@@ -41,12 +42,14 @@ class DeckCard {
     this.bio,
     this.gender,
     this.birthDate,
+    this.photos = const [],
   });
 
   final String id;
   final String username;
   final String? firstName;
   final String? avatarUrl;
+  final List<UserPhoto> photos;
   final String? bio;
   final String? gender;
   final DateTime? birthDate;
@@ -72,6 +75,7 @@ class DeckCard {
     firstName: json['first_name'] as String?,
     avatarUrl: json['avatar_url'] as String?,
     bio: json['bio'] as String?,
+    photos: UserPhoto.listFrom(json['photos']),
     gender: json['gender'] as String?,
     birthDate: json['birth_date'] != null
         ? DateTime.tryParse(json['birth_date'] as String)

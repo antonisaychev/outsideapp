@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingStep2Subtitle =>
-      'Pick your compatriots or who you\'d like to meet';
+      'Pick the country you came from — that’s how fellow expats find you';
 
   @override
   String get searchCountry => 'Search country';
@@ -150,7 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingStep3Title => 'Where are you now?';
 
   @override
-  String get citiesFootnote => 'More cities coming soon';
+  String get citiesFootnote => 'More places coming soon';
 
   @override
   String get done => 'Done';
@@ -207,7 +207,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get blockedSubtitle =>
-      'If you believe this is a mistake — write to us and we\'ll sort it out';
+      'Think this is a mistake? Write to us and we’ll sort it out';
 
   @override
   String get contactSupport => 'Contact support';
@@ -217,7 +217,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get avatarUploadFailed =>
-      'Couldn\'t upload the photo — you can add it later in your profile';
+      'Couldn’t upload the photo. Please try again';
 
   @override
   String get homeWelcomeTitle => 'Welcome to Outside!';
@@ -290,10 +290,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get recommendButton => '👍 Recommend';
+  String get recommendButton => 'Recommend';
 
   @override
-  String get youRecommend => '✓ You recommend';
+  String get youRecommend => 'You recommend this';
 
   @override
   String confirmButton(int count, int threshold) {
@@ -343,7 +343,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportSubmit => 'Submit report';
 
   @override
-  String get reportSent => 'Report sent. We\'ll review it and take action.';
+  String get reportSent => 'Report sent — we’ll look into it';
 
   @override
   String get addServiceTitle => 'New recommendation';
@@ -363,7 +363,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get makeCover => 'Make cover';
 
   @override
-  String get deletePhoto => 'Delete';
+  String get deletePhoto => 'Delete photo';
 
   @override
   String get serviceNameHint => 'Service name';
@@ -413,12 +413,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifFriendAccepted(String name) {
-    return '$name accepted your friend request';
+    return '$name accepted your request — you’re friends now';
   }
 
   @override
   String notifMatch(String name) {
-    return 'It\'s a match! You and $name are now friends';
+    return 'You and $name liked each other — you’re friends now';
   }
 
   @override
@@ -466,7 +466,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get datingEnableBody =>
-      'Turn on participation and we\'ll show you to other expats in your place. You can turn it off anytime';
+      'Turn it on and we’ll show you to other expats nearby. You can switch it off anytime';
 
   @override
   String get datingEnableButton => 'Enable dating';
@@ -486,16 +486,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get datingIncompleteAction => 'Fill in';
 
   @override
-  String get datingVisibilityNote => 'Others can see you in this section';
+  String get deckEmpty => 'You’ve seen everyone nearby. Check back later';
 
   @override
-  String get datingVisibilityChange => 'Change';
-
-  @override
-  String get deckEmpty => 'You\'ve seen everyone. Check back later';
-
-  @override
-  String get likeLimitReached => 'You\'ve reached today\'s like limit';
+  String get likeLimitReached => 'You’re out of likes for today';
 
   @override
   String get matchTitle => 'It\'s a match! 🎉';
@@ -512,14 +506,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get matchLater => 'Later';
 
   @override
-  String get datingSettingsTitle => 'Dating profile';
+  String get datingSettingsTitle => 'Dating settings';
 
   @override
-  String get datingParticipate => 'Participate';
+  String get datingParticipate => 'Show me in Dating';
 
   @override
   String get datingParticipateHint =>
-      'Show you in the deck and show others to you';
+      'Others see your profile in this section. Turn it off to hide';
 
   @override
   String get lookingForLabel => 'Looking for';
@@ -543,12 +537,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showGenderAny => 'Everyone';
 
   @override
-  String get myMatches => 'My matches';
-
-  @override
-  String get matchesEmpty => 'No matches yet — start swiping!';
-
-  @override
   String get messageDeleted => 'Message deleted';
 
   @override
@@ -559,7 +547,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messagesEmpty =>
-      'No conversations yet. Messaging is available between friends';
+      'Your chats will appear here. You can message friends';
 
   @override
   String get toFriends => 'To friends';
@@ -568,7 +556,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messageHint => 'Message';
 
   @override
-  String get cannotMessageUser => 'You can\'t message this user';
+  String get cannotMessageUser => 'You can only message friends';
 
   @override
   String get guestMessagesTitle => 'Log in to message your friends';
@@ -610,16 +598,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelRequestTitle => 'Cancel the request?';
 
   @override
-  String get requestSent => 'Sent ✓';
+  String get requestSent => 'Request sent';
 
   @override
-  String get addFriend => '+ Add';
+  String get addFriend => 'Add friend';
 
   @override
-  String get alreadyFriends => '✓ Friends';
+  String get alreadyFriends => 'You’re friends';
 
   @override
-  String get writeMessage => 'Message';
+  String get writeMessage => 'Send a message';
 
   @override
   String get removeFriend => 'Remove from friends';
@@ -666,7 +654,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String allInCity(String city) {
-    return 'Everyone in $city';
+    return 'Everyone here';
   }
 
   @override
@@ -746,7 +734,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountWarning =>
-      'Your profile will be deleted and your service cards hidden. This cannot be undone.';
+      'Your profile will be deleted and your service cards hidden. This can’t be undone';
 
   @override
   String get deleteAccountContinue => 'Continue';
@@ -758,7 +746,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccountConfirm => 'Delete forever';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get photosLabel => 'Photos';
+
+  @override
+  String get photosHint =>
+      'Up to 10 photos. The first one appears in Dating and next to your name';
+
+  @override
+  String get photosLimitReached => 'You can’t add more than 10 photos';
+
+  @override
+  String get makeMainPhoto => 'Set as main';
+
+  @override
+  String get mainPhotoBadge => 'Main';
 
   @override
   String get bioHint => 'About me';

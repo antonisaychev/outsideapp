@@ -335,7 +335,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingStep2Subtitle.
   ///
   /// In ru, this message translates to:
-  /// **'Выберите ваших соотечественников или с кем хотите пообщаться'**
+  /// **'Отметьте страну, откуда вы приехали — так вас найдут земляки'**
   String get onboardingStep2Subtitle;
 
   /// No description provided for @searchCountry.
@@ -359,7 +359,7 @@ abstract class AppLocalizations {
   /// No description provided for @citiesFootnote.
   ///
   /// In ru, this message translates to:
-  /// **'Скоро добавим новые города'**
+  /// **'Скоро добавим новые места'**
   String get citiesFootnote;
 
   /// No description provided for @done.
@@ -461,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @blockedSubtitle.
   ///
   /// In ru, this message translates to:
-  /// **'Если вы считаете это ошибкой — напишите нам, разберёмся'**
+  /// **'Считаете, что это ошибка? Напишите нам — разберёмся'**
   String get blockedSubtitle;
 
   /// No description provided for @contactSupport.
@@ -479,7 +479,7 @@ abstract class AppLocalizations {
   /// No description provided for @avatarUploadFailed.
   ///
   /// In ru, this message translates to:
-  /// **'Не удалось загрузить фото — добавите его позже в профиле'**
+  /// **'Не удалось загрузить фото. Попробуйте ещё раз'**
   String get avatarUploadFailed;
 
   /// No description provided for @homeWelcomeTitle.
@@ -611,13 +611,13 @@ abstract class AppLocalizations {
   /// No description provided for @recommendButton.
   ///
   /// In ru, this message translates to:
-  /// **'👍 Рекомендую'**
+  /// **'Рекомендую'**
   String get recommendButton;
 
   /// No description provided for @youRecommend.
   ///
   /// In ru, this message translates to:
-  /// **'✓ Вы рекомендуете'**
+  /// **'Вы рекомендуете'**
   String get youRecommend;
 
   /// No description provided for @confirmButton.
@@ -707,7 +707,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportSent.
   ///
   /// In ru, this message translates to:
-  /// **'Жалоба отправлена. Мы все проверим и примем решение.'**
+  /// **'Жалоба отправлена — мы её рассмотрим'**
   String get reportSent;
 
   /// No description provided for @addServiceTitle.
@@ -743,7 +743,7 @@ abstract class AppLocalizations {
   /// No description provided for @deletePhoto.
   ///
   /// In ru, this message translates to:
-  /// **'Удалить'**
+  /// **'Удалить фото'**
   String get deletePhoto;
 
   /// No description provided for @serviceNameHint.
@@ -833,13 +833,13 @@ abstract class AppLocalizations {
   /// No description provided for @notifFriendAccepted.
   ///
   /// In ru, this message translates to:
-  /// **'{name} принял(а) вашу заявку в друзья'**
+  /// **'{name} принял(а) заявку — теперь вы друзья'**
   String notifFriendAccepted(String name);
 
   /// No description provided for @notifMatch.
   ///
   /// In ru, this message translates to:
-  /// **'Это мэтч! Вы и {name} теперь друзья'**
+  /// **'Вы понравились друг другу с {name} — теперь вы друзья'**
   String notifMatch(String name);
 
   /// No description provided for @notifServiceRecommended.
@@ -911,7 +911,7 @@ abstract class AppLocalizations {
   /// No description provided for @datingEnableBody.
   ///
   /// In ru, this message translates to:
-  /// **'Включите участие — и мы покажем вас другим экспатам в вашем месте. Выключить можно в любой момент'**
+  /// **'Включите — и вас начнут показывать другим экспатам рядом. Выключить можно в любой момент'**
   String get datingEnableBody;
 
   /// No description provided for @datingEnableButton.
@@ -944,28 +944,16 @@ abstract class AppLocalizations {
   /// **'Заполнить'**
   String get datingIncompleteAction;
 
-  /// No description provided for @datingVisibilityNote.
-  ///
-  /// In ru, this message translates to:
-  /// **'Вас показывают другим в этом разделе'**
-  String get datingVisibilityNote;
-
-  /// No description provided for @datingVisibilityChange.
-  ///
-  /// In ru, this message translates to:
-  /// **'Изменить'**
-  String get datingVisibilityChange;
-
   /// No description provided for @deckEmpty.
   ///
   /// In ru, this message translates to:
-  /// **'Вы посмотрели всех. Загляните позже'**
+  /// **'Вы посмотрели всех, кто рядом. Загляните позже'**
   String get deckEmpty;
 
   /// No description provided for @likeLimitReached.
   ///
   /// In ru, this message translates to:
-  /// **'Лимит лайков на сегодня исчерпан'**
+  /// **'На сегодня лайки закончились'**
   String get likeLimitReached;
 
   /// No description provided for @matchTitle.
@@ -995,19 +983,19 @@ abstract class AppLocalizations {
   /// No description provided for @datingSettingsTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Анкета'**
+  /// **'Настройки знакомств'**
   String get datingSettingsTitle;
 
   /// No description provided for @datingParticipate.
   ///
   /// In ru, this message translates to:
-  /// **'Участвовать'**
+  /// **'Показывать меня в Знакомствах'**
   String get datingParticipate;
 
   /// No description provided for @datingParticipateHint.
   ///
   /// In ru, this message translates to:
-  /// **'Показывать вас в колоде и показывать вам других'**
+  /// **'Другие видят ваш профиль в этом разделе. Выключите — и вас перестанут показывать'**
   String get datingParticipateHint;
 
   /// No description provided for @lookingForLabel.
@@ -1052,18 +1040,6 @@ abstract class AppLocalizations {
   /// **'Всех'**
   String get showGenderAny;
 
-  /// No description provided for @myMatches.
-  ///
-  /// In ru, this message translates to:
-  /// **'Мои мэтчи'**
-  String get myMatches;
-
-  /// No description provided for @matchesEmpty.
-  ///
-  /// In ru, this message translates to:
-  /// **'Мэтчей пока нет — свайпайте!'**
-  String get matchesEmpty;
-
   /// No description provided for @messageDeleted.
   ///
   /// In ru, this message translates to:
@@ -1085,7 +1061,7 @@ abstract class AppLocalizations {
   /// No description provided for @messagesEmpty.
   ///
   /// In ru, this message translates to:
-  /// **'Пока нет диалогов. Сообщения доступны между друзьями'**
+  /// **'Здесь появятся переписки. Писать можно друзьям'**
   String get messagesEmpty;
 
   /// No description provided for @toFriends.
@@ -1103,7 +1079,7 @@ abstract class AppLocalizations {
   /// No description provided for @cannotMessageUser.
   ///
   /// In ru, this message translates to:
-  /// **'Вы не можете писать этому пользователю'**
+  /// **'Написать можно только друзьям'**
   String get cannotMessageUser;
 
   /// No description provided for @guestMessagesTitle.
@@ -1187,25 +1163,25 @@ abstract class AppLocalizations {
   /// No description provided for @requestSent.
   ///
   /// In ru, this message translates to:
-  /// **'Отправлено ✓'**
+  /// **'Заявка отправлена'**
   String get requestSent;
 
   /// No description provided for @addFriend.
   ///
   /// In ru, this message translates to:
-  /// **'+ Добавить'**
+  /// **'Добавить в друзья'**
   String get addFriend;
 
   /// No description provided for @alreadyFriends.
   ///
   /// In ru, this message translates to:
-  /// **'✓ Друзья'**
+  /// **'Вы друзья'**
   String get alreadyFriends;
 
   /// No description provided for @writeMessage.
   ///
   /// In ru, this message translates to:
-  /// **'Написать'**
+  /// **'Написать сообщение'**
   String get writeMessage;
 
   /// No description provided for @removeFriend.
@@ -1283,7 +1259,7 @@ abstract class AppLocalizations {
   /// No description provided for @allInCity.
   ///
   /// In ru, this message translates to:
-  /// **'Все на {city}'**
+  /// **'Все, кто здесь'**
   String allInCity(String city);
 
   /// No description provided for @nobodyFound.
@@ -1439,7 +1415,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteAccountWarning.
   ///
   /// In ru, this message translates to:
-  /// **'Профиль будет удалён, ваши карточки сервисов скроются. Действие необратимо.'**
+  /// **'Профиль удалится, ваши карточки сервисов скроются. Отменить это нельзя'**
   String get deleteAccountWarning;
 
   /// No description provided for @deleteAccountContinue.
@@ -1460,11 +1436,35 @@ abstract class AppLocalizations {
   /// **'Удалить навсегда'**
   String get deleteAccountConfirm;
 
-  /// No description provided for @changePhoto.
+  /// No description provided for @photosLabel.
   ///
   /// In ru, this message translates to:
-  /// **'Изменить фото'**
-  String get changePhoto;
+  /// **'Фото'**
+  String get photosLabel;
+
+  /// No description provided for @photosHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'До 10 фото. Первое видят в знакомствах и рядом с именем'**
+  String get photosHint;
+
+  /// No description provided for @photosLimitReached.
+  ///
+  /// In ru, this message translates to:
+  /// **'Больше 10 фото добавить нельзя'**
+  String get photosLimitReached;
+
+  /// No description provided for @makeMainPhoto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сделать главным'**
+  String get makeMainPhoto;
+
+  /// No description provided for @mainPhotoBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Главное'**
+  String get mainPhotoBadge;
 
   /// No description provided for @bioHint.
   ///

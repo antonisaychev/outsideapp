@@ -173,10 +173,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DatingSettingsScreen(),
       ),
       GoRoute(
-        path: '/dating/matches',
-        builder: (context, state) => const MyMatchesScreen(),
-      ),
-      GoRoute(
         path: '/notifications',
         builder: (context, state) => const NotificationsScreen(),
       ),

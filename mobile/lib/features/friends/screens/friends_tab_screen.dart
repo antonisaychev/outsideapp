@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/widgets/tab_header.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/api/models.dart';
@@ -179,22 +180,14 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 12, 12, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.tabFriends,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () => context.push('/people-search'),
-                  ),
-                ],
-              ),
+            TabHeader(
+              title: l10n.tabFriends,
+              actions: [
+                HeaderIconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () => context.push('/people-search'),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

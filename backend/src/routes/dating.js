@@ -2,7 +2,7 @@
 const express = require('express');
 const db = require('../db');
 const { required } = require('../middleware/auth');
-const { ensureFriendship } = require('../utils/friendships');
+const { ensureFriendship, getRelationship } = require('../utils/friendships');
 const { notify } = require('../utils/notify');
 
 const router = express.Router();
@@ -73,7 +73,9 @@ router.get('/deck', async (req, res) => {
   if (!my.city_id) return res.json([]);
 
   const r = await db.query(`
-    SELECT u.id, u.username, u.first_name, u.avatar_url, u.bio, u.gender, u.birth_date
+    SELECT u.id, u.username, u.first_name, u.avatar_url, u.bio, u.gender, u.birth_date,
+           COALESCE((SELECT json_agg(json_build_object('id', p.id, 'url', p.url) ORDER BY p.position, p.created_at)
+                     FROM user_photos p WHERE p.user_id=u.id), '[]'::json) AS photos
     FROM users u LEFT JOIN dating_profiles dp ON dp.user_id = u.id
     WHERE COALESCE(dp.is_active, true) = true AND u.id <> $1
       AND u.deleted_at IS NULL AND u.is_blocked = false
@@ -84,7 +86,10 @@ router.get('/deck', async (req, res) => {
       AND ($4 = 'any' OR u.gender = $4)
       AND NOT EXISTS (
         SELECT 1 FROM swipes s WHERE s.swiper_id=$1 AND s.target_id=u.id
-          AND (s.direction='like' OR (s.direction='pass' AND s.created_at > now() - interval '30 days'))
+          AND (s.direction='like'
+               OR (s.direction='pass' AND s.created_at > now() - interval '30 days'
+                   -- анкету поправили после свайпа — показываем заново
+                   AND s.created_at >= u.profile_updated_at))
       )
       AND NOT EXISTS (
         SELECT 1 FROM friendships f WHERE f.status='blocked'
@@ -126,7 +131,22 @@ router.post('/swipe', async (req, res) => {
   const reciprocal = await db.query(
     `SELECT 1 FROM swipes WHERE swiper_id=$1 AND target_id=$2 AND direction='like'`,
     [targetId, req.userId]);
-  if (!reciprocal.rowCount) return res.json({ match: false });
+
+  // Лайк без взаимности = обычная заявка в друзья (правка от 2026-07-28)
+  if (!reciprocal.rowCount) {
+    const rel = await getRelationship(req.userId, targetId);
+    if (!rel) {
+      await db.query(
+        `INSERT INTO friendships (requester_id, addressee_id, status) VALUES ($1,$2,'pending')`,
+        [req.userId, targetId]);
+      await notify(targetId, 'friend_request', { actorId: req.userId });
+    } else if (rel.status === 'pending' && rel.requester_id === targetId) {
+      // Встречная заявка уже висела — лайк её принимает
+      await ensureFriendship(req.userId, targetId);
+      await notify(targetId, 'friend_accepted', { actorId: req.userId });
+    }
+    return res.json({ match: false });
+  }
 
   const [a, b] = req.userId < targetId ? [req.userId, targetId] : [targetId, req.userId];
   await db.query('INSERT INTO matches (user_a, user_b) VALUES ($1,$2) ON CONFLICT DO NOTHING', [a, b]);
