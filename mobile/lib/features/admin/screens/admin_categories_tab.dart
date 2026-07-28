@@ -5,6 +5,7 @@ import '../../../core/api/admin_api.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/admin_providers.dart';
@@ -100,10 +101,7 @@ class AdminCategoriesTab extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       l10n.adminCategoryDeleteNote,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textSecondary,
-                      ),
+                      style: AppText.small,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -136,19 +134,12 @@ class AdminCategoriesTab extends ConsumerWidget {
                             category.nameRu,
                             category.nameEn,
                           ),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
-                          ),
+                          style: AppText.callout.copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           l10n.adminServicesCount(category.servicesCount),
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textSecondary,
-                          ),
+                          style: AppText.small,
                         ),
                       ],
                     ),

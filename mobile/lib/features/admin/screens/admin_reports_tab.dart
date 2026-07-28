@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api/admin_api.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/admin_providers.dart';
 import 'admin_screen.dart';
@@ -162,11 +163,7 @@ class AdminReportsTab extends ConsumerWidget {
                 report.kind == 'service'
                     ? l10n.adminReportOnService(report.targetLabel)
                     : l10n.adminReportOnUser(report.targetLabel),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
+                style: AppText.callout.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
               _ReportField(
@@ -194,10 +191,7 @@ class AdminReportsTab extends ConsumerWidget {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(0, 38),
                   padding: const EdgeInsets.symmetric(horizontal: 18),
-                  textStyle: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  textStyle: AppText.smallMedium.copyWith(fontWeight: FontWeight.w600),
                 ),
                 onPressed: () => _openActions(context, ref, report),
                 child: Text(l10n.adminTakeAction),

@@ -8,6 +8,7 @@ import '../../../core/api/models.dart';
 import '../../../core/api/services_api.dart';
 import '../../../core/api/users_api.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/selectable_chip.dart';
@@ -141,10 +142,7 @@ class _AdminServiceEditScreenState
               children: [
                 Text(
                   l10n.adminEditServiceNote,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
-                  ),
+                  style: AppText.small,
                 ),
                 const SizedBox(height: 20),
                 TextField(

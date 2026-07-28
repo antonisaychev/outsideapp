@@ -183,11 +183,7 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
                           const SizedBox(width: 6),
                           Text(
                             l10n.recommendCount(service.likesCount),
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: AppText.callout.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -241,11 +237,7 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
                               Expanded(
                                 child: Text(
                                   l10n.serviceVerified,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textPrimary,
-                                  ),
+                                  style: AppText.bodyStrong.copyWith(fontSize: 14),
                                 ),
                               ),
                             ],

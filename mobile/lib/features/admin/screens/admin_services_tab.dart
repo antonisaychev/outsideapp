@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api/admin_api.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../core/utils/localized_names.dart';
 import '../../../core/widgets/selectable_chip.dart';
 import '../../../l10n/app_localizations.dart';
@@ -174,11 +175,7 @@ class AdminServicesTab extends ConsumerWidget {
                         children: [
                           Text(
                             service.title,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: AppText.callout.copyWith(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 2),
                           Text(
@@ -191,10 +188,7 @@ class AdminServicesTab extends ConsumerWidget {
                               else
                                 '👍 ${service.likesCount}',
                             ].join(' · '),
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.textSecondary,
-                            ),
+                            style: AppText.small,
                           ),
                         ],
                       ),
@@ -210,10 +204,7 @@ class AdminServicesTab extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(0, 36),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        textStyle: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        textStyle: AppText.smallMedium.copyWith(fontWeight: FontWeight.w600),
                       ),
                       onPressed: () => _run(
                         context,
@@ -231,10 +222,7 @@ class AdminServicesTab extends ConsumerWidget {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, 36),
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      textStyle: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      textStyle: AppText.smallMedium.copyWith(fontWeight: FontWeight.w600),
                     ),
                     onPressed: () =>
                         context.push('/admin/services/${service.id}'),
@@ -246,10 +234,7 @@ class AdminServicesTab extends ConsumerWidget {
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size(0, 36),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        textStyle: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        textStyle: AppText.smallMedium.copyWith(fontWeight: FontWeight.w600),
                       ),
                       onPressed: () => _run(
                         context,
@@ -268,10 +253,7 @@ class AdminServicesTab extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         foregroundColor: AppColors.error,
                         side: const BorderSide(color: AppColors.error),
-                        textStyle: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        textStyle: AppText.smallMedium.copyWith(fontWeight: FontWeight.w600),
                       ),
                       onPressed: () => _run(
                         context,

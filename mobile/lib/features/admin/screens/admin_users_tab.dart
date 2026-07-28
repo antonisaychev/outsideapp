@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api/admin_api.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/admin_providers.dart';
 import 'admin_screen.dart';
@@ -86,11 +87,7 @@ class _AdminUsersTabState extends ConsumerState<AdminUsersTab> {
                   children: [
                     Text(
                       user.displayName,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
+                      style: AppText.callout.copyWith(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -98,10 +95,7 @@ class _AdminUsersTabState extends ConsumerState<AdminUsersTab> {
                         user.email,
                         if (user.isBlocked) l10n.adminBlockedLabel,
                       ].join(' · '),
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textSecondary,
-                      ),
+                      style: AppText.small,
                     ),
                     if (user.isBlocked &&
                         (user.blockedReason?.isNotEmpty ?? false))
@@ -151,10 +145,7 @@ class _AdminUsersTabState extends ConsumerState<AdminUsersTab> {
                           ? AppColors.success
                           : AppColors.error,
                     ),
-                    textStyle: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    textStyle: AppText.smallMedium.copyWith(fontWeight: FontWeight.w600),
                   ),
                   onPressed: () =>
                       user.isBlocked ? _unblock(user) : _block(user),
@@ -206,10 +197,7 @@ class _BlockDialogState extends State<_BlockDialog> {
         children: [
           Text(
             '${widget.user.displayName} · ${widget.user.email}',
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-            ),
+            style: AppText.small,
           ),
           const SizedBox(height: 16),
           TextField(

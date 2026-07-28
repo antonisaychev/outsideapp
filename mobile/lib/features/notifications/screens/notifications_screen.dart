@@ -8,6 +8,7 @@ import '../../../core/widgets/empty_state.dart';
 import '../../../core/api/friends_api.dart';
 import '../../../core/api/notifications_api.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../core/widgets/user_avatar.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../friends/providers/friends_providers.dart';
@@ -271,10 +272,7 @@ class _NotificationRow extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     time,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                    ),
+                    style: AppText.small,
                   ),
                   if (handledLabel != null) ...[
                     const SizedBox(height: 8),
