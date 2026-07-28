@@ -15,6 +15,7 @@ class AdminUser {
     required this.isBlocked,
     this.blockedReason,
     this.cityId,
+    this.isDeleted = false,
   });
 
   final String id;
@@ -26,6 +27,11 @@ class AdminUser {
   final bool isBlocked;
   final String? blockedReason;
   final int? cityId;
+
+  /// Аккаунт удалён самим пользователем
+  final bool isDeleted;
+
+  bool get isAdmin => role == 'admin';
 
   String get displayName {
     final name = [firstName, lastName].where((p) => p?.isNotEmpty ?? false);
@@ -42,6 +48,7 @@ class AdminUser {
     isBlocked: json['is_blocked'] as bool? ?? false,
     blockedReason: json['blocked_reason'] as String?,
     cityId: json['city_id'] as int?,
+    isDeleted: (json['is_deleted'] as bool?) ?? false,
   );
 }
 
@@ -160,11 +167,10 @@ class AdminApi {
       final users = (r.data as List)
           .map((e) => AdminUser.fromJson(e as Map<String, dynamic>))
           .toList();
-      // Заблокированные опускаются в конец, порядок внутри групп сохраняется
-      users.sort((a, b) {
-        if (a.isBlocked == b.isBlocked) return 0;
-        return a.isBlocked ? 1 : -1;
-      });
+      // Порядок: обычные → заблокированные → удалённые.
+      // Внутри групп сохраняется порядок сервера (свежие первыми)
+      int rank(AdminUser u) => u.isDeleted ? 2 : (u.isBlocked ? 1 : 0);
+      users.sort((a, b) => rank(a).compareTo(rank(b)));
       return users;
     } on DioException catch (e) {
       throw toApiException(e);

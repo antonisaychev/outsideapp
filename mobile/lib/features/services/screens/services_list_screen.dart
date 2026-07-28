@@ -30,12 +30,15 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
   bool get _isGuest =>
       ref.read(sessionControllerProvider).status != SessionStatus.ready;
 
+  /// Порядок карточек перемешивается, но остаётся стабильным внутри захода
+  String _seed = DateTime.now().millisecondsSinceEpoch.toString();
+
   @override
   void initState() {
     super.initState();
     // Справочник категорий живёт всю сессию — перечитываем при каждом заходе,
     // иначе добавленная админом категория не появится до перезапуска
-    Future.microtask(() => ref.invalidate(categoriesProvider));
+    Future.microtask(() => ref.invalidate(placeCategoriesProvider));
   }
 
   Future<void> _toggleFavorite(ServiceSummary service, bool isFavorite) async {
@@ -67,13 +70,18 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
     final l10n = AppLocalizations.of(context)!;
     final cityId = ref.watch(viewCityIdProvider);
     final categoryId = ref.watch(selectedCategoryProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(placeCategoriesProvider);
     final citiesAsync = ref.watch(citiesProvider);
     final session = ref.watch(sessionControllerProvider);
     final isGuest = session.status != SessionStatus.ready;
     final listAsync = ref.watch(
       servicesListProvider(
-        ServicesListKey(tab: _tab, cityId: cityId, categoryId: categoryId),
+        ServicesListKey(
+          tab: _tab,
+          cityId: cityId,
+          categoryId: categoryId,
+          seed: _seed,
+        ),
       ),
     );
     final favoriteIds = isGuest
@@ -190,8 +198,13 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                       )
                     : RefreshIndicator(
                         onRefresh: () async {
+                          // новое зерно — новый порядок карточек
+                          setState(
+                            () => _seed = DateTime.now().millisecondsSinceEpoch
+                                .toString(),
+                          );
                           ref.invalidate(servicesListProvider);
-                          ref.invalidate(categoriesProvider);
+                          ref.invalidate(placeCategoriesProvider);
                         },
                         child: GridView.builder(
                           padding: const EdgeInsets.fromLTRB(24, 0, 24, 96),

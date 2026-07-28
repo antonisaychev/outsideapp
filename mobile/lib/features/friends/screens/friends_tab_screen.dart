@@ -183,11 +183,11 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
             TabHeader(
               title: l10n.tabFriends,
               actions: [
-                const NotificationsBellButton(),
                 HeaderIconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () => context.push('/people-search'),
                 ),
+                const NotificationsBellButton(),
               ],
             ),
             Padding(
@@ -301,6 +301,7 @@ class _FriendsTabScreenState extends ConsumerState<FriendsTabScreen> {
                     leading: UserAvatar(
                       avatarUrl: f.avatarUrl,
                       name: f.displayName,
+                      isOnline: f.isOnline,
                     ),
                     title: Text(
                       f.displayName,

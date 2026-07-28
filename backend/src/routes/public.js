@@ -9,6 +9,19 @@ router.get('/cities', async (req, res) => {
 });
 
 router.get('/categories', async (req, res) => {
+  // ?city_id= — отдаём только те категории, где в этом месте есть карточки:
+  // фильтр по пустой категории всё равно показал бы пустой список
+  const cityId = req.query.city_id ? Number(req.query.city_id) : null;
+  if (Number.isInteger(cityId)) {
+    const r = await db.query(`
+      SELECT c.id, c.name_ru, c.name_en
+      FROM service_categories c
+      WHERE c.is_active AND EXISTS (
+        SELECT 1 FROM services s
+         WHERE s.category_id = c.id AND s.city_id = $1 AND s.status = 'recommended')
+      ORDER BY c.sort`, [cityId]);
+    return res.json(r.rows);
+  }
   const r = await db.query('SELECT id, name_ru, name_en FROM service_categories WHERE is_active ORDER BY sort');
   res.json(r.rows);
 });

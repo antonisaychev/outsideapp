@@ -45,6 +45,25 @@ void main() {
     isBlocked: true,
     blockedReason: 'Реклама в личных сообщениях',
   );
+  final adminUser = AdminUser(
+    id: 'u3',
+    email: 'root@outside.ink',
+    username: 'root',
+    firstName: 'Главный',
+    lastName: 'Админ',
+    role: 'admin',
+    isBlocked: false,
+  );
+  final deleted = AdminUser(
+    id: 'u4',
+    email: 'deleted+u4@deleted.local',
+    username: 'deleted_user',
+    firstName: 'Бывший',
+    lastName: 'Юзер',
+    role: 'user',
+    isBlocked: false,
+    isDeleted: true,
+  );
   final service = AdminService(
     id: 's1',
     title: 'Русская школа Sunrise',
@@ -299,5 +318,24 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+  testWidgets('у админа и удалённого нет кнопки блокировки', (tester) async {
+    await tester.pumpWidget(
+      _app(const AdminScreen(), [
+        ...overrides(),
+        adminUsersProvider.overrideWith(
+          (ref) async => [user, adminUser, deleted],
+        ),
+      ]),
+    );
+    await tester.pumpAndSettle();
+
+    // кнопка осталась только у обычного пользователя
+    expect(
+      find.widgetWithText(OutlinedButton, 'Заблокировать'),
+      findsOneWidget,
+    );
+    expect(find.text('Администратор'), findsOneWidget);
+    expect(find.text('Удалён'), findsOneWidget);
   });
 }

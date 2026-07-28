@@ -163,7 +163,8 @@ router.get('/blocked', async (req, res) => {
 router.get('/', async (req, res) => {
   const { limit, offset } = pagination(req);
   const r = await db.query(`
-    SELECT u.id, u.username, u.first_name, u.last_name, u.avatar_url, u.home_country, u.city_id, u.last_seen_at
+    SELECT u.id, u.username, u.first_name, u.last_name, u.avatar_url, u.home_country, u.city_id, u.last_seen_at,
+           (u.last_seen_at > now() - interval '5 minutes') AS is_online
     FROM friendships f
     JOIN users u ON u.id = (CASE WHEN f.requester_id=$1 THEN f.addressee_id ELSE f.requester_id END)
     WHERE (f.requester_id=$1 OR f.addressee_id=$1) AND f.status='accepted' AND u.deleted_at IS NULL

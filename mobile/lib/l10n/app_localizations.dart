@@ -2005,6 +2005,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Не удалось открыть ссылку'**
   String get linkOpenFailed;
+
+  /// No description provided for @adminDeletedLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалён'**
+  String get adminDeletedLabel;
+
+  /// No description provided for @adminRoleLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Администратор'**
+  String get adminRoleLabel;
 }
 
 class _AppLocalizationsDelegate

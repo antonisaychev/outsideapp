@@ -1051,4 +1051,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get linkOpenFailed => 'Couldn’t open the link';
+
+  @override
+  String get adminDeletedLabel => 'Deleted';
+
+  @override
+  String get adminRoleLabel => 'Admin';
 }

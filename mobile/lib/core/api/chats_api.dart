@@ -16,6 +16,7 @@ class Conversation {
     this.lastMessageAt,
     this.unreadCount = 0,
     this.lastMessageDeleted = false,
+    this.isOnline = false,
   });
 
   final String id;
@@ -28,6 +29,9 @@ class Conversation {
   final DateTime? lastMessageAt;
   final int unreadCount;
   final bool lastMessageDeleted;
+
+  /// Собеседник заходил за последние 5 минут
+  final bool isOnline;
 
   String get peerName {
     final name = [
@@ -50,6 +54,7 @@ class Conversation {
         : null,
     unreadCount: (json['unread_count'] as int?) ?? 0,
     lastMessageDeleted: (json['last_message_deleted'] as bool?) ?? false,
+    isOnline: (json['is_online'] as bool?) ?? false,
   );
 }
 

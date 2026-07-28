@@ -119,26 +119,49 @@ class _AdminUsersTabState extends ConsumerState<AdminUsersTab> {
                 ),
               ),
               const SizedBox(width: 12),
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(0, 36),
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  foregroundColor: user.isBlocked
-                      ? AppColors.success
-                      : AppColors.error,
-                  side: BorderSide(
-                    color: user.isBlocked ? AppColors.success : AppColors.error,
-                  ),
-                  textStyle: const TextStyle(
+              // Админа не блокируем, удалённого — некого блокировать
+              if (user.isDeleted)
+                Text(
+                  l10n.adminDeletedLabel,
+                  style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                  ),
+                )
+              else if (user.isAdmin)
+                Text(
+                  l10n.adminRoleLabel,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                  ),
+                )
+              else
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 36),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    foregroundColor: user.isBlocked
+                        ? AppColors.success
+                        : AppColors.error,
+                    side: BorderSide(
+                      color: user.isBlocked
+                          ? AppColors.success
+                          : AppColors.error,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: () =>
+                      user.isBlocked ? _unblock(user) : _block(user),
+                  child: Text(
+                    user.isBlocked ? l10n.adminUnblock : l10n.adminBlock,
                   ),
                 ),
-                onPressed: () => user.isBlocked ? _unblock(user) : _block(user),
-                child: Text(
-                  user.isBlocked ? l10n.adminUnblock : l10n.adminBlock,
-                ),
-              ),
             ],
           ),
         ),

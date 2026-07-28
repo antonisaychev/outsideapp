@@ -412,5 +412,7 @@
   "adminOwnerPick": "Choose owner",
   "adminOwnerClear": "Remove owner",
   "online": "online",
-  "linkOpenFailed": "Couldn’t open the link"
+  "linkOpenFailed": "Couldn’t open the link",
+  "adminDeletedLabel": "Deleted",
+  "adminRoleLabel": "Admin"
 }

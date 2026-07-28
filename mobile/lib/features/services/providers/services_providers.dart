@@ -19,29 +19,46 @@ class ServicesListKey {
     required this.tab,
     required this.cityId,
     this.categoryId,
+    this.seed = '',
   });
 
   final String tab;
   final int cityId;
   final int? categoryId;
 
+  /// Зерно перемешивания: одно на заход в раздел, меняется при обновлении —
+  /// иначе при подгрузке страниц карточки повторялись бы
+  final String seed;
+
   @override
   bool operator ==(Object other) =>
       other is ServicesListKey &&
       other.tab == tab &&
       other.cityId == cityId &&
-      other.categoryId == categoryId;
+      other.categoryId == categoryId &&
+      other.seed == seed;
 
   @override
-  int get hashCode => Object.hash(tab, cityId, categoryId);
+  int get hashCode => Object.hash(tab, cityId, categoryId, seed);
 }
 
 final servicesListProvider =
     FutureProvider.family<List<ServiceSummary>, ServicesListKey>(
       (ref, key) => ref
           .read(servicesApiProvider)
-          .list(tab: key.tab, cityId: key.cityId, categoryId: key.categoryId),
+          .list(
+            tab: key.tab,
+            cityId: key.cityId,
+            categoryId: key.categoryId,
+            seed: key.seed,
+          ),
     );
+
+/// Категории для текущего места: пустые фильтры не показываем
+final placeCategoriesProvider = FutureProvider<List<ServiceCategory>>((ref) {
+  final cityId = ref.watch(viewCityIdProvider);
+  return ref.read(servicesApiProvider).getCategories(cityId: cityId);
+});
 
 // Деталка содержит liked_by_me/is_favorite — сбрасываем при смене аккаунта
 final serviceDetailProvider = FutureProvider.autoDispose

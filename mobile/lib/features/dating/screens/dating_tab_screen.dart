@@ -336,11 +336,11 @@ class _DeckViewState extends ConsumerState<_DeckView>
           TabHeader(
             title: l10n.tabDating,
             actions: [
-              const NotificationsBellButton(),
               HeaderIconButton(
                 icon: const Icon(Icons.tune),
                 onPressed: () => context.push('/dating/settings'),
               ),
+              const NotificationsBellButton(),
             ],
           ),
           // Без фото/пола/даты рождения карточка не показывается другим

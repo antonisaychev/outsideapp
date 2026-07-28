@@ -55,14 +55,32 @@ router.get('/', optional, async (req, res) => {
   const params = [cityId, tab];
   let i = 3;
   if (categoryId) { where.push(`category_id=$${i++}`); params.push(categoryId); }
-  const order = tab === 'pending' ? 's.created_at DESC' : 's.likes_count DESC, s.created_at DESC';
+  // Выдача перемешивается, но наверх поднимается то, что человек ещё не видел
+  // или что изменилось после его последнего просмотра.
+  // seed на страницу — иначе при пагинации карточки повторялись бы.
+  let viewJoin = '';
+  let freshExpr = 'true';
+  if (req.userId) {
+    params.push(req.userId);
+    viewJoin = `LEFT JOIN service_views v ON v.service_id = s.id AND v.user_id = $${i++}`;
+    freshExpr = '(v.viewed_at IS NULL OR s.updated_at > v.viewed_at)';
+  }
+  // У гостя истории просмотров нет, поэтому только перемешивание:
+  // константа в ORDER BY (`true DESC`) для Postgres — ошибка
+  const shuffle = `md5(s.id::text || $${i++})`;
+  const order = tab === 'pending'
+    ? 's.created_at DESC'
+    : req.userId
+    ? `${freshExpr} DESC, ${shuffle}`
+    : shuffle;
+  if (tab !== 'pending') params.push(String(req.query.seed || new Date().toISOString().slice(0, 13)));
   params.push(limit, offset);
 
   const r = await db.query(
     `SELECT s.id, s.title, s.photo_url, s.category_id, s.city_id, s.status, s.likes_count, s.confirm_count, s.created_at,
-            s.is_verified, s.owner_id,
+            s.is_verified, s.owner_id, ${req.userId ? freshExpr : 'true'} AS is_fresh,
             (SELECT count(*)::int FROM service_photos sp WHERE sp.service_id=s.id) AS photos_count
-     FROM services s WHERE ${where.join(' AND ')} ORDER BY ${order} LIMIT $${i++} OFFSET $${i}`,
+     FROM services s ${viewJoin} WHERE ${where.join(' AND ')} ORDER BY ${order} LIMIT $${i++} OFFSET $${i}`,
     params);
   res.json(r.rows.map(s => tab === 'pending' ? { ...s, confirm_threshold: threshold() } : s));
 });
@@ -95,6 +113,14 @@ router.get('/:id', optional, async (req, res) => {
   }
 
   const photos = await db.query('SELECT id, url, sort FROM service_photos WHERE service_id=$1 ORDER BY sort', [s.id]);
+
+  // Отмечаем просмотр — карточка опустится в выдаче до следующей правки
+  if (req.userId) {
+    db.query(
+      `INSERT INTO service_views (user_id, service_id) VALUES ($1,$2)
+       ON CONFLICT (user_id, service_id) DO UPDATE SET viewed_at = now()`,
+      [req.userId, s.id]).catch(() => {});
+  }
 
   res.json({
     id: s.id, title: s.title, description: s.description, photo_url: s.photo_url,

@@ -57,9 +57,13 @@ class ServicesApi {
   ServicesApi(this._dio);
   final Dio _dio;
 
-  Future<List<ServiceCategory>> getCategories() async {
+  /// cityId — сервер вернёт только категории, в которых есть карточки
+  Future<List<ServiceCategory>> getCategories({int? cityId}) async {
     try {
-      final r = await _dio.get('/categories');
+      final r = await _dio.get(
+        '/categories',
+        queryParameters: {'city_id': ?cityId},
+      );
       return (r.data as List)
           .map((e) => ServiceCategory.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -73,6 +77,7 @@ class ServicesApi {
     required int cityId,
     int? categoryId,
     int page = 1,
+    String seed = '',
   }) async {
     try {
       final r = await _dio.get(
@@ -82,6 +87,7 @@ class ServicesApi {
           'city_id': cityId,
           'category_id': ?categoryId,
           'page': page,
+          if (seed.isNotEmpty) 'seed': seed,
         },
       );
       return (r.data as List)

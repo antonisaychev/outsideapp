@@ -412,5 +412,7 @@
   "adminOwnerPick": "Выбрать владельца",
   "adminOwnerClear": "Убрать владельца",
   "online": "в сети",
-  "linkOpenFailed": "Не удалось открыть ссылку"
+  "linkOpenFailed": "Не удалось открыть ссылку",
+  "adminDeletedLabel": "Удалён",
+  "adminRoleLabel": "Администратор"
 }

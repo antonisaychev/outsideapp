@@ -131,6 +131,7 @@ class ChatsTabScreen extends ConsumerWidget {
                             leading: UserAvatar(
                               avatarUrl: c.peerAvatarUrl,
                               name: c.peerName,
+                              isOnline: c.isOnline,
                             ),
                             title: Text(
                               c.peerName,

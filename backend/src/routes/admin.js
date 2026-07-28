@@ -54,7 +54,8 @@ router.get('/users', async (req, res) => {
   }
   params.push(limit, offset);
   const r = await db.query(
-    `SELECT id, email, username, first_name, last_name, role, is_blocked, blocked_reason, city_id, created_at, last_seen_at
+    `SELECT id, email, username, first_name, last_name, role, is_blocked, blocked_reason, city_id,
+            created_at, last_seen_at, (deleted_at IS NOT NULL) AS is_deleted
      FROM users ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
      ORDER BY created_at DESC LIMIT $${i++} OFFSET $${i}`,
     params);
@@ -227,7 +228,7 @@ router.patch('/services/:id', async (req, res) => {
   if (!sets.length) return res.status(400).json({ error: 'NO_FIELDS' });
 
   params.push(req.params.id);
-  const r = await db.query(`UPDATE services SET ${sets.join(', ')} WHERE id=$${i} RETURNING *`, params);
+  const r = await db.query(`UPDATE services SET ${sets.join(', ')}, updated_at=now() WHERE id=$${i} RETURNING *`, params);
   if (!r.rowCount) return res.status(404).json({ error: 'NOT_FOUND' });
   res.json(r.rows[0]);
 });

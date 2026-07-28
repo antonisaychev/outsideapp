@@ -239,25 +239,13 @@ class _ServiceCardScreenState extends ConsumerState<ServiceCardScreen> {
                               const VerifiedBadge(size: 20),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      l10n.serviceVerified,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.textPrimary,
-                                      ),
-                                    ),
-                                    Text(
-                                      l10n.serviceVerifiedNote,
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  l10n.serviceVerified,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary,
+                                  ),
                                 ),
                               ),
                             ],

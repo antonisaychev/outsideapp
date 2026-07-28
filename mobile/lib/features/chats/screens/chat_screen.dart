@@ -136,6 +136,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 avatarUrl: peer?.avatarUrl,
                 name: peer?.displayName,
                 radius: 18,
+                isOnline: peer?.isOnline ?? false,
               ),
               const SizedBox(width: 10),
               Expanded(

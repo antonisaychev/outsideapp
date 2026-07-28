@@ -88,6 +88,7 @@ class MyProfileTab extends ConsumerWidget {
                   icon: const Icon(Icons.settings_outlined),
                   onPressed: () => context.push('/settings'),
                 ),
+                const NotificationsBellButton(),
               ],
             ),
             const SizedBox(height: 4),

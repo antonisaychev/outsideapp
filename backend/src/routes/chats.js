@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
   const r = await db.query(`
     SELECT c.id, c.last_message_at,
            u.id AS other_id, u.username, u.first_name, u.last_name, u.avatar_url, u.last_seen_at,
+           (u.last_seen_at > now() - interval '5 minutes') AS is_online,
            (SELECT CASE WHEN m.deleted_at IS NULL THEN m.text ELSE NULL END
               FROM messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC LIMIT 1) AS last_message_text,
            (SELECT m.deleted_at IS NOT NULL FROM messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC LIMIT 1) AS last_message_deleted,

@@ -1050,4 +1050,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get linkOpenFailed => 'Не удалось открыть ссылку';
+
+  @override
+  String get adminDeletedLabel => 'Удалён';
+
+  @override
+  String get adminRoleLabel => 'Администратор';
 }

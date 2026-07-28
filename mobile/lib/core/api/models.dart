@@ -144,6 +144,7 @@ class UserListItem {
     this.avatarUrl,
     this.homeCountry,
     this.cityId,
+    this.isOnline = false,
   });
 
   final String id;
@@ -153,6 +154,9 @@ class UserListItem {
   final String? avatarUrl;
   final String? homeCountry;
   final int? cityId;
+
+  /// Заходил в приложение за последние 5 минут
+  final bool isOnline;
 
   String get displayName {
     final name = [
@@ -170,6 +174,7 @@ class UserListItem {
     avatarUrl: json['avatar_url'] as String?,
     homeCountry: json['home_country'] as String?,
     cityId: json['city_id'] as int?,
+    isOnline: (json['is_online'] as bool?) ?? false,
   );
 }
 
