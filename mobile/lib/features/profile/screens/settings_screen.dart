@@ -209,9 +209,7 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 title: Text(l10n.adminTitle),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(l10n.comingSoonSection))),
+                onTap: () => context.push('/admin'),
               ),
             ],
             _SectionHeader(l10n.settingsSectionAbout),

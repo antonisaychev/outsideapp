@@ -809,4 +809,164 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get retry => 'Повторить';
+
+  @override
+  String get adminTabUsers => 'Пользователи';
+
+  @override
+  String get adminTabServices => 'Сервисы';
+
+  @override
+  String get adminTabReports => 'Жалобы';
+
+  @override
+  String get adminTabCategories => 'Категории';
+
+  @override
+  String get adminSearchUsersHint => 'Email или имя';
+
+  @override
+  String get adminBlock => 'Заблокировать';
+
+  @override
+  String get adminUnblock => 'Разблокировать';
+
+  @override
+  String get adminBlockedLabel => 'заблокирован';
+
+  @override
+  String get adminBlockTitle => 'Заблокировать пользователя?';
+
+  @override
+  String get adminBlockReasonHint => 'Причина блокировки (обязательно)';
+
+  @override
+  String get adminBlockNote =>
+      'Причина будет показана пользователю на экране блокировки. Все его сервисы будут скрыты.';
+
+  @override
+  String get adminUserBlocked => 'Пользователь заблокирован';
+
+  @override
+  String get adminUserUnblocked => 'Пользователь разблокирован';
+
+  @override
+  String get adminFilterAll => 'Все';
+
+  @override
+  String get adminFilterPending => 'На проверке';
+
+  @override
+  String get adminFilterRecommended => 'Рекомендовано';
+
+  @override
+  String get adminFilterHidden => 'Скрытые';
+
+  @override
+  String get adminApprove => 'Одобрить';
+
+  @override
+  String get adminHide => 'Скрыть';
+
+  @override
+  String get adminServiceApproved => 'Сервис одобрен';
+
+  @override
+  String get adminServiceHidden => 'Сервис скрыт';
+
+  @override
+  String get adminEditServiceTitle => 'Редактирование сервиса';
+
+  @override
+  String get adminEditServiceNote =>
+      'Режим админа · изменения применяются сразу';
+
+  @override
+  String get adminSaveChanges => 'Сохранить изменения';
+
+  @override
+  String adminReportOnService(String title) {
+    return 'На карточку «$title»';
+  }
+
+  @override
+  String adminReportOnUser(String name) {
+    return 'На пользователя $name';
+  }
+
+  @override
+  String adminReportFrom(String name) {
+    return '— $name';
+  }
+
+  @override
+  String get adminTakeAction => 'Принять меры';
+
+  @override
+  String get adminActionOpen => 'Открыть';
+
+  @override
+  String get adminActionHideService => 'Скрыть сервис';
+
+  @override
+  String get adminActionBlockUser => 'Заблокировать автора';
+
+  @override
+  String get adminActionResolve => 'Отметить обработанной';
+
+  @override
+  String get adminReportResolved => 'Жалоба обработана';
+
+  @override
+  String get adminNewCategoryTitle => 'Новая категория';
+
+  @override
+  String get adminCategoryNameRu => 'Название (русский)';
+
+  @override
+  String get adminCategoryNameEn => 'Name (english)';
+
+  @override
+  String get adminCreate => 'Создать';
+
+  @override
+  String get adminCategoryDeleteNote =>
+      'Удалить можно только категорию без активных сервисов';
+
+  @override
+  String get adminCategoryInUse =>
+      'В категории есть сервисы — сначала перенесите их';
+
+  @override
+  String get adminCategoryCreated => 'Категория создана';
+
+  @override
+  String get adminCategoryDeleted => 'Категория удалена';
+
+  @override
+  String get adminCategoryDuplicate => 'Такая категория уже есть';
+
+  @override
+  String get adminEmptyUsers => 'Никого не найдено';
+
+  @override
+  String get adminEmptyServices => 'Сервисов нет';
+
+  @override
+  String get adminEmptyReports => 'Необработанных жалоб нет';
+
+  @override
+  String adminServicesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сервисов',
+      few: '$count сервиса',
+      one: '$count сервис',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminEdit => 'Редактировать';
 }

@@ -237,7 +237,11 @@ router.patch('/services/:id/photos/order', async (req, res) => {
 // --- Категории ---
 
 router.get('/categories', async (req, res) => {
-  const r = await db.query('SELECT id, name_ru, name_en, sort, is_active FROM service_categories ORDER BY sort');
+  // services_count нужен экрану 42: удалять можно только пустую категорию
+  const r = await db.query(`
+    SELECT c.id, c.name_ru, c.name_en, c.sort, c.is_active,
+           (SELECT count(*)::int FROM services s WHERE s.category_id = c.id) AS services_count
+    FROM service_categories c ORDER BY c.sort`);
   res.json(r.rows);
 });
 

@@ -1567,6 +1567,288 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Повторить'**
   String get retry;
+
+  /// No description provided for @adminTabUsers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользователи'**
+  String get adminTabUsers;
+
+  /// No description provided for @adminTabServices.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервисы'**
+  String get adminTabServices;
+
+  /// No description provided for @adminTabReports.
+  ///
+  /// In ru, this message translates to:
+  /// **'Жалобы'**
+  String get adminTabReports;
+
+  /// No description provided for @adminTabCategories.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категории'**
+  String get adminTabCategories;
+
+  /// No description provided for @adminSearchUsersHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Email или имя'**
+  String get adminSearchUsersHint;
+
+  /// No description provided for @adminBlock.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокировать'**
+  String get adminBlock;
+
+  /// No description provided for @adminUnblock.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разблокировать'**
+  String get adminUnblock;
+
+  /// No description provided for @adminBlockedLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'заблокирован'**
+  String get adminBlockedLabel;
+
+  /// No description provided for @adminBlockTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокировать пользователя?'**
+  String get adminBlockTitle;
+
+  /// No description provided for @adminBlockReasonHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Причина блокировки (обязательно)'**
+  String get adminBlockReasonHint;
+
+  /// No description provided for @adminBlockNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Причина будет показана пользователю на экране блокировки. Все его сервисы будут скрыты.'**
+  String get adminBlockNote;
+
+  /// No description provided for @adminUserBlocked.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользователь заблокирован'**
+  String get adminUserBlocked;
+
+  /// No description provided for @adminUserUnblocked.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользователь разблокирован'**
+  String get adminUserUnblocked;
+
+  /// No description provided for @adminFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get adminFilterAll;
+
+  /// No description provided for @adminFilterPending.
+  ///
+  /// In ru, this message translates to:
+  /// **'На проверке'**
+  String get adminFilterPending;
+
+  /// No description provided for @adminFilterRecommended.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендовано'**
+  String get adminFilterRecommended;
+
+  /// No description provided for @adminFilterHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрытые'**
+  String get adminFilterHidden;
+
+  /// No description provided for @adminApprove.
+  ///
+  /// In ru, this message translates to:
+  /// **'Одобрить'**
+  String get adminApprove;
+
+  /// No description provided for @adminHide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть'**
+  String get adminHide;
+
+  /// No description provided for @adminServiceApproved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервис одобрен'**
+  String get adminServiceApproved;
+
+  /// No description provided for @adminServiceHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервис скрыт'**
+  String get adminServiceHidden;
+
+  /// No description provided for @adminEditServiceTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактирование сервиса'**
+  String get adminEditServiceTitle;
+
+  /// No description provided for @adminEditServiceNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Режим админа · изменения применяются сразу'**
+  String get adminEditServiceNote;
+
+  /// No description provided for @adminSaveChanges.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить изменения'**
+  String get adminSaveChanges;
+
+  /// No description provided for @adminReportOnService.
+  ///
+  /// In ru, this message translates to:
+  /// **'На карточку «{title}»'**
+  String adminReportOnService(String title);
+
+  /// No description provided for @adminReportOnUser.
+  ///
+  /// In ru, this message translates to:
+  /// **'На пользователя {name}'**
+  String adminReportOnUser(String name);
+
+  /// No description provided for @adminReportFrom.
+  ///
+  /// In ru, this message translates to:
+  /// **'— {name}'**
+  String adminReportFrom(String name);
+
+  /// No description provided for @adminTakeAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Принять меры'**
+  String get adminTakeAction;
+
+  /// No description provided for @adminActionOpen.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открыть'**
+  String get adminActionOpen;
+
+  /// No description provided for @adminActionHideService.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть сервис'**
+  String get adminActionHideService;
+
+  /// No description provided for @adminActionBlockUser.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заблокировать автора'**
+  String get adminActionBlockUser;
+
+  /// No description provided for @adminActionResolve.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отметить обработанной'**
+  String get adminActionResolve;
+
+  /// No description provided for @adminReportResolved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Жалоба обработана'**
+  String get adminReportResolved;
+
+  /// No description provided for @adminNewCategoryTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новая категория'**
+  String get adminNewCategoryTitle;
+
+  /// No description provided for @adminCategoryNameRu.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название (русский)'**
+  String get adminCategoryNameRu;
+
+  /// No description provided for @adminCategoryNameEn.
+  ///
+  /// In ru, this message translates to:
+  /// **'Name (english)'**
+  String get adminCategoryNameEn;
+
+  /// No description provided for @adminCreate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создать'**
+  String get adminCreate;
+
+  /// No description provided for @adminCategoryDeleteNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить можно только категорию без активных сервисов'**
+  String get adminCategoryDeleteNote;
+
+  /// No description provided for @adminCategoryInUse.
+  ///
+  /// In ru, this message translates to:
+  /// **'В категории есть сервисы — сначала перенесите их'**
+  String get adminCategoryInUse;
+
+  /// No description provided for @adminCategoryCreated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория создана'**
+  String get adminCategoryCreated;
+
+  /// No description provided for @adminCategoryDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория удалена'**
+  String get adminCategoryDeleted;
+
+  /// No description provided for @adminCategoryDuplicate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Такая категория уже есть'**
+  String get adminCategoryDuplicate;
+
+  /// No description provided for @adminEmptyUsers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Никого не найдено'**
+  String get adminEmptyUsers;
+
+  /// No description provided for @adminEmptyServices.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервисов нет'**
+  String get adminEmptyServices;
+
+  /// No description provided for @adminEmptyReports.
+  ///
+  /// In ru, this message translates to:
+  /// **'Необработанных жалоб нет'**
+  String get adminEmptyReports;
+
+  /// No description provided for @adminServicesCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count, plural, one{{count} сервис} few{{count} сервиса} other{{count} сервисов}}'**
+  String adminServicesCount(int count);
+
+  /// No description provided for @adminEdit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать'**
+  String get adminEdit;
 }
 
 class _AppLocalizationsDelegate

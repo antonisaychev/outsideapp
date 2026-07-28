@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/admin/screens/admin_screen.dart';
+import '../../features/admin/screens/admin_service_edit_screen.dart';
 import '../../features/auth/providers/session_controller.dart';
 import '../../features/auth/screens/blocked_screen.dart';
 import '../../features/auth/screens/forgot_password_screen.dart';
@@ -167,6 +169,15 @@ final routerProvider = Provider<GoRouter>((ref) {
           conversationId: state.pathParameters['id']!,
           peerId: state.uri.queryParameters['peer'] ?? '',
         ),
+      ),
+      GoRoute(
+        path: '/admin',
+        builder: (context, state) => const AdminScreen(),
+      ),
+      GoRoute(
+        path: '/admin/services/:id',
+        builder: (context, state) =>
+            AdminServiceEditScreen(serviceId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: '/dating/settings',

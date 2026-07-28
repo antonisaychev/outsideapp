@@ -811,4 +811,162 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get adminTabUsers => 'Users';
+
+  @override
+  String get adminTabServices => 'Services';
+
+  @override
+  String get adminTabReports => 'Reports';
+
+  @override
+  String get adminTabCategories => 'Categories';
+
+  @override
+  String get adminSearchUsersHint => 'Email or name';
+
+  @override
+  String get adminBlock => 'Block';
+
+  @override
+  String get adminUnblock => 'Unblock';
+
+  @override
+  String get adminBlockedLabel => 'blocked';
+
+  @override
+  String get adminBlockTitle => 'Block this user?';
+
+  @override
+  String get adminBlockReasonHint => 'Reason (required)';
+
+  @override
+  String get adminBlockNote =>
+      'The reason will be shown to the user on the blocked screen. All their services will be hidden.';
+
+  @override
+  String get adminUserBlocked => 'User blocked';
+
+  @override
+  String get adminUserUnblocked => 'User unblocked';
+
+  @override
+  String get adminFilterAll => 'All';
+
+  @override
+  String get adminFilterPending => 'Pending';
+
+  @override
+  String get adminFilterRecommended => 'Recommended';
+
+  @override
+  String get adminFilterHidden => 'Hidden';
+
+  @override
+  String get adminApprove => 'Approve';
+
+  @override
+  String get adminHide => 'Hide';
+
+  @override
+  String get adminServiceApproved => 'Service approved';
+
+  @override
+  String get adminServiceHidden => 'Service hidden';
+
+  @override
+  String get adminEditServiceTitle => 'Edit service';
+
+  @override
+  String get adminEditServiceNote => 'Admin mode · changes apply immediately';
+
+  @override
+  String get adminSaveChanges => 'Save changes';
+
+  @override
+  String adminReportOnService(String title) {
+    return 'About “$title”';
+  }
+
+  @override
+  String adminReportOnUser(String name) {
+    return 'About $name';
+  }
+
+  @override
+  String adminReportFrom(String name) {
+    return '— $name';
+  }
+
+  @override
+  String get adminTakeAction => 'Take action';
+
+  @override
+  String get adminActionOpen => 'Open';
+
+  @override
+  String get adminActionHideService => 'Hide service';
+
+  @override
+  String get adminActionBlockUser => 'Block author';
+
+  @override
+  String get adminActionResolve => 'Mark as resolved';
+
+  @override
+  String get adminReportResolved => 'Report resolved';
+
+  @override
+  String get adminNewCategoryTitle => 'New category';
+
+  @override
+  String get adminCategoryNameRu => 'Name (Russian)';
+
+  @override
+  String get adminCategoryNameEn => 'Name (English)';
+
+  @override
+  String get adminCreate => 'Create';
+
+  @override
+  String get adminCategoryDeleteNote =>
+      'Only categories without services can be deleted';
+
+  @override
+  String get adminCategoryInUse =>
+      'This category has services — move them first';
+
+  @override
+  String get adminCategoryCreated => 'Category created';
+
+  @override
+  String get adminCategoryDeleted => 'Category deleted';
+
+  @override
+  String get adminCategoryDuplicate => 'This category already exists';
+
+  @override
+  String get adminEmptyUsers => 'Nobody found';
+
+  @override
+  String get adminEmptyServices => 'No services';
+
+  @override
+  String get adminEmptyReports => 'No open reports';
+
+  @override
+  String adminServicesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count services',
+      one: '$count service',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminEdit => 'Edit';
 }
