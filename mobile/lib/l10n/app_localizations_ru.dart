@@ -408,24 +408,49 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String notifFriendRequest(String name) {
-    return '$name хочет добавить вас в друзья';
+    return '$name отправил(а) вам заявку в друзья';
   }
 
   @override
   String notifFriendAccepted(String name) {
-    return '$name принял(а) вашу заявку';
+    return '$name принял(а) вашу заявку в друзья';
   }
 
   @override
   String notifMatch(String name) {
-    return 'У вас мэтч с $name!';
+    return 'Это мэтч! Вы и $name теперь друзья';
   }
 
   @override
-  String get notifServiceRecommended => 'Ваш сервис попал в «Рекомендовано»';
+  String notifServiceRecommended(String title) {
+    return 'Ваша карточка «$title» попала в «Рекомендовано» 🎉';
+  }
 
   @override
-  String get notifServiceHidden => 'Ваш сервис скрыт администратором';
+  String notifServiceHidden(String title) {
+    return 'Ваша карточка «$title» скрыта администратором';
+  }
+
+  @override
+  String get timeJustNow => 'Только что';
+
+  @override
+  String timeMinutesAgo(int count) {
+    return '$count мин назад';
+  }
+
+  @override
+  String timeHoursAgo(int count) {
+    return '$count ч назад';
+  }
+
+  @override
+  String get timeYesterday => 'Вчера';
+
+  @override
+  String timeDaysAgo(int count) {
+    return '$count дн назад';
+  }
 
   @override
   String get nowFriends => 'Вы теперь друзья';

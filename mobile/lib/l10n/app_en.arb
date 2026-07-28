@@ -169,20 +169,40 @@
 
   "notificationsTitle": "Notifications",
   "notificationsEmpty": "No notifications yet",
-  "notifFriendRequest": "{name} wants to add you as a friend",
+  "notifFriendRequest": "{name} sent you a friend request",
   "@notifFriendRequest": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifFriendAccepted": "{name} accepted your request",
+  "notifFriendAccepted": "{name} accepted your friend request",
   "@notifFriendAccepted": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifMatch": "You matched with {name}!",
+  "notifMatch": "It's a match! You and {name} are now friends",
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifServiceRecommended": "Your service is now Recommended",
-  "notifServiceHidden": "Your service was hidden by an admin",
+  "notifServiceRecommended": "Your card “{title}” made it to Recommended 🎉",
+  "@notifServiceRecommended": {
+    "placeholders": { "title": {"type": "String"} }
+  },
+  "notifServiceHidden": "Your card “{title}” was hidden by an admin",
+  "@notifServiceHidden": {
+    "placeholders": { "title": {"type": "String"} }
+  },
+  "timeJustNow": "Just now",
+  "timeMinutesAgo": "{count} min ago",
+  "@timeMinutesAgo": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "timeHoursAgo": "{count} h ago",
+  "@timeHoursAgo": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "timeYesterday": "Yesterday",
+  "timeDaysAgo": "{count} d ago",
+  "@timeDaysAgo": {
+    "placeholders": { "count": {"type": "int"} }
+  },
   "nowFriends": "You are now friends",
   "requestDeclined": "Request declined",
   "guestDatingTitle": "Log in to meet people",

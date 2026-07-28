@@ -827,32 +827,62 @@ abstract class AppLocalizations {
   /// No description provided for @notifFriendRequest.
   ///
   /// In ru, this message translates to:
-  /// **'{name} хочет добавить вас в друзья'**
+  /// **'{name} отправил(а) вам заявку в друзья'**
   String notifFriendRequest(String name);
 
   /// No description provided for @notifFriendAccepted.
   ///
   /// In ru, this message translates to:
-  /// **'{name} принял(а) вашу заявку'**
+  /// **'{name} принял(а) вашу заявку в друзья'**
   String notifFriendAccepted(String name);
 
   /// No description provided for @notifMatch.
   ///
   /// In ru, this message translates to:
-  /// **'У вас мэтч с {name}!'**
+  /// **'Это мэтч! Вы и {name} теперь друзья'**
   String notifMatch(String name);
 
   /// No description provided for @notifServiceRecommended.
   ///
   /// In ru, this message translates to:
-  /// **'Ваш сервис попал в «Рекомендовано»'**
-  String get notifServiceRecommended;
+  /// **'Ваша карточка «{title}» попала в «Рекомендовано» 🎉'**
+  String notifServiceRecommended(String title);
 
   /// No description provided for @notifServiceHidden.
   ///
   /// In ru, this message translates to:
-  /// **'Ваш сервис скрыт администратором'**
-  String get notifServiceHidden;
+  /// **'Ваша карточка «{title}» скрыта администратором'**
+  String notifServiceHidden(String title);
+
+  /// No description provided for @timeJustNow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только что'**
+  String get timeJustNow;
+
+  /// No description provided for @timeMinutesAgo.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} мин назад'**
+  String timeMinutesAgo(int count);
+
+  /// No description provided for @timeHoursAgo.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} ч назад'**
+  String timeHoursAgo(int count);
+
+  /// No description provided for @timeYesterday.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вчера'**
+  String get timeYesterday;
+
+  /// No description provided for @timeDaysAgo.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} дн назад'**
+  String timeDaysAgo(int count);
 
   /// No description provided for @nowFriends.
   ///

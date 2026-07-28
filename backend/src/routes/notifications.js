@@ -22,8 +22,11 @@ router.get('/', async (req, res) => {
   const { limit, offset } = pagination(req);
   const r = await db.query(`
     SELECT n.id, n.type, n.entity_id, n.is_read, n.created_at,
-           a.id AS actor_id, a.username AS actor_username, a.first_name AS actor_first_name, a.avatar_url AS actor_avatar_url
-    FROM notifications n LEFT JOIN users a ON a.id = n.actor_id
+           a.id AS actor_id, a.username AS actor_username, a.first_name AS actor_first_name, a.avatar_url AS actor_avatar_url,
+           s.title AS entity_title
+    FROM notifications n
+    LEFT JOIN users a ON a.id = n.actor_id
+    LEFT JOIN services s ON s.id = n.entity_id
     WHERE n.user_id=$1 ORDER BY n.created_at DESC LIMIT $2 OFFSET $3`,
     [req.userId, limit, offset]);
   await db.query('UPDATE notifications SET is_read=true WHERE user_id=$1 AND is_read=false', [req.userId]);

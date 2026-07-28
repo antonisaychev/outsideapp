@@ -408,24 +408,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notifFriendRequest(String name) {
-    return '$name wants to add you as a friend';
+    return '$name sent you a friend request';
   }
 
   @override
   String notifFriendAccepted(String name) {
-    return '$name accepted your request';
+    return '$name accepted your friend request';
   }
 
   @override
   String notifMatch(String name) {
-    return 'You matched with $name!';
+    return 'It\'s a match! You and $name are now friends';
   }
 
   @override
-  String get notifServiceRecommended => 'Your service is now Recommended';
+  String notifServiceRecommended(String title) {
+    return 'Your card “$title” made it to Recommended 🎉';
+  }
 
   @override
-  String get notifServiceHidden => 'Your service was hidden by an admin';
+  String notifServiceHidden(String title) {
+    return 'Your card “$title” was hidden by an admin';
+  }
+
+  @override
+  String get timeJustNow => 'Just now';
+
+  @override
+  String timeMinutesAgo(int count) {
+    return '$count min ago';
+  }
+
+  @override
+  String timeHoursAgo(int count) {
+    return '$count h ago';
+  }
+
+  @override
+  String get timeYesterday => 'Yesterday';
+
+  @override
+  String timeDaysAgo(int count) {
+    return '$count d ago';
+  }
 
   @override
   String get nowFriends => 'You are now friends';

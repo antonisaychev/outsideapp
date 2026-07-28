@@ -17,6 +17,7 @@ class AppNotification {
     this.actorUsername,
     this.actorFirstName,
     this.actorAvatarUrl,
+    this.entityTitle,
   });
 
   final String id;
@@ -28,6 +29,9 @@ class AppNotification {
   final String? actorUsername;
   final String? actorFirstName;
   final String? actorAvatarUrl;
+
+  /// Название сервиса для уведомлений о карточках
+  final String? entityTitle;
 
   String get actorName {
     if (actorFirstName != null && actorFirstName!.isNotEmpty) {
@@ -47,6 +51,7 @@ class AppNotification {
         actorUsername: json['actor_username'] as String?,
         actorFirstName: json['actor_first_name'] as String?,
         actorAvatarUrl: json['actor_avatar_url'] as String?,
+        entityTitle: json['entity_title'] as String?,
       );
 }
 

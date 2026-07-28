@@ -169,20 +169,40 @@
 
   "notificationsTitle": "Уведомления",
   "notificationsEmpty": "Пока нет уведомлений",
-  "notifFriendRequest": "{name} хочет добавить вас в друзья",
+  "notifFriendRequest": "{name} отправил(а) вам заявку в друзья",
   "@notifFriendRequest": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifFriendAccepted": "{name} принял(а) вашу заявку",
+  "notifFriendAccepted": "{name} принял(а) вашу заявку в друзья",
   "@notifFriendAccepted": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifMatch": "У вас мэтч с {name}!",
+  "notifMatch": "Это мэтч! Вы и {name} теперь друзья",
   "@notifMatch": {
     "placeholders": { "name": {"type": "String"} }
   },
-  "notifServiceRecommended": "Ваш сервис попал в «Рекомендовано»",
-  "notifServiceHidden": "Ваш сервис скрыт администратором",
+  "notifServiceRecommended": "Ваша карточка «{title}» попала в «Рекомендовано» 🎉",
+  "@notifServiceRecommended": {
+    "placeholders": { "title": {"type": "String"} }
+  },
+  "notifServiceHidden": "Ваша карточка «{title}» скрыта администратором",
+  "@notifServiceHidden": {
+    "placeholders": { "title": {"type": "String"} }
+  },
+  "timeJustNow": "Только что",
+  "timeMinutesAgo": "{count} мин назад",
+  "@timeMinutesAgo": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "timeHoursAgo": "{count} ч назад",
+  "@timeHoursAgo": {
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "timeYesterday": "Вчера",
+  "timeDaysAgo": "{count} дн назад",
+  "@timeDaysAgo": {
+    "placeholders": { "count": {"type": "int"} }
+  },
   "nowFriends": "Вы теперь друзья",
   "requestDeclined": "Заявка отклонена",
   "guestDatingTitle": "Войдите, чтобы знакомиться",
