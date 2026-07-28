@@ -126,7 +126,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             relationAsync.valueOrNull != RelationStatus.accepted);
 
     return Scaffold(
+      // Подложка, чтобы белые пузыри собеседника читались (макет 09 · Чат)
+      backgroundColor: AppColors.neutral50,
       appBar: AppBar(
+        backgroundColor: AppColors.neutral0,
         titleSpacing: 0,
         title: GestureDetector(
           onTap: () => context.push('/users/${widget.peerId}'),
@@ -333,8 +336,8 @@ class _MessageBubble extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: deleted
-                ? AppColors.surface
-                : (isMine ? AppColors.coral : AppColors.surface),
+                ? AppColors.neutral100
+                : (isMine ? AppColors.coral : AppColors.neutral0),
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(18),
               topRight: const Radius.circular(18),
@@ -351,8 +354,8 @@ class _MessageBubble extends StatelessWidget {
                   fontSize: 15,
                   fontStyle: deleted ? FontStyle.italic : FontStyle.normal,
                   color: deleted
-                      ? AppColors.textSecondary
-                      : (isMine ? Colors.white : AppColors.textPrimary),
+                      ? AppColors.neutral400
+                      : (isMine ? Colors.white : AppColors.neutral800),
                 ),
               ),
               const SizedBox(height: 2),

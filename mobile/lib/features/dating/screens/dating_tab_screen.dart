@@ -496,12 +496,13 @@ class _DeckViewState extends ConsumerState<_DeckView>
                 children: [
                   _RoundActionButton(
                     icon: Icons.close,
-                    color: AppColors.textSecondary,
+                    color: AppColors.neutral600,
                     onTap: () => _fly(like: false),
                   ),
                   const SizedBox(width: 32),
                   _RoundActionButton(
                     icon: Icons.favorite,
+                    filled: true,
                     color: AppColors.coral,
                     onTap: () => _fly(like: true),
                   ),
@@ -682,11 +683,16 @@ class _RoundActionButton extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.onTap,
+    this.filled = false,
   });
 
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
+
+  /// Главное действие — сплошная коралловая заливка, второстепенное —
+  /// белый круг с рамкой. Без теней (макет 05 · Знакомства)
+  final bool filled;
 
   @override
   Widget build(BuildContext context) {
@@ -697,17 +703,17 @@ class _RoundActionButton extends StatelessWidget {
         height: 64,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: filled ? AppColors.coral : AppColors.neutral0,
           shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          border: filled
+              ? null
+              : Border.all(color: AppColors.neutral200, width: 1),
         ),
-        child: Icon(icon, size: 30, color: color),
+        child: Icon(
+          icon,
+          size: 27,
+          color: filled ? Colors.white : AppColors.neutral600,
+        ),
       ),
     );
   }
