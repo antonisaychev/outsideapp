@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,6 +10,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/session_controller.dart';
 import '../../friends/providers/friends_providers.dart';
 import '../providers/chats_providers.dart';
+import '../widgets/read_ticks.dart';
 
 /// Экран 09 «Чат»: optimistic-отправка, ✓/✓✓, подгрузка истории вверх.
 class ChatScreen extends ConsumerStatefulWidget {
@@ -76,13 +78,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 l10n.deleteMessage,
                 style: const TextStyle(color: AppColors.error),
               ),
-              onTap: () {
+              onTap: () async {
                 Navigator.of(sheetContext).pop();
-                ref
+                final ok = await ref
                     .read(
                       chatControllerProvider(widget.conversationId).notifier,
                     )
                     .deleteMessage(m.message.id);
+                if (!ok && mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+                }
               },
             ),
             ListTile(
@@ -204,18 +211,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: TextField(
                         controller: _textController,
                         maxLines: 5,
                         minLines: 1,
-                        maxLength: 2000,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(2000),
+                        ],
                         onChanged: (_) => setState(() {}),
                         decoration: InputDecoration(
                           hintText: l10n.messageHint,
-                          counterText: '',
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,
@@ -353,13 +361,7 @@ class _MessageBubble extends StatelessWidget {
                                 color: Colors.white70,
                               ),
                             )
-                          : Text(
-                              message.message.readAt != null ? '✓✓' : '✓',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                color: Colors.white70,
-                              ),
-                            ),
+                          : ReadTicks(read: message.message.readAt != null),
                     ],
                   ],
                 ],

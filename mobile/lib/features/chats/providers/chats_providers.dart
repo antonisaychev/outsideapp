@@ -261,14 +261,17 @@ class ChatController extends StateNotifier<ChatState> {
     markRead();
   }
 
-  /// Удаление своего сообщения: текст скрывается у обоих, остаётся заглушка
-  Future<void> deleteMessage(String messageId) async {
+  /// Удаление своего сообщения: текст скрывается у обоих, остаётся заглушка.
+  /// Возвращает true при успехе — экран покажет ошибку, если false
+  /// (молчаливый провал прятал «сервер не обновлён», см. QA_NOTES №30)
+  Future<bool> deleteMessage(String messageId) async {
     try {
       await _api.deleteMessage(conversationId, messageId);
       _applyDeleted(messageId);
       _ref.invalidate(conversationsProvider);
+      return true;
     } on ApiException {
-      // сообщение уже удалено или не наше — состояние не меняем
+      return false;
     }
   }
 
