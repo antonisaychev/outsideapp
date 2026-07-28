@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,6 +9,7 @@ import '../../../core/api/dating_api.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/session_controller.dart';
+import '../../chats/providers/chats_providers.dart';
 import '../providers/dating_providers.dart';
 import 'match_screen.dart';
 
@@ -185,29 +187,147 @@ class _DeckView extends ConsumerStatefulWidget {
   ConsumerState<_DeckView> createState() => _DeckViewState();
 }
 
-class _DeckViewState extends ConsumerState<_DeckView> {
-  Offset _drag = Offset.zero;
-  bool _animating = false;
+/// Куда ведёт текущая анимация карточки
+enum _Flight { none, returning, leaving }
 
-  Future<void> _swipe({required bool like}) async {
-    if (_animating) return;
-    setState(() => _animating = true);
-    final match = await ref
+class _DeckViewState extends ConsumerState<_DeckView>
+    with SingleTickerProviderStateMixin {
+  /// Смещение карточки. ValueNotifier, а не setState: перерисовывается
+  /// только трансформация, само фото не пересобирается на каждый кадр.
+  final _drag = ValueNotifier<Offset>(Offset.zero);
+
+  late final AnimationController _controller;
+  _Flight _flight = _Flight.none;
+  Offset _flightFrom = Offset.zero;
+  Offset _flightTo = Offset.zero;
+
+  /// Порог принятия свайпа и скорость броска, при которой порог не нужен
+  static const _distanceThreshold = 110.0;
+  static const _velocityThreshold = 800.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController.unbounded(vsync: this)
+      ..addListener(_onTick);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _drag.dispose();
+    super.dispose();
+  }
+
+  void _onTick() {
+    switch (_flight) {
+      case _Flight.returning:
+        // Пружина возвращает карточку в центр
+        _drag.value = Offset.lerp(_flightFrom, Offset.zero, _controller.value)!;
+      case _Flight.leaving:
+        _drag.value = Offset.lerp(
+          _flightFrom,
+          _flightTo,
+          Curves.easeOut.transform(_controller.value.clamp(0.0, 1.0)),
+        )!;
+      case _Flight.none:
+        break;
+    }
+  }
+
+  void _onPanStart(DragStartDetails _) {
+    if (_flight == _Flight.leaving) return;
+    _controller.stop();
+    _flight = _Flight.none;
+  }
+
+  void _onPanUpdate(DragUpdateDetails d) {
+    if (_flight == _Flight.leaving) return;
+    _drag.value += d.delta;
+  }
+
+  void _onPanEnd(DragEndDetails d) {
+    if (_flight == _Flight.leaving) return;
+    final velocity = d.velocity.pixelsPerSecond;
+    final dx = _drag.value.dx;
+    final accepted =
+        dx.abs() > _distanceThreshold ||
+        (velocity.dx.abs() > _velocityThreshold && dx.abs() > 20);
+    if (accepted) {
+      _fly(like: dx > 0 || (dx.abs() <= 20 && velocity.dx > 0), velocity: velocity);
+    } else {
+      _settleBack(velocity);
+    }
+  }
+
+  /// Мягкий пружинный возврат с учётом того, с какой скоростью отпустили
+  void _settleBack(Offset velocity) {
+    final from = _drag.value;
+    if (from == Offset.zero) return;
+    // Скорость вдоль направления «к центру», нормированная к отрезку 0..1
+    final unitVelocity =
+        -(velocity.dx * from.dx + velocity.dy * from.dy) /
+        (from.distanceSquared);
+    _flightFrom = from;
+    _flight = _Flight.returning;
+    _controller
+        .animateWith(
+          SpringSimulation(
+            const SpringDescription(mass: 1, stiffness: 320, damping: 26),
+            0,
+            1,
+            unitVelocity.clamp(-8.0, 8.0),
+          ),
+        )
+        .then((_) {
+          // Пружина затухает около единицы — добиваем ровно в центр
+          if (mounted && _flight == _Flight.returning) {
+            _flight = _Flight.none;
+            _drag.value = Offset.zero;
+          }
+        });
+  }
+
+  /// Карточка улетает за край экрана, продолжая движение руки
+  void _fly({required bool like, Offset velocity = Offset.zero}) {
+    if (_flight == _Flight.leaving) return;
+    final width = MediaQuery.sizeOf(context).width;
+    _flightFrom = _drag.value;
+    _flightTo = Offset(
+      (like ? 1 : -1) * (width + 250),
+      _drag.value.dy + velocity.dy * 0.15,
+    );
+    _flight = _Flight.leaving;
+    _controller.value = 0;
+    // Контроллер unbounded (нужен для пружины), поэтому animateTo, не forward
+    _controller
+        .animateTo(1, duration: const Duration(milliseconds: 260))
+        .then((_) {
+          if (mounted) _commit(like: like);
+        });
+  }
+
+  /// Свайп ушёл на сервер; карточка снимается с колоды мгновенно
+  Future<void> _commit({required bool like}) async {
+    final pending = ref
         .read(deckControllerProvider.notifier)
         .swipeTop(like: like);
-    if (mounted) {
-      setState(() {
-        _drag = Offset.zero;
-        _animating = false;
-      });
-    }
-    if (match != null && mounted) {
-      // Экран 08 «Это мэтч!» поверх колоды
-      await showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => MatchScreen(match: match),
-      );
+    // Колода уже сдвинулась (снятие карточки синхронное) — возвращаем позицию
+    _flight = _Flight.none;
+    _drag.value = Offset.zero;
+    final match = await pending;
+    if (!mounted || match == null) return;
+
+    // Экран 08 «Это мэтч!» — поверх всего, вместе с нижними вкладками
+    final write = await Navigator.of(context, rootNavigator: true).push<bool>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (_) => MatchScreen(match: match),
+      ),
+    );
+    // Чат открываем отсюда: у экрана мэтча после закрытия context уже мёртв
+    if (write == true && mounted) {
+      await openChatWith(context, ref, match.id);
     }
   }
 
@@ -272,39 +392,70 @@ class _DeckViewState extends ConsumerState<_DeckView> {
                   )
                 : Padding(
                     padding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // следующая карточка — фоном
-                        if (deck.cards.length > 1)
-                          Transform.scale(
-                            scale: 0.95,
-                            child: _DeckCardView(card: deck.cards[1]),
-                          ),
-                        GestureDetector(
-                          onPanUpdate: (d) => setState(() => _drag += d.delta),
-                          onPanEnd: (_) {
-                            if (_drag.dx.abs() > 100) {
-                              _swipe(like: _drag.dx > 0);
-                            } else {
-                              setState(() => _drag = Offset.zero);
-                            }
-                          },
-                          onTap: () =>
-                              context.push('/users/${deck.cards.first.id}'),
-                          child: Transform.translate(
-                            offset: _drag,
-                            child: Transform.rotate(
-                              angle: _drag.dx / 1200,
-                              child: _DeckCardView(
-                                card: deck.cards.first,
-                                overlayLike: _drag.dx > 40,
-                                overlayPass: _drag.dx < -40,
+                    child: ValueListenableBuilder<Offset>(
+                      valueListenable: _drag,
+                      // Фото карточек в child — они не пересобираются при таскании
+                      child: _DeckCardView(
+                        key: ValueKey(deck.cards.first.id),
+                        card: deck.cards.first,
+                      ),
+                      builder: (context, drag, card) {
+                        // 0 → карточка в центре, 1 → на пороге принятия
+                        final progress = (drag.dx.abs() / _distanceThreshold)
+                            .clamp(0.0, 1.0);
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // следующая карточка — фоном, подрастает по мере свайпа
+                            if (deck.cards.length > 1)
+                              Transform.scale(
+                                scale: 0.94 + 0.06 * progress,
+                                child: _DeckCardView(
+                                  key: ValueKey(deck.cards[1].id),
+                                  card: deck.cards[1],
+                                ),
+                              ),
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onPanStart: _onPanStart,
+                              onPanUpdate: _onPanUpdate,
+                              onPanEnd: _onPanEnd,
+                              onTap: () =>
+                                  context.push('/users/${deck.cards.first.id}'),
+                              child: Transform.translate(
+                                offset: drag,
+                                child: Transform.rotate(
+                                  // наклон как в Tinder: тем сильнее, чем дальше увели
+                                  angle: drag.dx / 2200,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      AppRadius.large,
+                                    ),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        card!,
+                                        if (progress > 0.02)
+                                          Opacity(
+                                            opacity: progress,
+                                            child: _SwipeOverlay(
+                                              color: drag.dx > 0
+                                                  ? AppColors.coral
+                                                  : Colors.white,
+                                              icon: drag.dx > 0
+                                                  ? Icons.favorite
+                                                  : Icons.close,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                          ],
+                        );
+                      },
                     ),
                   ),
           ),
@@ -317,13 +468,13 @@ class _DeckViewState extends ConsumerState<_DeckView> {
                   _RoundActionButton(
                     icon: Icons.close,
                     color: AppColors.textSecondary,
-                    onTap: () => _swipe(like: false),
+                    onTap: () => _fly(like: false),
                   ),
                   const SizedBox(width: 32),
                   _RoundActionButton(
                     icon: Icons.favorite,
                     color: AppColors.coral,
-                    onTap: () => _swipe(like: true),
+                    onTap: () => _fly(like: true),
                   ),
                 ],
               ),
@@ -335,15 +486,9 @@ class _DeckViewState extends ConsumerState<_DeckView> {
 }
 
 class _DeckCardView extends StatelessWidget {
-  const _DeckCardView({
-    required this.card,
-    this.overlayLike = false,
-    this.overlayPass = false,
-  });
+  const _DeckCardView({super.key, required this.card});
 
   final DeckCard card;
-  final bool overlayLike;
-  final bool overlayPass;
 
   @override
   Widget build(BuildContext context) {
@@ -402,10 +547,6 @@ class _DeckCardView extends StatelessWidget {
               ],
             ),
           ),
-          if (overlayLike)
-            const _SwipeOverlay(color: AppColors.coral, icon: Icons.favorite),
-          if (overlayPass)
-            const _SwipeOverlay(color: Colors.white, icon: Icons.close),
         ],
       ),
     );
