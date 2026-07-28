@@ -203,7 +203,7 @@ class _ServicesListScreenState extends ConsumerState<ServicesListScreen> {
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 16,
                                 crossAxisSpacing: 16,
-                                childAspectRatio: 0.72,
+                                childAspectRatio: 0.71,
                               ),
                           itemCount: services.length,
                           itemBuilder: (context, index) {
@@ -293,18 +293,16 @@ class _CategoryChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? AppColors.coralTint : AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: selected ? AppColors.coral : Colors.transparent,
-          ),
+          // Выбранный — сплошная коралловая заливка (макеты Outside 2.0)
+          color: selected ? AppColors.coral : AppColors.neutral100,
+          borderRadius: BorderRadius.circular(AppRadius.full),
         ),
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: selected ? AppColors.coral : AppColors.textPrimary,
+            color: selected ? Colors.white : AppColors.neutral600,
           ),
         ),
       ),

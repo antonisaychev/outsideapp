@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/models.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text.dart';
 import '../../../core/widgets/verified_badge.dart';
 
 /// Карточка сервиса в плитке (макет 04/43): фото с сердечком и бейджем
@@ -32,8 +33,8 @@ class ServiceGridCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.background,
-          borderRadius: BorderRadius.circular(AppRadius.medium),
-          border: Border.all(color: AppColors.border),
+          borderRadius: BorderRadius.circular(AppRadius.large),
+          border: Border.all(color: AppColors.neutral200),
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -42,7 +43,7 @@ class ServiceGridCard extends StatelessWidget {
             // Фиксированная пропорция — миниатюры одинаковые независимо
             // от того, в одну или две строки лёг заголовок ниже
             AspectRatio(
-              aspectRatio: 1.35,
+              aspectRatio: 4 / 3,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -124,46 +125,43 @@ class ServiceGridCard extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+                // Название сверху, счётчик прижат к низу — так карточки
+                // одинаково читаются при заголовке в одну и в две строки
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      service.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          service.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppText.bodyStrong,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          categoryName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppText.small,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      categoryName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
                     Row(
                       children: [
                         const Icon(
                           Icons.thumb_up,
-                          size: 14,
+                          size: 15,
                           color: AppColors.coral,
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 6),
                         Text(
                           '${service.likesCount}',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
-                          ),
+                          style: AppText.smallMedium,
                         ),
                       ],
                     ),
